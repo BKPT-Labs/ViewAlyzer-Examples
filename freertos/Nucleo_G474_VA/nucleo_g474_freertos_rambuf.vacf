@@ -1,0 +1,8 @@
+{
+  "transport": "stlink-rambuf",
+  "target-device": "STM32G474RE",
+  "cpu-clock-hz": 170000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "rambuf-poll-ms": 5
+}

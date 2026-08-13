@@ -1,0 +1,26 @@
+# Build output (per-board / per-transport build dirs)
+build/
+build-*/
+
+# Python
+__pycache__/
+*.pyc
+
+# Per-machine tool paths (see tools.local.example.json)
+build.local.json
+build.local.*.json
+tools.local.json
+tools.local.*.json
+
+# Editor / tool caches
+.cache/
+.root-artifact-backup/
+
+# ViewAlyzer per-machine state (shared .va/settings.json IS committed)
+.va/settings.local.*.json
+.va/locks/
+.va/trace/
+.va/debug-audit.ndjson
+
+# Capture databases (outputs, not sources)
+*.vadb

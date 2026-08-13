@@ -1,0 +1,14 @@
+{
+  "transport": "jlink-rtt",
+  "target-device": "MAX32657",
+  "cpu-clock-hz": 50000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": true,
+  "rtt-channel": 0,
+  "rtt-address": "0x30000410",
+  "rtt-port": 19021,
+  "jlink-gdb-port": 2331,
+  "jlink-swo-port": 2332,
+  "jlink-telnet-port": 2333
+}
