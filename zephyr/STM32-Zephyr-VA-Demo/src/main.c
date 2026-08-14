@@ -80,8 +80,13 @@ K_SEM_DEFINE(binary_sem, 0, 1);          /* binary semaphore, starts empty */
 K_SEM_DEFINE(counting_sem, 0, 5);        /* counting semaphore, max 5 */
 K_SEM_DEFINE(blink_sem, 1, 1);           /* blink LED guard */
 
-/* Demo heap */
+/* Demo heap — exists to be exhausted on purpose (failed-alloc events);
+ * a smaller pool on the 32 KB H503 just exhausts sooner. */
+#if defined(CONFIG_SOC_STM32H503XX)
+K_HEAP_DEFINE(demo_heap, 1024);
+#else
 K_HEAP_DEFINE(demo_heap, 2048);
+#endif
 
 /* Event flags: default_task posts one of three bits every 500 ms; the
  * waiter needs BOTH low bits inside a short window, so the trace shows

@@ -99,9 +99,9 @@ You should immediately see ~20 threads scheduling, four live charts (sine
 wave, shared accumulator, tick counter, mutex wait time), queue depth ramping
 in bursts, and periodic mutex contention between three priorities.
 
-Connection configs included: `nucleo_g474_zephyr_swo.vacf` (also a
-`..._varambuf.vacf` RAM-buffer variant), `nucleo_f446re_zephyr_rtt.vacf`,
-`nucleo_h5_zephyr_swo.vacf`, `stm32h750b_zephyr_swo.vacf`.
+Connection configs included: `nucleo_g474_zephyr_swo.vacf` and
+`nucleo_h5_zephyr_swo.vacf` (each also has a `..._varambuf.vacf` RAM-buffer
+variant), `nucleo_f446re_zephyr_rtt.vacf`, `stm32h750b_zephyr_swo.vacf`.
 
 ## build.py Reference
 
@@ -149,6 +149,7 @@ never disturbs another build:
 
 ```bash
 python3 build.py flash g4 --varambuf   # then capture with nucleo_g474_zephyr_varambuf.vacf
+python3 build.py flash h5 --varambuf   # then capture with nucleo_h5_zephyr_varambuf.vacf
 ```
 
 ## What the Firmware Does

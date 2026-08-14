@@ -425,18 +425,26 @@ BOARD_ALIASES = {
 
 # Transport overrides (--swo / --rtt / --varambuf / --snapshot).  Each maps to
 # a Kconfig fragment merged after the board conf, plus a build-dir suffix so
-# every transport keeps its own CMake/Kconfig cache and ELF.
-def apply_transport(board_cfg: BoardConfig, transport: str | None) -> tuple[BoardConfig, Path | None]:
-    """Return (possibly rebuilt) board config and the overlay conf to merge."""
+# every transport keeps its own CMake/Kconfig cache and ELF.  A board that
+# needs transport-specific tuning (e.g. a smaller RAM ring on a small-SRAM
+# part) adds transports/<transport>.<board>.conf, merged after the generic
+# fragment.
+def apply_transport(board_cfg: BoardConfig, transport: str | None) -> tuple[BoardConfig, list[Path]]:
+    """Return (possibly rebuilt) board config and the overlay confs to merge."""
     if transport is None:
-        return board_cfg, None
+        return board_cfg, []
 
     overlay = PROJECT_DIR / "transports" / f"{transport}.conf"
     if not overlay.is_file():
         raise ValueError(f"Transport overlay not found: {overlay}")
 
+    overlays = [overlay]
+    board_overlay = PROJECT_DIR / "transports" / f"{transport}.{board_cfg.board}.conf"
+    if board_overlay.is_file():
+        overlays.append(board_overlay)
+
     build_dir = board_cfg.build_dir.parent / f"{board_cfg.build_dir.name}-{transport}"
-    return replace(board_cfg, build_dir=build_dir), overlay
+    return replace(board_cfg, build_dir=build_dir), overlays
 
 
 RUNNER_ALIASES = {
@@ -508,7 +516,7 @@ def resolve_runner(name: str | None, *, default: str) -> str:
 
 
 def west_build_args(board_cfg: BoardConfig, west: str, pristine: bool, host_tools: HostTools,
-                    transport_overlay: Path | None = None) -> list[str]:
+                    transport_overlays: list[Path] | None = None) -> list[str]:
     args = [
         west, "build",
         "-p", "always" if pristine else "auto",
@@ -519,9 +527,11 @@ def west_build_args(board_cfg: BoardConfig, west: str, pristine: bool, host_tool
         "-DZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb",
         f"-DGNUARMEMB_TOOLCHAIN_PATH={host_tools.toolchain_path}",
     ]
-    if transport_overlay is not None:
+    if transport_overlays:
         # Relative to the app dir; forward slashes keep it valid on Windows.
-        args.append(f"-DEXTRA_CONF_FILE={transport_overlay.relative_to(PROJECT_DIR).as_posix()}")
+        # ';' is the CMake list separator (no shell involved, so it's safe).
+        fragments = ";".join(p.relative_to(PROJECT_DIR).as_posix() for p in transport_overlays)
+        args.append(f"-DEXTRA_CONF_FILE={fragments}")
     if project_dir_looks_like_build_dir():
         args.insert(2, "--force")
     return args
@@ -626,22 +636,23 @@ def west_runner_args(board_cfg: BoardConfig, runner: str, host_tools: HostTools)
 
 
 # ── Commands ─────────────────────────────────────────────────────────
-def cmd_build(board_cfg: BoardConfig, pristine: bool = False, transport_overlay: Path | None = None):
+def cmd_build(board_cfg: BoardConfig, pristine: bool = False, transport_overlays: list[Path] | None = None):
     env, host_tools = setup_env()
     west = find_west(env)
 
     moved_root_artifacts = quarantine_root_build_artifacts()
     build_dir_reset = reset_build_dir_if_needed(board_cfg)
 
-    args = west_build_args(board_cfg, west, pristine, host_tools, transport_overlay)
+    args = west_build_args(board_cfg, west, pristine, host_tools, transport_overlays)
 
     print(f"{'[CLEAN] ' if pristine else ''}Building {board_cfg.board} ({board_cfg.alias}) …")
     print(f"  west     = {west}")
     print(f"  build dir   = {board_cfg.build_dir}")
     print(f"  ZEPHYR_BASE = {env['ZEPHYR_BASE']}")
     print(f"  toolchain   = gnuarmemb ({host_tools.toolchain_path})")
-    if transport_overlay is not None:
-        print(f"  transport   = {transport_overlay.stem} (overlay {transport_overlay.relative_to(PROJECT_DIR).as_posix()})")
+    if transport_overlays:
+        shown = ", ".join(p.relative_to(PROJECT_DIR).as_posix() for p in transport_overlays)
+        print(f"  transport   = {transport_overlays[0].stem} (overlays {shown})")
     if moved_root_artifacts:
         print(f"  note        = quarantined generated root artifacts: {', '.join(moved_root_artifacts)}")
     elif project_dir_looks_like_build_dir():
@@ -653,14 +664,14 @@ def cmd_build(board_cfg: BoardConfig, pristine: bool = False, transport_overlay:
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
-def cmd_menuconfig(board_cfg: BoardConfig, transport_overlay: Path | None = None):
+def cmd_menuconfig(board_cfg: BoardConfig, transport_overlays: list[Path] | None = None):
     env, host_tools = setup_env()
     west = find_west(env)
 
     quarantine_root_build_artifacts()
     build_dir_reset = reset_build_dir_if_needed(board_cfg)
 
-    args = west_build_args(board_cfg, west, False, host_tools, transport_overlay)
+    args = west_build_args(board_cfg, west, False, host_tools, transport_overlays)
     # Insert -t menuconfig before the "--" separator so it's parsed by
     # west, not forwarded to CMake.
     try:
@@ -678,8 +689,8 @@ def cmd_menuconfig(board_cfg: BoardConfig, transport_overlay: Path | None = None
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
-def cmd_flash(board_cfg: BoardConfig, runner: str, transport_overlay: Path | None = None):
-    rc = cmd_build(board_cfg, transport_overlay=transport_overlay)
+def cmd_flash(board_cfg: BoardConfig, runner: str, transport_overlays: list[Path] | None = None):
+    rc = cmd_build(board_cfg, transport_overlays=transport_overlays)
     if rc != 0:
         return rc
 
@@ -693,8 +704,8 @@ def cmd_flash(board_cfg: BoardConfig, runner: str, transport_overlay: Path | Non
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
-def cmd_debug(board_cfg: BoardConfig, runner: str, transport_overlay: Path | None = None):
-    rc = cmd_build(board_cfg, transport_overlay=transport_overlay)
+def cmd_debug(board_cfg: BoardConfig, runner: str, transport_overlays: list[Path] | None = None):
+    rc = cmd_build(board_cfg, transport_overlays=transport_overlays)
     if rc != 0:
         return rc
 
@@ -755,19 +766,19 @@ def main():
 
     try:
         board_cfg = resolve_board(args.board)
-        board_cfg, transport_overlay = apply_transport(board_cfg, args.transport)
+        board_cfg, transport_overlays = apply_transport(board_cfg, args.transport)
         if args.action == "build":
-            return cmd_build(board_cfg, pristine=False, transport_overlay=transport_overlay)
+            return cmd_build(board_cfg, pristine=False, transport_overlays=transport_overlays)
         if args.action == "clean":
-            return cmd_build(board_cfg, pristine=True, transport_overlay=transport_overlay)
+            return cmd_build(board_cfg, pristine=True, transport_overlays=transport_overlays)
         if args.action == "menuconfig":
-            return cmd_menuconfig(board_cfg, transport_overlay)
+            return cmd_menuconfig(board_cfg, transport_overlays)
         if args.action == "flash":
             runner = resolve_runner(args.runner, default=board_cfg.default_flash_runner)
-            return cmd_flash(board_cfg, runner, transport_overlay)
+            return cmd_flash(board_cfg, runner, transport_overlays)
         if args.action == "debug":
             runner = resolve_runner(args.runner, default=board_cfg.default_debug_runner)
-            return cmd_debug(board_cfg, runner, transport_overlay)
+            return cmd_debug(board_cfg, runner, transport_overlays)
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
