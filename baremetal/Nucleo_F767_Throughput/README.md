@@ -10,8 +10,12 @@ transport switch aimed at J-Link use cases:
 - **SEGGER RTT** (`-DVA_TRANSPORT=JLINK_RTT`) — vendored `SEGGER_RTT/` sources
 
 All RAM lives in **DTCM** (never cached, inside the app's default scan
-window). Caches stay off. CMSIS headers are vendored under `Drivers/`
-(`cmsis-core` + `cmsis-device-f7`, BSD-3 ST/ARM licenses).
+window). Caches stay off. If your own firmware enables the D-cache or
+places `.bss` elsewhere, pin the ring to a non-cacheable region with
+`VA_RAMBUF_ATTRIBUTES` (a section attribute; set it via the
+`VA_CONFIG_HEADER` pattern, see `core/va_config_template.h`). CMSIS
+headers are vendored under `Drivers/` (`cmsis-core` + `cmsis-device-f7`,
+BSD-3 ST/ARM licenses).
 
 ## Build & flash (J-Link)
 

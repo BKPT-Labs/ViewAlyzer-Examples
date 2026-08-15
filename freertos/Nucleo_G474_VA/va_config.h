@@ -44,4 +44,14 @@
 #define VA_TRACE_TIMERS             1
 #define VA_TRACE_EVENT_FLAGS        1
 
+/* RAM buffer transport (built with -DVA_RAMBUF=ON)
+   The ring size lives in CMakeLists.txt (-DVA_RAMBUF_SIZE=16384u); do
+   not also define it here or the compiler flags a redefinition.
+   Placement is a knob too: the G4 has no data cache, so the default
+   .bss spot streams fine - define this only to pin the ring to a
+   specific RAM region (e.g. CCM-SRAM, keeping it off the SRAM your app
+   uses) via a section from your linker script. The host finds the ring
+   wherever it lands (ELF symbol or magic-tag scan): */
+/* #define VA_RAMBUF_ATTRIBUTES __attribute__((section(".va_rambuf"))) */
+
 #endif /* VA_CONFIG_H */

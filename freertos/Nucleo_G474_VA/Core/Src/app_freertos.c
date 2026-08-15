@@ -55,15 +55,15 @@ volatile uint16_t invertedSineVal = 0;
 volatile uint16_t sine_index = 0;
 
 
+#define SINE_PERIOD_MS 2000u /* one full sine cycle every 2 s */
+
 uint16_t get_next_sine_value(void)
 {
-  // Generate a sine wave value between 0 and 200
-  // sine_index goes from 0 to 359 (degrees)
+  // Generate a sine wave value between 0 and 200. 
+  sine_index = (uint16_t)(((HAL_GetTick() % SINE_PERIOD_MS) * 360u) / SINE_PERIOD_MS);
   float radians = (sine_index * 2.0f * (float)M_PI) / 360.0f;
   float sine = sinf(radians);                                   // -1.0 to 1.0
   volatile uint16_t value = (uint16_t)((sine + 1.0f) * 100.0f); // 0 to 200
-
-  sine_index = (sine_index + 1) % 360;
   return value;
 }
 
@@ -519,7 +519,19 @@ void StartTask02(void *argument)
       __NOP();
     }
 
-    vTaskDelay(pdMS_TO_TICKS(150 + ((rng >> 8) % 300u))); // 150..449 ms rest
+    // Rest the same random 150..449 ms (the queue-burst rhythm above is
+    // tuned to it), but tick the sine every 40 ms while resting so the wave
+    // samples at ~25 Hz instead of once per burst - a smooth, fast sine
+    // without touching the backlog pattern.
+    const uint32_t restMs = 150 + ((rng >> 8) % 300u);
+    for (uint32_t rested = 0; rested < restMs; rested += 40)
+    {
+      vTaskDelay(pdMS_TO_TICKS(40));
+      sineVal = get_next_sine_value();
+      VA_LogTrace(42, sineVal); // Sine Wave
+      float restRadians = (sine_index * 2.0f * (float)M_PI) / 360.0f;
+      VA_LogTraceFloat(60, sinf(restRadians)); // Sine Float
+    }
   }
   /* USER CODE END StartTask02 */
 }
@@ -552,8 +564,6 @@ void StartTask03(void *argument)
           xSemaphoreGive(sharedResourceMutex);
         }
         
-        // Log processed data
-        VA_LogTrace(46, receivedData.sensorValue);
       }
     }
     BSP_LED_Toggle(LED2); // Toggle LED to visualize activity

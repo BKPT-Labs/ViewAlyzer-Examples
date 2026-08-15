@@ -198,7 +198,6 @@ int main(void)
   VA_RegisterUserTrace(43, "Tick Counter", VA_USER_TYPE_GRAPH);  // Task05: HAL tick counter
   VA_RegisterUserTrace(44, "Task08 Toggle", VA_USER_TYPE_TOGGLE); // Task08: Function entry/exit toggle
   VA_RegisterUserEvent(45, "Custom Event");                   // Task08: Span or event timing
-  VA_RegisterUserTrace(46, "Processed Data", VA_USER_TYPE_GRAPH); // Task03: Processed sensor values
   VA_RegisterUserTrace(47, "Shared Counter", VA_USER_TYPE_COUNTER); // Task05: Mutex-protected shared counter
   VA_RegisterUserTrace(48, "Protected Op", VA_USER_TYPE_GRAPH);   // Task07: Mutex-protected operation result
   VA_RegisterUserTrace(50, "Workload Prof", VA_USER_TYPE_BAR);    // WorkloadManager: Current profile index
@@ -269,7 +268,6 @@ int main(void)
 
     VA_LogTrace(42, sineValue);                      // Sine Wave
     VA_LogTrace(43, HAL_GetTick());                   // Tick Counter
-    VA_LogTrace(46, (uint16_t)(sineValue * 0.8f));    // Processed Data
     VA_LogTrace(48, HAL_GetTick() * 2);               // Protected Op
 
     sine_idx = (sine_idx + 1) % 360;
