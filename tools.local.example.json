@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "Machine-local tool paths for the example build scripts. Copy this file to",
+    "tools.local.json (or tools.local.win.json / tools.local.linux.json /",
+    "tools.local.mac.json on a dual-boot machine) at the repo root and keep",
+    "only the keys auto-detection gets wrong. A build.local[.os].json next to",
+    "a project's build.py overrides these per project. All .local. files are",
+    "gitignored - never commit machine paths."
+  ],
+
+  "stm32cubeclt_root": "/opt/ST/STM32CubeCLT_1.22.0",
+  "zephyr_base": "~/zephyrproject/zephyr",
+  "gnuarmemb_toolchain_path": "/opt/ST/STM32CubeCLT_1.22.0/GNU-tools-for-STM32",
+  "openocd_bin": "/usr/local/bin/openocd",
+  "jlink_commander": "/Applications/SEGGER/JLink/JLinkExe"
+}

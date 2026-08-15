@@ -11,6 +11,7 @@ build.local.json
 build.local.*.json
 tools.local.json
 tools.local.*.json
+!tools.local.example.json
 
 # Editor / tool caches
 .cache/

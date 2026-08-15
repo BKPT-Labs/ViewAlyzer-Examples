@@ -7,7 +7,7 @@ the standard toolchain for that target.
 
 This repo doubles as integration documentation:
 
-- **[AI_INTEGRATION.md](AI_INTEGRATION.md)** — the complete integration
+- **[AI_INTEGRATION.md](AI_INTEGRATION.md)** - the complete integration
   reference on one page (transports, per-RTOS recipes, `.vacf` configs,
   capture, troubleshooting). Written for humans *and* for pointing an AI
   assistant at ("integrate ViewAlyzer into my project, follow this guide").
@@ -18,9 +18,10 @@ The projects are grouped by RTOS / runtime:
 
 ```
 ViewAlyzer-Examples/
-├── baremetal/           # No RTOS — direct user trace + ISR instrumentation
+├── baremetal/           # No RTOS - direct user trace + ISR instrumentation
 ├── freertos/            # FreeRTOS-based examples (task switches, sync objects)
 ├── zephyr/              # Zephyr RTOS examples using the ViewAlyzer Zephyr module
+├── throughput/          # Transport bandwidth benchmarks (one board per Cortex-M core)
 ├── Desktop-CPP-UDP/     # Host-side C++ example that streams traces over UDP
 └── Desktop-Python-UDP/  # Host-side Python UDP sender package + examples
 ```
@@ -44,23 +45,23 @@ So the zero-configuration setup is two sibling clones:
 └── ViewAlyzer-Examples/   # this repository
 ```
 
-## Transports — which one to use
+## Transports - which one to use
 
 The recorder can stream over several transports; pick per board:
 
-- **RAM buffer** (*recommended*) — the recorder writes a ring buffer in
+- **RAM buffer** (*recommended*) - the recorder writes a ring buffer in
   target RAM and the host drains it through the debug probe with plain
   memory reads. Works with the on-board ST-LINK every Nucleo ships with, no
   SWO pin, no SEGGER stack, best sustained throughput in practice, and it
   enables post-mortem **snapshot** capture (run untethered, read the last
   trace window out later).
-- **ITM/SWO** — classic ARM trace over the SWO pin (ST-LINK).
-- **SEGGER RTT** — when the board's probe runs J-Link firmware.
-- **UDP** — desktop/simulation producers (see the Desktop examples).
+- **ITM/SWO** - classic ARM trace over the SWO pin (ST-LINK).
+- **SEGGER RTT** - when the board's probe runs J-Link firmware.
+- **UDP** - desktop/simulation producers (see the Desktop examples).
 
 ## Connection configs (`.vacf`)
 
-Every firmware example ships one or more `.vacf` files — small JSON
+Every firmware example ships one or more `.vacf` files - small JSON
 **connection configs** (transport, target device, probe speed, SWO
 frequency, …). Open one in the ViewAlyzer app and the connection is set up
 in one click, or pass it on the CLI:
@@ -74,8 +75,8 @@ settings ever again. Key reference: [AI_INTEGRATION.md](AI_INTEGRATION.md#step-3
 
 ## Machine-specific tool paths
 
-Committed files never contain machine paths. Anything local — Zephyr
-checkout, toolchain, OpenOCD, J-Link — goes into gitignored config files
+Committed files never contain machine paths. Anything local - Zephyr
+checkout, toolchain, OpenOCD, J-Link - goes into gitignored config files
 read by the build scripts: a `tools.local[.win|.linux|.mac].json` at this
 repo root (shared by all projects), overridable per project with
 `build.local[.os].json` next to its `build.py`. Copy
@@ -87,7 +88,7 @@ machine can share a single checkout.
 
 ## zephyr/
 
-Zephyr projects use the recorder as an external Zephyr module — no sources
+Zephyr projects use the recorder as an external Zephyr module - no sources
 are copied. **[STM32-Zephyr-VA-Demo](zephyr/STM32-Zephyr-VA-Demo)** is the
 place to start: a multi-board, multi-transport demo that exercises every
 traceable kernel object, with a quickstart and a step-by-step
@@ -111,7 +112,7 @@ switches, queues, semaphores, and mutexes are captured automatically.
 
 Note the defines live in `add_definitions(...)` at the top of each project's
 `CMakeLists.txt`, which is directory-scoped: the FreeRTOS kernel target gets
-the identical set. That matters — the kernel compiles the trace hooks, and a
+the identical set. That matters - the kernel compiles the trace hooks, and a
 kernel built with a different `VA_TRACE_*` set installs different hooks.
 
 | Project | Board | Notes |
@@ -119,15 +120,15 @@ kernel built with a different `VA_TRACE_*` set installs different hooks.
 | [Nucleo_F103_VA](freertos/Nucleo_F103_VA) | Nucleo-F103RB | STM32CubeMX + CMake, FreeRTOS |
 | [Nucleo_F446RE](freertos/Nucleo_F446RE) | Nucleo-F446RE | STM32CubeMX + CMake, FreeRTOS, SEGGER RTT |
 | [Nucleo_G474_VA](freertos/Nucleo_G474_VA) | Nucleo-G474RE | STM32CubeMX + CMake, FreeRTOS |
-| [Nucleo_G474_VA_Standalone](freertos/Nucleo_G474_VA_Standalone) | Nucleo-G474RE | Self-contained variant of Nucleo_G474_VA (recorder sources vendored in-tree) |
 | [Nucleo_U385](freertos/Nucleo_U385) | Nucleo-U385 | STM32CubeMX + CMake, FreeRTOS (kernel v10.6, `ViewAlyzerFreeRTOSHook_V10_4_Plus.h`) |
 
-Build (typical):
+Build (every project ships a `build.py`; plain CMake works too):
 
 ```bash
 cd freertos/Nucleo_G474_VA
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
+python3 build.py                    # build
+python3 build.py --flash            # build + flash via the on-board ST-LINK
+python3 build.py --flash --serial <probe-serial>   # pick one of several probes
 ```
 
 ## baremetal/
@@ -138,9 +139,18 @@ ISR instrumentation without any RTOS hooks.
 
 | Project | Board | Highlights |
 |---------|-------|-----------|
-| `Nucleo_H723_VA` | Nucleo-H723ZG (STM32H723ZG) | **RAM buffer transport** — streams through the on-board ST-Link with no SWO pin and no SEGGER RTT; switchable to ITM/SWO with `-DVA_TRANSPORT=ARM_ITM` |
-| `Nucleo_H723_Throughput` | Nucleo-H723ZG (STM32H723ZG) | Transport throughput stress rig (RAM buffer / ITM), used for bandwidth ceiling measurements |
-| `Nucleo_F767_Throughput` | Nucleo-F767ZI (STM32F767ZI) | Throughput rig over **SEGGER RTT** (vendored SEGGER sources) — the baremetal RTT reference |
+| [Nucleo_F103_VA](baremetal/Nucleo_F103_VA) | Nucleo-F103RB (STM32F103RB, Cortex-M3) | Small-SRAM reference - RAM buffer through the on-board ST-LINK V2-1, switchable to ITM/SWO |
+| [Nucleo_G474_VA](baremetal/Nucleo_G474_VA) | Nucleo-G474RE (STM32G474RE, Cortex-M4F) | RAM buffer through the on-board ST-LINK V3, switchable to ITM/SWO |
+| [Nucleo_H723_VA](baremetal/Nucleo_H723_VA) | Nucleo-H723ZG (STM32H723ZG, Cortex-M7) | **RAM buffer transport** - streams through the on-board ST-Link with no SWO pin and no SEGGER RTT; switchable to ITM/SWO with `-DVA_TRANSPORT=ARM_ITM` |
+
+## throughput/
+
+Transport bandwidth benchmarks - one board per Cortex-M core (M3, M4, M33,
+M7), each measuring what RAM-buffer / SWO / RTT capture actually sustains
+from that target. These deliberately saturate the pipe and are **not**
+integration references. See [throughput/README.md](throughput/README.md) for
+how the benchmark works and [throughput/RESULTS.md](throughput/RESULTS.md)
+for measured numbers.
 
 ## Desktop-CPP-UDP/
 

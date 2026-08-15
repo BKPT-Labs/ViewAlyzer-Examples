@@ -1,0 +1,11 @@
+{
+  "transport": "stlink-swo",
+  "target-device": "STM32H503RB",
+  "cpu-clock-hz": 240000000,
+  "trace-clock-hz": 240000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "swo-freq-hz": 2000000,
+  "itm-port": 1,
+  "stlink-apid": 1
+}

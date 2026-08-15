@@ -1,0 +1,9 @@
+{
+  "transport": "stlink-rambuf",
+  "target-device": "STM32H503RB",
+  "interface": "SWD",
+  "speed-khz": 24000,
+  "rambuf-scan-start": "0x20000000",
+  "rambuf-scan-size": 32768,
+  "stlink-apid": 1
+}
