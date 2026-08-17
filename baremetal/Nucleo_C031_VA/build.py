@@ -19,7 +19,7 @@ the ViewAlyzer CLI prints them too: `ViewAlyzer --headless --list-probes`).
 Requirements: CMake, Ninja, and the Arm GNU toolchain. Everything is found
 automatically when STM32CubeCLT is installed. Machine-specific paths can be
 set in tools.local[.win|.linux|.mac].json at the repo root (shared by all
-examples) or build.local[.os].json next to this script — see
+examples) or build.local[.os].json next to this script - see
 tools.local.example.json at the repo root. Committed files never contain
 machine paths.
 """
