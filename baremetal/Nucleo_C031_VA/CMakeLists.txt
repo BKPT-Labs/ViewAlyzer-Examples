@@ -1,0 +1,90 @@
+cmake_minimum_required(VERSION 3.22)
+
+# ── Nucleo-C031C6 ViewAlyzer bare-metal integration example ──
+# Cortex-M0+: no DWT cycle counter, no ITM. Timestamps from TIM3 (recorder
+# CUSTOM_TIMER source), transport = RAM buffer drained by the on-board
+# ST-LINK. The only transport this part supports without a J-Link is the RAM
+# buffer, so there is no transport switch here.
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS ON)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
+set(CMAKE_PROJECT_NAME Nucleo_C031_VA)
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+project(${CMAKE_PROJECT_NAME})
+message("Build type: " ${CMAKE_BUILD_TYPE})
+enable_language(C ASM)
+
+add_executable(${CMAKE_PROJECT_NAME})
+
+# ── Locate the ViewAlyzer Recorder ────────────────────────────────────
+# Resolution order:
+#   1. -DVIEWALYZER_RECORDER_DIR=<path> on the cmake command line
+#   2. The VIEWALYZER_RECORDER_DIR environment variable
+#   3. A ViewAlyzer checkout cloned next to this examples repo:
+#      <workspace>/ViewAlyzer/ViewAlyzerRecorder
+if(NOT DEFINED VIEWALYZER_RECORDER_DIR)
+  if(DEFINED ENV{VIEWALYZER_RECORDER_DIR})
+    set(VIEWALYZER_RECORDER_DIR "$ENV{VIEWALYZER_RECORDER_DIR}")
+  else()
+    set(VIEWALYZER_RECORDER_DIR
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../../ViewAlyzer/ViewAlyzerRecorder")
+  endif()
+endif()
+get_filename_component(VIEWALYZER_RECORDER_DIR "${VIEWALYZER_RECORDER_DIR}" ABSOLUTE)
+if(NOT EXISTS "${VIEWALYZER_RECORDER_DIR}/core/ViewAlyzer.c")
+  message(FATAL_ERROR
+    "ViewAlyzer Recorder not found at: ${VIEWALYZER_RECORDER_DIR}\n"
+    "Clone the ViewAlyzer repo next to this examples repo, or point "
+    "VIEWALYZER_RECORDER_DIR (CMake option or environment variable) at a "
+    "ViewAlyzerRecorder directory.")
+endif()
+
+set(HAL_DIR Drivers/STM32C0xx_HAL_Driver)
+
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    startup_stm32c031xx.s
+    Core/Src/system_stm32c0xx.c
+    Core/Src/syscalls.c
+    Core/Src/sysmem.c
+    Core/Src/main.c
+    # HAL subset: clock bring-up, GPIO, DBGMCU
+    ${HAL_DIR}/Src/stm32c0xx_hal.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_cortex.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_rcc.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_rcc_ex.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_pwr.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_pwr_ex.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_flash.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_flash_ex.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_exti.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_gpio.c
+    ${HAL_DIR}/Src/stm32c0xx_hal_dma.c
+    ${VIEWALYZER_RECORDER_DIR}/core/ViewAlyzer.c
+)
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+    Core/Inc
+    Drivers/CMSIS/Include
+    Drivers/CMSIS/Device/ST/STM32C0xx/Include
+    ${HAL_DIR}/Inc
+    ${HAL_DIR}/Inc/Legacy
+    ${VIEWALYZER_RECORDER_DIR}/core
+)
+
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+    STM32C031xx
+    USE_HAL_DRIVER
+    VA_ENABLED=1
+    VA_RTOS_SELECT=0
+    VA_DEVICE_HEADER=stm32c0xx.h
+    VA_CONFIG_HEADER=va_config.h
+)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} m)

@@ -1,0 +1,13 @@
+{
+  "comment": "Nucleo-C031C6 (Cortex-M0+) over its on-board ST-LINK V2-1: RAM-buffer recorder stream + live statistical profile by DWT_PCSR polling (this core has no ITM/SWO, so PC sampling by polling is the hardware-trace path). ELF is not a .vacf key: set ELF / Symbols > ELF File to build/rambuf/Nucleo_C031_VA.elf for function names.",
+  "transport": "stlink-rambuf",
+  "target-device": "STM32C031C6",
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "cpu-clock-hz": 48000000,
+  "rambuf-scan-start": "0x20000000",
+  "rambuf-scan-size": 12288,
+  "hardware-trace": {
+    "dwt": { "enable": true, "pc-sample-cyc": 1 }
+  }
+}

@@ -140,6 +140,7 @@ ISR instrumentation without any RTOS hooks.
 | Project | Board | Highlights |
 |---------|-------|-----------|
 | [Nucleo_F103_VA](baremetal/Nucleo_F103_VA) | Nucleo-F103RB (STM32F103RB, Cortex-M3) | Small-SRAM reference - RAM buffer through the on-board ST-LINK V2-1, switchable to ITM/SWO |
+| [Nucleo_C031_VA](baremetal/Nucleo_C031_VA) | Nucleo-C031C6 (STM32C031C6, Cortex-M0+) | Smallest-core reference - CUSTOM_TIMER timestamps (no DWT cycle counter), RAM buffer (no ITM), live PC-sample profile by DWT_PCSR polling |
 | [Nucleo_G474_VA](baremetal/Nucleo_G474_VA) | Nucleo-G474RE (STM32G474RE, Cortex-M4F) | RAM buffer through the on-board ST-LINK V3, switchable to ITM/SWO |
 | [Nucleo_H723_VA](baremetal/Nucleo_H723_VA) | Nucleo-H723ZG (STM32H723ZG, Cortex-M7) | **RAM buffer transport** - streams through the on-board ST-Link with no SWO pin and no SEGGER RTT; switchable to ITM/SWO with `-DVA_TRANSPORT=ARM_ITM` |
 
