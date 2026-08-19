@@ -1,0 +1,12 @@
+{
+  "transport": "stlink-swo",
+  "target-device": "STM32H5",
+  "cpu-clock-hz": 240000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "swo-freq-hz": 1000000,
+  "itm-port": 1,
+  "stlink-gdb-port": 61234,
+  "stlink-swo-port": 61235,
+  "stlink-apid": 1
+}

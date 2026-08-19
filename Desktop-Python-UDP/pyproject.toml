@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "viewalyzer"
+dynamic = ["version"]
+description = "Python library for sending ViewAlyzer protocol data over UDP with COBS framing"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.8"
+authors = [{name = "BKPT, Inc."}]
+keywords = ["embedded", "profiler", "rtos", "tracing", "viewalyzer"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Embedded Systems",
+    "Programming Language :: Python :: 3",
+]
+
+# Zero external dependencies - stdlib only
+dependencies = []
+
+[project.urls]
+Homepage = "https://viewalyzer.net"
+Documentation = "https://viewalyzer.net/docs.html"
+Repository = "https://github.com/ViewAlyzer/ViewAlyzer"
+
+[tool.setuptools.dynamic]
+version = { attr = "viewalyzer.__version__" }

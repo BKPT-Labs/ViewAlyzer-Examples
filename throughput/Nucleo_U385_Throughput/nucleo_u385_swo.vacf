@@ -1,0 +1,10 @@
+{
+  "transport": "stlink-swo",
+  "target-device": "STM32U385RG",
+  "cpu-clock-hz": 96000000,
+  "trace-clock-hz": 96000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "swo-freq-hz": 2000000,
+  "itm-port": 1
+}

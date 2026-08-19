@@ -1,0 +1,12 @@
+{
+  "transport": "jlink-rtt",
+  "target-device": "STM32F446RE",
+  "cpu-clock-hz": 96000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "rtt-channel": 1,
+  "rtt-port": 19021,
+  "jlink-gdb-port": 2331,
+  "jlink-swo-port": 2332,
+  "jlink-telnet-port": 2333
+}

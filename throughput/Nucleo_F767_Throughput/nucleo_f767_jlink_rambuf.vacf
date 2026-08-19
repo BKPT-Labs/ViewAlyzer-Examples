@@ -1,0 +1,8 @@
+{
+  "transport": "jlink-rambuf",
+  "target-device": "STM32F767ZI",
+  "interface": "SWD",
+  "speed-khz": 25000,
+  "rambuf-scan-start": "0x20000000",
+  "rambuf-scan-size": 131072
+}
