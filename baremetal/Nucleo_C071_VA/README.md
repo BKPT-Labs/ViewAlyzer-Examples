@@ -60,4 +60,28 @@ heading as an angle dial and the temperature as a gauge.
 The classic C++ app records this target the same way as the C031 example
 (`Load Config`, set the ELF, Connect); it simply shows the plain traces.
 
+## External instrument sync (any instrument)
+
+The firmware also emits **sync marks**: a rising edge on PB8 (Arduino "D15"
+on CN10; verify the pin with a meter before trusting silkscreen) paired with
+a `VA_LogTrace("jsync", seq)` event, at LFSR-dithered intervals. Wire that
+pin + GND to anything that can timestamp a logic edge on its own clock
+(power analyzer GPI, DAQ, logic analyzer), convert its capture to the
+external-series NDJSON contract (`ViewAlyzer-RS/docs/EXTERNAL-SERIES.md`),
+and merge:
+
+```sh
+viewalyzer-cli import imu-demo.vadb --series instrument.ndjson --max-resid-us 500
+# or in one step, spawning the instrument's recorder for the capture window:
+viewalyzer-cli capture --config nucleo_c071_rambuf.vacf --elf build/rambuf/Nucleo_C071_VA.elf \
+    --output imu-demo.vadb --duration 15 \
+    --instrument-cmd "<whatever records your instrument>" --instrument-series instrument.ndjson
+```
+
+The import reports matched pairs, clock drift and fit residuals. Note the
+LFSR restarts from a fixed seed at reset, so every boot emits the same
+fingerprint: always import the instrument file recorded alongside THAT
+capture. For the Joulescope specifically, the adapter is
+`joulescope-demo/scripts/npz_to_vaext.py`.
+
 Memory: ~11 KB RAM (8 KB ring + recorder state + stack), ~7 KB flash.

@@ -35,6 +35,7 @@
 #define TRACE_IMU_HEAD    53
 #define TRACE_IMU_TEMP    54
 #define TRACE_IMU_MOT     55
+#define TRACE_JSYNC       60
 #define TRACE_LOG          1
 
 /* Quarter-wave sine table (0..90 deg, scaled 0..100) - avoids pulling in libm */
@@ -201,6 +202,54 @@ DEMO_FN static void imu_sample (ImuSample *out)
     out->moving = moving;
 }
 
+/* ── External-instrument sync marks ───────────────────────────────────
+ * Any bench instrument that can timestamp a logic edge on its own clock
+ * (power analyzer GPI, logic analyzer, DAQ, scope) can be merged onto this
+ * recording's time axis: wire PB8 (Arduino "D15" on CN10) + GND to the
+ * instrument, record the edge times, and hand them to
+ * `viewalyzer-cli import` as the sync train (NDJSON contract).
+ *
+ * Each mark is a rising edge plus a VA_LogTrace("jsync", seq) event inside
+ * one interrupt-masked section, so edge-to-timestamp skew is a constant few
+ * instructions (the import's linear fit absorbs it). Delays are
+ * LFSR-dithered (400..700 ms in 20 ms steps) so the interval sequence is a
+ * unique fingerprint: alignment is unambiguous no matter when the
+ * instrument capture started. A fixed period would be ambiguous modulo one
+ * period. */
+#define SYNC_GPIO_PORT  GPIOB
+#define SYNC_GPIO_PIN   GPIO_PIN_8
+
+static void sync_gpio_init (void)
+{
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    GPIO_InitTypeDef g = {0};
+    HAL_GPIO_WritePin (SYNC_GPIO_PORT, SYNC_GPIO_PIN, GPIO_PIN_RESET);
+    g.Pin   = SYNC_GPIO_PIN;
+    g.Mode  = GPIO_MODE_OUTPUT_PP;
+    g.Pull  = GPIO_NOPULL;
+    g.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init (SYNC_GPIO_PORT, &g);
+}
+
+static void sync_mark (uint32_t seq)
+{
+    uint32_t primask = __get_PRIMASK();
+    __disable_irq();
+    SYNC_GPIO_PORT->BSRR = SYNC_GPIO_PIN;                 /* rising edge      */
+    VA_LogTrace (TRACE_JSYNC, (int32_t) seq);             /* timestamped mark */
+    SYNC_GPIO_PORT->BSRR = (uint32_t) SYNC_GPIO_PIN << 16;
+    __set_PRIMASK (primask);
+}
+
+/* Galois LFSR (seed 0xACE1, taps 0xB400): the import's synthetic test
+ * mirrors this generator. Separate state from noise_lfsr on purpose. */
+static uint32_t sync_next_delay_ms (void)
+{
+    static uint16_t lfsr = 0xACE1u;
+    lfsr = (uint16_t) ((lfsr >> 1) ^ ((lfsr & 1u) ? 0xB400u : 0u));
+    return 400u + (uint32_t) (lfsr & 0xFu) * 20u;
+}
+
 /* ── SysTick: HAL 1 kHz tick + a traced ISR band on the timeline ── */
 void SysTick_Handler (void)
 {
@@ -272,6 +321,7 @@ int main (void)
     HAL_DBGMCU_EnableDBGStopMode();
     HAL_DBGMCU_EnableDBGStandbyMode();
     led_init();
+    sync_gpio_init();
     tick_timer_init();
 
     /* Start the recorder: RAM ring in SRAM (the host scans for the control
@@ -292,10 +342,13 @@ int main (void)
     VA_RegisterUserTrace (TRACE_IMU_HEAD, "imu.heading",   VA_USER_TYPE_GRAPH);
     VA_RegisterUserTrace (TRACE_IMU_TEMP, "imu.temp",      VA_USER_TYPE_GRAPH);
     VA_RegisterUserTrace (TRACE_IMU_MOT,  "imu.motion",    VA_USER_TYPE_TOGGLE);
+    VA_RegisterUserTrace (TRACE_JSYNC,    "jsync",         VA_USER_TYPE_GRAPH);
 
     uint32_t step = 0;
     bool led_state = false;
     bool was_moving = false;
+    uint32_t sync_seq = 0;
+    uint32_t sync_next_ms = 0;   /* startup burst at ~0/50/100 ms, then dithered */
 
     for (;;)
     {
@@ -339,6 +392,14 @@ int main (void)
             led_state = ! led_state;
             HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
             VA_LogToggle (TRACE_LED, led_state);
+        }
+
+        /* Instrument sync marks, paced by the HAL tick. */
+        if ((int32_t) (HAL_GetTick() - sync_next_ms) >= 0)
+        {
+            sync_mark (sync_seq);
+            sync_next_ms = HAL_GetTick() + (sync_seq < 2u ? 50u : sync_next_delay_ms());
+            ++sync_seq;
         }
 
         if ((step & 0x7FFFFu) == 0u)
