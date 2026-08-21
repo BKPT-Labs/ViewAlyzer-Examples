@@ -36,6 +36,7 @@
 #define TRACE_IMU_TEMP    54
 #define TRACE_IMU_MOT     55
 #define TRACE_JSYNC       60
+#define TRACE_PSTATE      61
 #define TRACE_LOG          1
 
 /* Quarter-wave sine table (0..90 deg, scaled 0..100) - avoids pulling in libm */
@@ -250,6 +251,45 @@ static uint32_t sync_next_delay_ms (void)
     return 400u + (uint32_t) (lfsr & 0xFu) * 20u;
 }
 
+/* ── Power-profile stages ─────────────────────────────────────────────
+ * A repeating 4-stage cycle (600 ms each) that gives an external power
+ * instrument distinct signatures to see, each announced on the pwr.stage
+ * trace so the current curve correlates with a cause:
+ *   0 busy    the normal DSP pipeline (baseline)
+ *   1 sleep   WFI between SysTicks: core clock-gated, the big dip
+ *   2 led     user LED solid on: measures whether the LED sits behind
+ *             the IDD measurement point at all
+ *   3 clocks  a bank of peripheral clocks enabled (clock-tree power)
+ * Sync marks keep firing on schedule in every stage (the sleep loop wakes
+ * at 1 kHz), so instrument alignment is unaffected. */
+static void pwr_clocks (bool on)
+{
+    if (on)
+    {
+        __HAL_RCC_TIM1_CLK_ENABLE();
+        __HAL_RCC_TIM14_CLK_ENABLE();
+        __HAL_RCC_TIM16_CLK_ENABLE();
+        __HAL_RCC_TIM17_CLK_ENABLE();
+        __HAL_RCC_USART1_CLK_ENABLE();
+        __HAL_RCC_USART2_CLK_ENABLE();
+        __HAL_RCC_SPI1_CLK_ENABLE();
+        __HAL_RCC_I2C1_CLK_ENABLE();
+        __HAL_RCC_ADC_CLK_ENABLE();
+    }
+    else
+    {
+        __HAL_RCC_TIM1_CLK_DISABLE();
+        __HAL_RCC_TIM14_CLK_DISABLE();
+        __HAL_RCC_TIM16_CLK_DISABLE();
+        __HAL_RCC_TIM17_CLK_DISABLE();
+        __HAL_RCC_USART1_CLK_DISABLE();
+        __HAL_RCC_USART2_CLK_DISABLE();
+        __HAL_RCC_SPI1_CLK_DISABLE();
+        __HAL_RCC_I2C1_CLK_DISABLE();
+        __HAL_RCC_ADC_CLK_DISABLE();
+    }
+}
+
 /* ── SysTick: HAL 1 kHz tick + a traced ISR band on the timeline ── */
 void SysTick_Handler (void)
 {
@@ -343,58 +383,82 @@ int main (void)
     VA_RegisterUserTrace (TRACE_IMU_TEMP, "imu.temp",      VA_USER_TYPE_GRAPH);
     VA_RegisterUserTrace (TRACE_IMU_MOT,  "imu.motion",    VA_USER_TYPE_TOGGLE);
     VA_RegisterUserTrace (TRACE_JSYNC,    "jsync",         VA_USER_TYPE_GRAPH);
+    VA_RegisterUserTrace (TRACE_PSTATE,   "pwr.stage",     VA_USER_TYPE_GRAPH);
 
     uint32_t step = 0;
-    bool led_state = false;
     bool was_moving = false;
     uint32_t sync_seq = 0;
     uint32_t sync_next_ms = 0;   /* startup burst at ~0/50/100 ms, then dithered */
+    uint32_t pwr_stage = 0;
+    uint32_t pwr_next_ms = 600;
+    VA_LogTrace (TRACE_PSTATE, 0);
 
     for (;;)
     {
-        /* The pipeline runs EVERY iteration (no HAL_Delay: a PC sample then
-         * always lands in real code, never in an idle poll). Only every 256th
-         * pass is wrapped in the VA event: per-pass events would flood the
-         * ring. */
-        bool traced_pass = (step & 255u) == 0u;
-        if (traced_pass) VA_EVENT_START (EVENT_WORK);
-        int32_t env = process_sample (step);
-        if (traced_pass) VA_EVENT_END (EVENT_WORK);
-
-        /* VA logging is decimated: the ring must not be flooded. */
-        if ((step & 2047u) == 0u)
+        /* Power-profile stage machine (fixed 600 ms cadence). */
+        if ((int32_t) (HAL_GetTick() - pwr_next_ms) >= 0)
         {
-            VA_LogTrace (TRACE_SINE, sine_lookup (step >> 11));
-            VA_LogTrace (TRACE_TICK, (int32_t) (HAL_GetTick() % 1000u));
-            VA_LogTrace (TRACE_WORKLOAD, env);
+            pwr_stage = (pwr_stage + 1u) & 3u;
+            pwr_next_ms += 600u;
+            VA_LogTrace (TRACE_PSTATE, (int32_t) pwr_stage);
+            bool led_on = pwr_stage == 2u;
+            HAL_GPIO_WritePin (GPIOA, GPIO_PIN_5, led_on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+            VA_LogToggle (TRACE_LED, led_on);
+            pwr_clocks (pwr_stage == 3u);
         }
 
-        /* IMU: one sample every 1024th pass; motion is edge-logged only. */
-        if ((step & 1023u) == 0u)
+        if (pwr_stage == 1u)
         {
-            ImuSample s;
-            imu_sample (&s);
-            VA_LogTraceFloat (TRACE_IMU_AX, s.ax);
-            VA_LogTraceFloat (TRACE_IMU_AY, s.ay);
-            VA_LogTraceFloat (TRACE_IMU_AZ, s.az);
-            VA_LogTraceFloat (TRACE_IMU_HEAD, s.heading);
-            if ((step & 8191u) == 0u)
-                VA_LogTraceFloat (TRACE_IMU_TEMP, s.temp);
-            if (s.moving != was_moving)
+            /* Sleep stage: WFI until the next SysTick; the DSP pipeline
+             * pauses (that is the point), sync marks stay on time below. */
+            __WFI();
+        }
+        else
+        {
+            /* The pipeline runs EVERY iteration (no HAL_Delay: a PC sample
+             * then always lands in real code, never in an idle poll). Only
+             * every 256th pass is wrapped in the VA event: per-pass events
+             * would flood the ring. */
+            bool traced_pass = (step & 255u) == 0u;
+            if (traced_pass) VA_EVENT_START (EVENT_WORK);
+            int32_t env = process_sample (step);
+            if (traced_pass) VA_EVENT_END (EVENT_WORK);
+
+            /* VA logging is decimated: the ring must not be flooded. */
+            if ((step & 2047u) == 0u)
             {
-                was_moving = s.moving;
-                VA_LogToggle (TRACE_IMU_MOT, s.moving);
+                VA_LogTrace (TRACE_SINE, sine_lookup (step >> 11));
+                VA_LogTrace (TRACE_TICK, (int32_t) (HAL_GetTick() % 1000u));
+                VA_LogTrace (TRACE_WORKLOAD, env);
             }
+
+            /* IMU: one sample every 1024th pass; motion is edge-logged only. */
+            if ((step & 1023u) == 0u)
+            {
+                ImuSample s;
+                imu_sample (&s);
+                VA_LogTraceFloat (TRACE_IMU_AX, s.ax);
+                VA_LogTraceFloat (TRACE_IMU_AY, s.ay);
+                VA_LogTraceFloat (TRACE_IMU_AZ, s.az);
+                VA_LogTraceFloat (TRACE_IMU_HEAD, s.heading);
+                if ((step & 8191u) == 0u)
+                    VA_LogTraceFloat (TRACE_IMU_TEMP, s.temp);
+                if (s.moving != was_moving)
+                {
+                    was_moving = s.moving;
+                    VA_LogToggle (TRACE_IMU_MOT, s.moving);
+                }
+            }
+
+            if ((step & 0x7FFFFu) == 0u)
+                VA_LogString (TRACE_LOG, "Nucleo-C071 IMU demo alive");
+
+            ++step;
         }
 
-        if ((step & 32767u) == 0u)
-        {
-            led_state = ! led_state;
-            HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
-            VA_LogToggle (TRACE_LED, led_state);
-        }
-
-        /* Instrument sync marks, paced by the HAL tick. */
+        /* Instrument sync marks, paced by the HAL tick: runs in EVERY stage
+         * (the sleep loop wakes at 1 kHz), so a mark is never late and the
+         * interval fingerprint stays intact. */
         if ((int32_t) (HAL_GetTick() - sync_next_ms) >= 0)
         {
             sync_mark (sync_seq);
@@ -402,11 +466,7 @@ int main (void)
             ++sync_seq;
         }
 
-        if ((step & 0x7FFFFu) == 0u)
-            VA_LogString (TRACE_LOG, "Nucleo-C071 IMU demo alive");
-
         VA_TickOverflowCheck();               /* 16-bit tick: every pass */
-        ++step;
     }
 }
 
