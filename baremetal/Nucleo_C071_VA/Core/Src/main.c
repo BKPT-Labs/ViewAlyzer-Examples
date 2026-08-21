@@ -205,7 +205,7 @@ DEMO_FN static void imu_sample (ImuSample *out)
 /* ── External-instrument sync marks ───────────────────────────────────
  * Any bench instrument that can timestamp a logic edge on its own clock
  * (power analyzer GPI, logic analyzer, DAQ, scope) can be merged onto this
- * recording's time axis: wire PB8 (Arduino "D15" on CN10) + GND to the
+ * recording's time axis: wire PC10 (morpho CN7 pin 1) + GND to the
  * instrument, record the edge times, and hand them to
  * `viewalyzer-cli import` as the sync train (NDJSON contract).
  *
@@ -216,12 +216,12 @@ DEMO_FN static void imu_sample (ImuSample *out)
  * unique fingerprint: alignment is unambiguous no matter when the
  * instrument capture started. A fixed period would be ambiguous modulo one
  * period. */
-#define SYNC_GPIO_PORT  GPIOB
-#define SYNC_GPIO_PIN   GPIO_PIN_8
+#define SYNC_GPIO_PORT  GPIOC
+#define SYNC_GPIO_PIN   GPIO_PIN_10
 
 static void sync_gpio_init (void)
 {
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef g = {0};
     HAL_GPIO_WritePin (SYNC_GPIO_PORT, SYNC_GPIO_PIN, GPIO_PIN_RESET);
     g.Pin   = SYNC_GPIO_PIN;

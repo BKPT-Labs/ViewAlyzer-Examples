@@ -62,9 +62,9 @@ The classic C++ app records this target the same way as the C031 example
 
 ## External instrument sync (any instrument)
 
-The firmware also emits **sync marks**: a rising edge on PB8 (Arduino "D15"
-on CN10; verify the pin with a meter before trusting silkscreen) paired with
-a `VA_LogTrace("jsync", seq)` event, at LFSR-dithered intervals. Wire that
+The firmware also emits **sync marks**: a rising edge on PC10 (morpho
+connector CN7 pin 1) paired with a `VA_LogTrace("jsync", seq)` event, at
+LFSR-dithered intervals. Wire that
 pin + GND to anything that can timestamp a logic edge on its own clock
 (power analyzer GPI, DAQ, logic analyzer), convert its capture to the
 external-series NDJSON contract (`ViewAlyzer-RS/docs/EXTERNAL-SERIES.md`),
