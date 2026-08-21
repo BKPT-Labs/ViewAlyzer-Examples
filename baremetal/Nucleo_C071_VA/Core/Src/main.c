@@ -391,6 +391,8 @@ int main (void)
     uint32_t sync_next_ms = 0;   /* startup burst at ~0/50/100 ms, then dithered */
     uint32_t pwr_stage = 0;
     uint32_t pwr_next_ms = 600;
+    uint32_t log_next_ms = 10;
+    uint32_t log_n = 0;
     VA_LogTrace (TRACE_PSTATE, 0);
 
     for (;;)
@@ -424,16 +426,26 @@ int main (void)
             int32_t env = process_sample (step);
             if (traced_pass) VA_EVENT_END (EVENT_WORK);
 
-            /* VA logging is decimated: the ring must not be flooded. */
+            /* Workload rides the LOOP on purpose: it must pause during the
+             * sleep stage. Decimated so the ring is not flooded. */
             if ((step & 2047u) == 0u)
-            {
-                VA_LogTrace (TRACE_SINE, sine_lookup (step >> 11));
-                VA_LogTrace (TRACE_TICK, (int32_t) (HAL_GetTick() % 1000u));
                 VA_LogTrace (TRACE_WORKLOAD, env);
-            }
 
-            /* IMU: one sample every 1024th pass; motion is edge-logged only. */
-            if ((step & 1023u) == 0u)
+            if ((step & 0x7FFFFu) == 0u)
+                VA_LogString (TRACE_LOG, "Nucleo-C071 IMU demo alive");
+
+            ++step;
+        }
+
+        /* Demo signals are TIME-paced (10 ms) and run in EVERY stage (the
+         * sleep loop wakes at 1 kHz), so the sine stays a sine and the tick
+         * sawtooth stays regular while the DSP loop is frozen. */
+        if ((int32_t) (HAL_GetTick() - log_next_ms) >= 0)
+        {
+            log_next_ms = HAL_GetTick() + 10u;
+            VA_LogTrace (TRACE_SINE, sine_lookup (HAL_GetTick() >> 4));   /* ~1 s period */
+            VA_LogTrace (TRACE_TICK, (int32_t) (HAL_GetTick() % 1000u));
+            if ((log_n & 1u) == 0u)                                       /* IMU at 50 Hz */
             {
                 ImuSample s;
                 imu_sample (&s);
@@ -441,7 +453,7 @@ int main (void)
                 VA_LogTraceFloat (TRACE_IMU_AY, s.ay);
                 VA_LogTraceFloat (TRACE_IMU_AZ, s.az);
                 VA_LogTraceFloat (TRACE_IMU_HEAD, s.heading);
-                if ((step & 8191u) == 0u)
+                if ((log_n & 255u) == 0u)
                     VA_LogTraceFloat (TRACE_IMU_TEMP, s.temp);
                 if (s.moving != was_moving)
                 {
@@ -449,11 +461,7 @@ int main (void)
                     VA_LogToggle (TRACE_IMU_MOT, s.moving);
                 }
             }
-
-            if ((step & 0x7FFFFu) == 0u)
-                VA_LogString (TRACE_LOG, "Nucleo-C071 IMU demo alive");
-
-            ++step;
+            ++log_n;
         }
 
         /* Instrument sync marks, paced by the HAL tick: runs in EVERY stage
