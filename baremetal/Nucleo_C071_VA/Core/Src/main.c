@@ -262,6 +262,18 @@ static uint32_t sync_next_delay_ms (void)
  *   3 clocks  a bank of peripheral clocks enabled (clock-tree power)
  * Sync marks keep firing on schedule in every stage (the sleep loop wakes
  * at 1 kHz), so instrument alignment is unaffected. */
+/* Stage durations are LFSR-dithered (250..1825 ms, own seed, NOT the jsync
+ * generator) so the power waveform is aperiodic: every current step has a
+ * random width that must match its pwr.stage bar and Workload burst
+ * one-to-one. That makes the time alignment visually falsifiable: a shifted
+ * match cannot exist, and you can SEE it, not just trust the residuals. */
+static uint32_t pwr_next_duration_ms (void)
+{
+    static uint16_t lfsr = 0xBEEFu;
+    lfsr = (uint16_t) ((lfsr >> 1) ^ ((lfsr & 1u) ? 0xB400u : 0u));
+    return 250u + (uint32_t) (lfsr & 0x3Fu) * 25u;
+}
+
 static void pwr_clocks (bool on)
 {
     if (on)
@@ -397,11 +409,11 @@ int main (void)
 
     for (;;)
     {
-        /* Power-profile stage machine (fixed 600 ms cadence). */
+        /* Power-profile stage machine, LFSR-dithered stage lengths. */
         if ((int32_t) (HAL_GetTick() - pwr_next_ms) >= 0)
         {
             pwr_stage = (pwr_stage + 1u) & 3u;
-            pwr_next_ms += 600u;
+            pwr_next_ms = HAL_GetTick() + pwr_next_duration_ms();
             VA_LogTrace (TRACE_PSTATE, (int32_t) pwr_stage);
             bool led_on = pwr_stage == 2u;
             HAL_GPIO_WritePin (GPIOA, GPIO_PIN_5, led_on ? GPIO_PIN_SET : GPIO_PIN_RESET);
