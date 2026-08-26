@@ -26,6 +26,14 @@
             }
         },
         {
+            "name": "Debug-RTT",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "VA_RTT": "ON"
+            }
+        },
+        {
             "name": "RelWithDebInfo",
             "inherits": "default",
             "cacheVariables": {

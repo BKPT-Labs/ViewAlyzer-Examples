@@ -132,6 +132,14 @@ DEMO_FN static void stats_update (uint32_t band, int32_t v, uint32_t step)
     }
 }
 
+/* Globals for DWT data-watch demos: the probe's DWT comparators can trace
+ * writes to these addresses over SWO without any recorder involvement.
+ * volatile keeps every write in RAM (never register-cached), which is what
+ * a hardware watch sees. Both update on the decimated path so the SWO pin
+ * is not flooded. */
+volatile uint32_t g_dwt_counter = 0;      /* monotonically increasing */
+volatile int32_t  g_dwt_sine    = 0;      /* +/-100 sine wave */
+
 /* One pipeline pass: the whole chain, top of the demo call tree */
 DEMO_FN static int32_t process_sample (uint32_t step)
 {
@@ -232,6 +240,10 @@ int main (void)
             VA_LogTrace (TRACE_SINE, sine_lookup (step >> 10));
             VA_LogTrace (TRACE_TICK, (int32_t) (HAL_GetTick() % 1000u));
             VA_LogTrace (TRACE_WORKLOAD, env);
+
+            /* DWT watch targets (see the globals above) */
+            g_dwt_counter = g_dwt_counter + 1u;
+            g_dwt_sine    = sine_lookup (step >> 10);
         }
 
         if ((step & 32767u) == 0u)

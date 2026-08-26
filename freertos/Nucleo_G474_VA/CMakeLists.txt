@@ -69,6 +69,16 @@ if(VA_RAMBUF)
     message(STATUS "ViewAlyzer: RAM-buffer transport (16 KB ring)")
 endif()
 
+# RTT transport: SEGGER RTT up channel drained by any debug probe (J-Link, or
+# ST-Link through the ViewAlyzer host's RTT reader). Own build dir:
+#
+#   cmake --preset Debug-RTT && cmake --build build/Debug-RTT
+option(VA_RTT "Use the SEGGER RTT transport instead of ITM/SWO" OFF)
+if(VA_RTT)
+    add_definitions(-DVA_TRANSPORT=JLINK_RTT)
+    message(STATUS "ViewAlyzer: RTT transport")
+endif()
+
 # Define the build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -125,6 +135,14 @@ if(NOT EXISTS "${VIEWALYZER_RECORDER_DIR}/core/ViewAlyzer.c")
 endif()
 
 # Add sources to executable
+if(VA_RTT)
+    target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+        SEGGER_RTT/SEGGER_RTT.c
+        SEGGER_RTT/SEGGER_RTT_printf.c
+    )
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE SEGGER_RTT)
+endif()
+
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${VIEWALYZER_RECORDER_DIR}/core/ViewAlyzer.c
