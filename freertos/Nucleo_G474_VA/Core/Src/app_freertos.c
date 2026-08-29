@@ -887,6 +887,11 @@ void WorkloadManagerTask(void *argument)
       lastProfileChange = xTaskGetTickCount();
     }
     
+    /* Recorder housekeeping from thread context: keeps the timestamp
+     * extension across quiet gaps and lets a late-attaching host receive
+     * the task names (kernel hooks run with interrupts masked and cannot). */
+    VA_TickOverflowCheck();
+
     vTaskDelay(pdMS_TO_TICKS(100)); // Check every 100ms
   }
   /* USER CODE END WorkloadManagerTask */

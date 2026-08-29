@@ -195,6 +195,10 @@ static void blink_thread(void *p1, void *p2, void *p3)
 		k_sem_take(&blink_sem, K_FOREVER);
 		gpio_pin_toggle_dt(&led);
 		k_sem_give(&blink_sem);
+		/* Recorder housekeeping from thread context: keeps the timestamp
+		 * extension across quiet gaps and lets a late-attaching host
+		 * receive the thread names. */
+		VA_TickOverflowCheck();
 		k_msleep(LED_BLINK_TIME_MS);
 	}
 }
