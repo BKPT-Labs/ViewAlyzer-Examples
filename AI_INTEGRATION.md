@@ -35,6 +35,13 @@ package manager, no library build step — you compile a few `.c` files.
 | SEGGER RTT | J-Link (or J-Link OB) | none | Good when the board already has J-Link firmware on its probe. |
 | UDP | none (network) | none | For desktop/simulation producers — see the `Desktop-CPP-UDP` and `Desktop-Python-UDP` examples. |
 
+For MCU output over UART, USB or another byte stream, use
+`VA_TRANSPORT=CUSTOM_TRANSPORT` and compile `core/viewalyzer_cobs.c`. The
+[G474 UART example](README.md#g474-freertos-uart) uses a callback returning the
+number of bytes accepted, with `VA_TRANSPORT_BUFFERED=1` to retry partial writes.
+Copy or transmit accepted bytes before returning; do not block or retain the
+data pointer for DMA.
+
 Cortex-M0/M0+/M23 parts have no DWT cycle counter: they additionally need a
 hardware timer as the timestamp source (`CUSTOM_TIMER`). Working references:
 `zephyr/Nucleo-G0B1RE-*` (32-bit timer), `Nucleo-C031C6-*` and
@@ -143,6 +150,34 @@ target_include_directories(app PRIVATE ${VIEWALYZER_RECORDER_DIR}/core)
 
 You get user traces, user events, strings, and ISR instrumentation; there are
 no RTOS objects to trace.
+
+### Buffered output and stack ownership
+
+The default `RAM_BUFFER` transport is drained by the host through the debug
+probe and needs no firmware drain hook. Optional buffered ITM, RTT or custom
+output (`VA_TRANSPORT_BUFFERED=1`) requires application-scheduled `VA_Drain()`
+calls. Neither RTOS adapter creates a drain task automatically.
+
+For FreeRTOS, enable `configUSE_IDLE_HOOK=1` and add `VA_Drain()` to your
+`vApplicationIdleHook()` implementation. FreeRTOS calls it automatically when
+idle runs. Keep one hook definition and do not block in it. If idle gets
+insufficient CPU time, call the drain from an application service task instead.
+For Zephyr, `CONFIG_VIEWALYZER_BUFFERED=y` with ITM or RTT needs draining from
+an ordinary application thread. Bare-metal applications call it from the main
+loop. Calls from ISRs or with interrupts masked do no draining.
+
+Draining and the custom send callback use the caller's stack; packet construction
+still uses producer-context stack. Measure high-water marks for the enabled
+features and compiler configuration. The G474 buffered UART example allocates
+256 words (1,024 bytes) to idle, not to every task; this is not a universal
+recorder stack requirement. `VA_BUFFER_SIZE` is separate static ring storage.
+
+A drain call offers at most `VA_DRAIN_MAX_BYTES` (256 by default); call regularly
+at a rate that keeps up with trace output. `VA_GetBufferStats()` reports queued
+bytes and cumulative staging-ring losses. `VA_TickOverflowCheck()` services
+timestamp/setup housekeeping and does not replace draining. The
+[recorder transport guide](https://github.com/BKPT-Labs/ViewAlyzer/blob/main/ViewAlyzerRecorder/docs/api/transports.md)
+contains the complete callback and drain contract.
 
 ### Desktop / non-embedded
 
