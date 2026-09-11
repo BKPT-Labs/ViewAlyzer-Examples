@@ -76,12 +76,7 @@
 #define configCPU_CLOCK_HZ                       ( SystemCoreClock )
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 56 )
-/* Buffered draining runs on the idle task stack. */
-#if defined(VA_TRANSPORT_BUFFERED) && VA_TRANSPORT_BUFFERED
-#define configMINIMAL_STACK_SIZE                 ((uint16_t)256)
-#else
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#endif
 #define configTOTAL_HEAP_SIZE                    ((size_t)32768)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configGENERATE_RUN_TIME_STATS            1

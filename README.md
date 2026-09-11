@@ -90,7 +90,7 @@ Use this option with the recorder's byte-count transport callback API.
 
 The example enables FreeRTOS's `vApplicationIdleHook()` automatically with
 `VA_UART=ON`; the hook calls `VA_Drain()` on the idle task's stack. Its buffered
-configuration reserves 256 words (1,024 bytes on this board) for idle. This is
+configuration reserves 128 words (512 bytes on this board) for idle. This is
 an example allocation to validate for your build and callback. If your workload
 leaves insufficient idle time, schedule draining in an application service task.
 The default RAM transport does not need this hook. See
