@@ -64,6 +64,13 @@ endif()
 # FreeRTOS's idle task does not WFI in this configuration, so the Zephyr
 # demo's busy-idle workaround is not needed here.
 option(VA_RAMBUF "Use the RAM-buffer transport instead of ITM/SWO" OFF)
+option(VA_UART "Use buffered LPUART1 output" OFF)
+if(VA_UART AND VA_RAMBUF)
+    message(FATAL_ERROR "Choose VA_UART or VA_RAMBUF, not both")
+endif()
+if(VA_UART)
+    add_definitions(-DVA_TRANSPORT=CUSTOM_TRANSPORT -DVA_TRANSPORT_BUFFERED=1)
+endif()
 if(VA_RAMBUF)
     add_definitions(-DVA_TRANSPORT=RAM_BUFFER -DVA_RAMBUF_SIZE=16384u)
     message(STATUS "ViewAlyzer: RAM-buffer transport (16 KB ring)")

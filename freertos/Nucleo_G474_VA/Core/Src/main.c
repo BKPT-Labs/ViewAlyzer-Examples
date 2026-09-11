@@ -77,14 +77,23 @@ int _write(int file, char *data, int len)
 }
 
 #if VA_TRANSPORT_IS_CUSTOM
-// ViewAlyzer custom transport callback — sends COBS-encoded bytes over LPUART1
-static void va_lpuart_send(const uint8_t *data, uint32_t length)
+#if !VA_TRANSPORT_BUFFERED
+#error "The LPUART1 example requires VA_TRANSPORT_BUFFERED=1"
+#endif
+/* Send only the bytes the UART can accept immediately. */
+static uint32_t va_lpuart_send(const uint8_t *data, uint32_t length)
 {
-    for (uint32_t i = 0; i < length; i++)
-    {
-        LPUART1->TDR = (uint16_t)data[i];
-        while (!(LPUART1->ISR & USART_ISR_TXE));
-    }
+    uint32_t sent = 0;
+    while (sent < length && (LPUART1->ISR & USART_ISR_TXE))
+        LPUART1->TDR = data[sent++];
+    return sent;
+}
+#endif
+
+#if VA_TRANSPORT_BUFFERED
+void vApplicationIdleHook(void)
+{
+    VA_Drain();
 }
 #endif
 

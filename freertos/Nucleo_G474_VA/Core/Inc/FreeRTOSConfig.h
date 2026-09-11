@@ -66,13 +66,22 @@
 #define configUSE_PREEMPTION                     1
 #define configSUPPORT_STATIC_ALLOCATION          1
 #define configSUPPORT_DYNAMIC_ALLOCATION         1
+#if defined(VA_TRANSPORT_BUFFERED) && VA_TRANSPORT_BUFFERED
+#define configUSE_IDLE_HOOK                      1
+#else
 #define configUSE_IDLE_HOOK                      0
+#endif
 #define configUSE_TICK_HOOK                      0
 #define configCHECK_FOR_STACK_OVERFLOW           2
 #define configCPU_CLOCK_HZ                       ( SystemCoreClock )
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 56 )
+/* Buffered draining runs on the idle task stack. */
+#if defined(VA_TRANSPORT_BUFFERED) && VA_TRANSPORT_BUFFERED
+#define configMINIMAL_STACK_SIZE                 ((uint16_t)256)
+#else
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
+#endif
 #define configTOTAL_HEAP_SIZE                    ((size_t)32768)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configGENERATE_RUN_TIME_STATS            1

@@ -73,6 +73,21 @@ ViewAlyzer --headless --config nucleo_g474_zephyr_swo.vacf --output run.vadb --d
 Commit one per board next to your own firmware so nobody re-enters probe
 settings ever again. Key reference: [AI_INTEGRATION.md](AI_INTEGRATION.md#step-3--connect-and-capture).
 
+## G474 FreeRTOS UART
+
+The `freertos/Nucleo_G474_VA` example supports buffered LPUART1 output through
+the board's ST-Link virtual COM port:
+
+```sh
+cmake -S freertos/Nucleo_G474_VA -B build/g474-uart -G Ninja -DVA_UART=ON
+cmake --build build/g474-uart
+```
+
+Flash the generated ELF and select serial transport in ViewAlyzer at
+250,000 baud with COBS enabled. The idle hook drains accepted byte prefixes;
+this trace-heavy workload can drop events when UART throughput is insufficient.
+Use this option with the recorder's byte-count transport callback API.
+
 ## Machine-specific tool paths
 
 Committed files never contain machine paths. Anything local - Zephyr
