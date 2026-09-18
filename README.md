@@ -66,6 +66,13 @@ The recorder can stream over several transports; pick per board:
 
 ## Connection configs (`.vacf`)
 
+Default direct DROP-mode RAM capture requires the matching firmware ELF and a
+ViewAlyzer-RS host with RAM metadata support. Select the ELF before recording,
+or pass `--elf build/firmware.elf` on the CLI. Set `VA_METADATA=0` (Zephyr:
+`CONFIG_VIEWALYZER_METADATA=n`) for setup-bundle capture with older viewers,
+without an ELF, or with reduced RAM usage. See the
+[integration guide](AI_INTEGRATION.md#step-3--connect-and-capture).
+
 Every firmware example ships one or more `.vacf` files - small JSON
 **connection configs** (transport, target device, probe speed, SWO
 frequency, …). Open one in the ViewAlyzer app and the connection is set up
