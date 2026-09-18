@@ -1,0 +1,2020 @@
+{
+  "id": "com.bkpt.ble.journal-2",
+  "name": "BLE - retained activity slots 8-15",
+  "version": "0.1.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "rate_hz": 1,
+    "channels": [
+      {
+        "name": "ble.journal.8.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.8.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.8.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.8.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.8.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.8.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 8
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.9.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 9
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.10.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 10
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.11.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 11
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.12.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 12
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.13.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 13
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.14.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 14
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.sequence",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "sequence"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.kind",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "kind"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.code",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal.15.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal"
+            },
+            {
+              "op": "index",
+              "index": 15
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.8.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 8"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.9.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 9"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.10.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 10"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.11.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 11"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.12.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 12"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.13.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 13"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.14.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 14"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.sequence"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.kind"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15",
+      "names": {
+        "0": "Unused",
+        "1": "Command outcome",
+        "2": "Asynchronous event"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.code"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.status"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal.15.handle"
+      },
+      "interpolation": "step",
+      "group": "Journal slot 15"
+    }
+  ],
+  "derived": [],
+  "verdicts": [],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Journal slot 8",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.8.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.8.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.8.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.8.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.8.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.8.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 9",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.9.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.9.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.9.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.9.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.9.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.9.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 10",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.10.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.10.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.10.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.10.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.10.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.10.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 11",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.11.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.11.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.11.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.11.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.11.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.11.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 12",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.12.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.12.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.12.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.12.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.12.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.12.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 13",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.13.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.13.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.13.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.13.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.13.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.13.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 14",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.14.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.14.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.14.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.14.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.14.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.14.handle",
+            "label": "Connection handle"
+          }
+        ]
+      },
+      {
+        "title": "Journal slot 15",
+        "view": "table",
+        "description": "Physical ring slots, not sorted rows. Sort mentally by sequence; sequence 0 is unused/in-progress. Last 16 significant observations are retained. Radio-activity callbacks only increment the event counter. Halt for a consistent journal; polling does not capture every entry.",
+        "fields": [
+          {
+            "channel": "ble.journal.15.sequence",
+            "label": "Sequence"
+          },
+          {
+            "channel": "ble.journal.15.tick_ms",
+            "label": "Firmware time (ms)"
+          },
+          {
+            "channel": "ble.journal.15.kind",
+            "label": "Kind"
+          },
+          {
+            "channel": "ble.journal.15.code",
+            "label": "Opcode / encoded event code"
+          },
+          {
+            "channel": "ble.journal.15.status",
+            "label": "Command status (events use 0)"
+          },
+          {
+            "channel": "ble.journal.15.handle",
+            "label": "Connection handle"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -7,6 +7,11 @@ the standard toolchain for that target.
 
 This repo doubles as integration documentation:
 
+- **[Domain catalog](domains/README.md#domain-catalog)** - canonical definitions,
+  firmware prerequisites, engineering references and downloads.
+- **[Authoring examples](domains/README.md#authoring-examples)** - templates to adapt
+  when creating a domain, with a shared contribution guide.
+
 - **[AI_INTEGRATION.md](AI_INTEGRATION.md)** - the complete integration
   reference on one page (transports, per-RTOS recipes, `.vacf` configs,
   capture, troubleshooting). Written for humans *and* for pointing an AI

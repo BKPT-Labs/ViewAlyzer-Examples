@@ -1,0 +1,111 @@
+{
+  "id": "com.bkpt.ble.stm32wb-transport",
+  "name": "BLE - STM32WB shared transport",
+  "version": "0.1.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "rate_hz": 2,
+    "channels": [
+      {
+        "name": "ble.ipcc_c1_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "ipcc_c1_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.ipcc_c2_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "ipcc_c2_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.ipcc_c1_mask",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "ipcc_c1_mask"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.ipcc_c1_status"
+      },
+      "interpolation": "step",
+      "group": "IPCC status samples",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.ipcc_c2_status"
+      },
+      "interpolation": "step",
+      "group": "IPCC status samples",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.ipcc_c1_mask"
+      },
+      "interpolation": "step",
+      "group": "IPCC status samples",
+      "display": "register"
+    }
+  ],
+  "derived": [],
+  "verdicts": [],
+  "presentation": {
+    "sections": [
+      {
+        "title": "IPCC status samples",
+        "view": "table",
+        "description": "Application-copied read-only IPCC status and mask registers. Transient flags between samples may be missed; these are not queue lengths. CPU2 private radio/GATT state is inaccessible.",
+        "fields": [
+          {
+            "channel": "ble.ipcc_c1_status",
+            "label": "M4 to M0+ channel flags"
+          },
+          {
+            "channel": "ble.ipcc_c2_status",
+            "label": "M0+ to M4 channel flags"
+          },
+          {
+            "channel": "ble.ipcc_c1_mask",
+            "label": "M4 interrupt mask"
+          }
+        ]
+      }
+    ]
+  }
+}

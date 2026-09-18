@@ -1,0 +1,506 @@
+{
+  "id": "com.bkpt.imu-6dof",
+  "name": "IMU (6-axis MEMS)",
+  "version": "0.2.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "svd_device": "STM32WB55_CM4",
+    "target_device_prefix": [
+      "STM32WB5"
+    ],
+    "rate_hz": 1000,
+    "coalesce_gap_bytes": 256,
+    "channels": [
+      {
+        "name": "imu.sample_count",
+        "symbol": "imu_sample_count",
+        "ty": "u32",
+        "note": "samples the application actually consumed; the sensor's own pace is imu.odr_hz"
+      },
+      {
+        "name": "imu.acc_x",
+        "symbol": "imu_acc_x_mg",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.acc_y",
+        "symbol": "imu_acc_y_mg",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.acc_z",
+        "symbol": "imu_acc_z_mg",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.gyro_x",
+        "symbol": "imu_gyro_x_mdps",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.gyro_y",
+        "symbol": "imu_gyro_y_mdps",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.gyro_z",
+        "symbol": "imu_gyro_z_mdps",
+        "ty": "i32"
+      },
+      {
+        "name": "imu.ctrl1_xl",
+        "symbol": "imu_ctrl1_xl",
+        "ty": "u32",
+        "note": "firmware mirror of the sensor's CTRL1_XL, re-read after every config write"
+      },
+      {
+        "name": "imu.bus_errs",
+        "symbol": "imu_i2c_errs",
+        "ty": "u32"
+      },
+      {
+        "name": "app.heartbeat",
+        "symbol": "app_heartbeat",
+        "ty": "u32",
+        "note": "liveness reference: advances while the application scheduler runs"
+      },
+      {
+        "name": "imu.bus_cr1",
+        "peripheral": "I2C3",
+        "register": "CR1",
+        "safety": "conditional",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "APB1ENR1",
+          "mask": "0x00800000",
+          "equals": "0x00800000",
+          "description": "I2C3 clock disabled: registers read zero, not data"
+        }
+      },
+      {
+        "name": "imu.whoami",
+        "safety": "unsupported",
+        "reason": "sensor-internal register behind the application's I2C bus; the debug port cannot address the sensor"
+      },
+      {
+        "name": "imu.fifo_level",
+        "safety": "unsupported",
+        "reason": "sensor-internal FIFO status behind the application's I2C bus; observe a firmware mirror instead"
+      }
+    ]
+  },
+  "derived": [
+    {
+      "type": "field",
+      "name": "imu.odr_code",
+      "source": "imu.ctrl1_xl",
+      "shift": 4,
+      "mask": "0xF"
+    },
+    {
+      "type": "map",
+      "name": "imu.odr_hz",
+      "source": "imu.odr_code",
+      "unit": "Hz",
+      "table": {
+        "0": 0,
+        "1": 12.5,
+        "2": 26,
+        "3": 52,
+        "4": 104,
+        "5": 208,
+        "6": 416,
+        "7": 833,
+        "8": 1660,
+        "9": 3330,
+        "10": 6660
+      }
+    },
+    {
+      "type": "field",
+      "name": "imu.acc_fs_code",
+      "source": "imu.ctrl1_xl",
+      "shift": 2,
+      "mask": "0x3"
+    },
+    {
+      "type": "map",
+      "name": "imu.acc_fs_g",
+      "source": "imu.acc_fs_code",
+      "unit": "g",
+      "table": {
+        "0": 2,
+        "1": 16,
+        "2": 4,
+        "3": 8
+      }
+    },
+    {
+      "type": "rate",
+      "name": "imu.sample_rate",
+      "source": "imu.sample_count",
+      "unit": "samples/s"
+    },
+    {
+      "type": "field",
+      "name": "imu.bus_enabled",
+      "source": "imu.bus_cr1",
+      "shift": 0,
+      "mask": "0x1",
+      "values": {
+        "0": "OFF",
+        "1": "ON"
+      }
+    }
+  ],
+  "verdicts": [
+    {
+      "id": "imu-rate-below-odr",
+      "name": "Consumer behind the sensor",
+      "severity": "warning",
+      "when": {
+        "type": "ratio_below",
+        "channel": "imu.sample_rate",
+        "reference": "imu.odr_hz",
+        "ratio": 0.8,
+        "sustained_ms": 2000
+      },
+      "explain": "The application is consuming samples slower than the sensor's configured output data rate, so data is overwritten unread. Check the reader task's period and priority, and the bus bandwidth.",
+      "evidence": [
+        "imu.sample_rate",
+        "imu.odr_hz",
+        "imu.sample_count"
+      ]
+    },
+    {
+      "id": "imu-stream-stalled",
+      "name": "IMU stream stalled",
+      "severity": "error",
+      "when": {
+        "type": "counter_stalled",
+        "channel": "imu.sample_count",
+        "while_advances": "app.heartbeat",
+        "window_ms": 1000
+      },
+      "explain": "Sample consumption stopped while the rest of the application kept running. Check whether the reader task is blocked, starved, or deleted, and whether the sensor still asserts data-ready.",
+      "evidence": [
+        "imu.sample_count",
+        "app.heartbeat",
+        "imu.odr_hz"
+      ]
+    },
+    {
+      "id": "imu-bus-errors",
+      "name": "IMU bus errors",
+      "severity": "error",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "imu.bus_errs"
+      },
+      "explain": "The sensor driver reported bus transaction failures. Check bus contention between tasks, pull-ups, and clock stretching tolerance.",
+      "evidence": [
+        "imu.bus_errs",
+        "imu.sample_rate"
+      ]
+    }
+  ],
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.acc_x"
+      },
+      "unit": "mg",
+      "group": "Accelerometer",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.acc_y"
+      },
+      "unit": "mg",
+      "group": "Accelerometer",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.acc_z"
+      },
+      "unit": "mg",
+      "group": "Accelerometer",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.gyro_x"
+      },
+      "unit": "mdps",
+      "group": "Gyroscope",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.gyro_y"
+      },
+      "unit": "mdps",
+      "group": "Gyroscope",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.gyro_z"
+      },
+      "unit": "mdps",
+      "group": "Gyroscope",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.sample_count"
+      },
+      "display": "counter",
+      "group": "Stream",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "app.heartbeat"
+      },
+      "display": "counter",
+      "group": "Stream",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.bus_errs"
+      },
+      "display": "counter",
+      "group": "Bus",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.bus_cr1"
+      },
+      "display": "register",
+      "group": "Bus",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "imu.ctrl1_xl"
+      },
+      "display": "register",
+      "group": "Config",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "imu.sample_rate"
+      },
+      "unit": "samples/s",
+      "group": "Stream",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "imu.odr_hz"
+      },
+      "unit": "Hz",
+      "group": "Config",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "imu.acc_fs_g"
+      },
+      "unit": "g",
+      "group": "Config",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "imu.bus_enabled"
+      },
+      "display": "enum",
+      "group": "Bus",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name_prefix": "imu."
+      },
+      "group": "Config",
+      "interpolation": "step",
+      "graph": false
+    }
+  ],
+  "series_kinds": [],
+  "namespaces": [],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Motion",
+        "view": "cards",
+        "description": "Firmware-retained sensor samples. The six axes start graphed; each can be selected independently.",
+        "fields": [
+          {
+            "channel": "imu.acc_x",
+            "label": "Acceleration X",
+            "unit": "mg"
+          },
+          {
+            "channel": "imu.acc_y",
+            "label": "Acceleration Y",
+            "unit": "mg"
+          },
+          {
+            "channel": "imu.acc_z",
+            "label": "Acceleration Z",
+            "unit": "mg"
+          },
+          {
+            "channel": "imu.gyro_x",
+            "label": "Angular velocity X",
+            "unit": "mdps"
+          },
+          {
+            "channel": "imu.gyro_y",
+            "label": "Angular velocity Y",
+            "unit": "mdps"
+          },
+          {
+            "channel": "imu.gyro_z",
+            "label": "Angular velocity Z",
+            "unit": "mdps"
+          }
+        ]
+      },
+      {
+        "title": "Stream",
+        "view": "cards",
+        "description": "Host observation rate and sensor output rate differ. A lower achieved poll rate cannot reconstruct intermediate motion samples.",
+        "fields": [
+          {
+            "channel": "imu.sample_rate",
+            "label": "Observed consumption rate",
+            "unit": "samples/s"
+          },
+          {
+            "channel": "imu.odr_hz",
+            "label": "Configured sensor output rate",
+            "unit": "Hz"
+          },
+          {
+            "channel": "imu.sample_count",
+            "label": "Samples consumed"
+          },
+          {
+            "channel": "app.heartbeat",
+            "label": "Application heartbeat"
+          }
+        ],
+        "checks": [
+          "imu-rate-below-odr",
+          "imu-stream-stalled"
+        ]
+      },
+      {
+        "title": "Sensor configuration",
+        "view": "table",
+        "description": "Decoded configuration and raw codes. Firmware owns the I2C sensor and refreshes this mirror.",
+        "fields": [
+          {
+            "channel": "imu.acc_fs_g",
+            "label": "Accelerometer full scale",
+            "unit": "g"
+          },
+          {
+            "channel": "imu.ctrl1_xl",
+            "label": "CTRL1_XL firmware mirror",
+            "group": [
+              "Raw configuration"
+            ]
+          },
+          {
+            "channel": "imu.odr_code",
+            "label": "Output data rate code",
+            "group": [
+              "Raw configuration"
+            ]
+          },
+          {
+            "channel": "imu.acc_fs_code",
+            "label": "Full scale code",
+            "group": [
+              "Raw configuration"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Bus and access limits",
+        "view": "table",
+        "description": "Only guarded I2C controller state and existing firmware values are sampled. Sensor identity and FIFO status remain unsupported through the debug port.",
+        "fields": [
+          {
+            "channel": "imu.bus_enabled",
+            "label": "I2C peripheral enabled"
+          },
+          {
+            "channel": "imu.bus_errs",
+            "label": "Bus errors"
+          },
+          {
+            "channel": "imu.bus_cr1",
+            "label": "I2C control register",
+            "group": [
+              "Raw register"
+            ]
+          },
+          {
+            "channel": "imu.whoami",
+            "label": "Sensor identity (not directly accessible)",
+            "group": [
+              "Unavailable through debug port"
+            ]
+          },
+          {
+            "channel": "imu.fifo_level",
+            "label": "Sensor FIFO level (not directly accessible)",
+            "group": [
+              "Unavailable through debug port"
+            ]
+          }
+        ],
+        "checks": [
+          "imu-bus-errors"
+        ]
+      }
+    ]
+  }
+}

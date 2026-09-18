@@ -1,0 +1,1027 @@
+{
+  "id": "com.bkpt.stm32-ethernet",
+  "name": "STM32 Ethernet",
+  "version": "0.9.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "svd_device": "STM32N657",
+    "target_device_prefix": [
+      "STM32N65"
+    ],
+    "rate_hz": 100,
+    "channels": [
+      {
+        "name": "eth.tx_good",
+        "peripheral": "ETH_S",
+        "register": "ETH_TX_PACKET_COUNT_GOOD",
+        "note": "monotonic; valid while MMC_CONTROL.RSTONRD is clear (ST HAL default)",
+        "precondition": {
+          "peripheral": "ETH_S",
+          "register": "ETH_MMC_CONTROL",
+          "mask": "0x4",
+          "equals": "0x0",
+          "description": "MMC_CONTROL.RSTONRD is set: counter reads self-clear, sampling would destroy the values it reports"
+        },
+        "counter": "wrapping"
+      },
+      {
+        "name": "eth.rx_good",
+        "peripheral": "ETH_S",
+        "register": "ETH_RX_UNICAST_PACKETS_GOOD",
+        "note": "unicast only; broadcast/multicast are separate MMC counters",
+        "precondition": {
+          "peripheral": "ETH_S",
+          "register": "ETH_MMC_CONTROL",
+          "mask": "0x4",
+          "equals": "0x0",
+          "description": "MMC_CONTROL.RSTONRD is set: counter reads self-clear, sampling would destroy the values it reports"
+        },
+        "counter": "wrapping"
+      },
+      {
+        "name": "eth.rx_crc_err",
+        "peripheral": "ETH_S",
+        "register": "ETH_RX_CRC_ERROR_PACKETS",
+        "precondition": {
+          "peripheral": "ETH_S",
+          "register": "ETH_MMC_CONTROL",
+          "mask": "0x4",
+          "equals": "0x0",
+          "description": "MMC_CONTROL.RSTONRD is set: counter reads self-clear, sampling would destroy the values it reports"
+        },
+        "counter": "wrapping"
+      },
+      {
+        "name": "eth.rx_align_err",
+        "peripheral": "ETH_S",
+        "register": "ETH_RX_ALIGNMENT_ERROR_PACKETS",
+        "precondition": {
+          "peripheral": "ETH_S",
+          "register": "ETH_MMC_CONTROL",
+          "mask": "0x4",
+          "equals": "0x0",
+          "description": "MMC_CONTROL.RSTONRD is set: counter reads self-clear, sampling would destroy the values it reports"
+        },
+        "counter": "wrapping"
+      },
+      {
+        "name": "eth.mmc_control",
+        "peripheral": "ETH_S",
+        "register": "ETH_MMC_CONTROL",
+        "note": "RSTONRD (bit 2) set would make counter reads self-clear"
+      },
+      {
+        "name": "eth.mac_config",
+        "peripheral": "ETH_S",
+        "register": "ETH_MACCR",
+        "note": "link speed/duplex as programmed by the driver; RE/TE enable bits"
+      },
+      {
+        "name": "eth.mac_debug",
+        "peripheral": "ETH_S",
+        "register": "ETH_MACDR",
+        "note": "MAC tx/rx FSM states, read-only"
+      },
+      {
+        "name": "eth.mtl_txq_dbg",
+        "peripheral": "ETH_S",
+        "register": "ETH_MTLTXQ0DR",
+        "note": "tx queue fill and controller state"
+      },
+      {
+        "name": "eth.mtl_rxq_dbg",
+        "peripheral": "ETH_S",
+        "register": "ETH_MTLRXQ0DR",
+        "note": "rx queue fill level"
+      },
+      {
+        "name": "eth.rx_missed",
+        "peripheral": "ETH_S",
+        "register": "ETH_MTLRXQ0MPOCR",
+        "note": "missed packet and fifo overflow counters; CLEAR-ON-READ: each sample is the count since the previous read, not a running total, and a debug-port read consumes counts any firmware reader would have seen",
+        "counter": "clear_on_read"
+      },
+      {
+        "name": "eth.dma_debug",
+        "peripheral": "ETH_S",
+        "register": "ETH_DMADSR",
+        "note": "rx/tx DMA process states; suspended/stopped verdicts derive from this"
+      },
+      {
+        "name": "eth.dma_ch0",
+        "peripheral": "ETH_S",
+        "register": "ETH_DMAC0SR",
+        "note": "channel status bits clear on write-1, never on read"
+      },
+      {
+        "name": "eth.rx_ring_cur",
+        "peripheral": "ETH_S",
+        "register": "ETH_DMAC0CARXDR",
+        "note": "current rx descriptor pointer: the ring occupancy cursor"
+      },
+      {
+        "name": "eth.dma_missed",
+        "peripheral": "ETH_S",
+        "register": "ETH_DMAC0MFCR",
+        "counter": "clear_on_read"
+      },
+      {
+        "name": "eth.phy_link",
+        "safety": "unsafe",
+        "reason": "PHY registers go through MDIO (MACMDIOAR/MACMDIODR) and a debug-port transaction races the driver's own use of the address register; link speed is shown from ETH_MACCR instead"
+      },
+      {
+        "name": "eth.rx_ring",
+        "ring": {
+          "symbol": "DMARxDscrTab",
+          "entries": 4,
+          "stride_bytes": 24,
+          "own_word_offset": 12,
+          "own_mask": "0x80000000",
+          "count_set": false
+        },
+        "note": "ch0 RX descriptor ring backlog: descriptors filled by the DMA and not yet reclaimed by the application"
+      },
+      {
+        "name": "lwip.ip_recv",
+        "symbol": "lwip_stats",
+        "offset_bytes": 74,
+        "ty": "u16",
+        "counter": "wrapping",
+        "note": "packets the stack delivered to IP; lwIP's own statistics block (LWIP_STATS in lwipopts.h); nothing is added to the firmware to observe it. STAT_COUNTER is u16 here (LWIP_STATS_LARGE off) so it wraps every few seconds under load and is declared wrapping. Cacheable AXISRAM: reads can lag the core by write-back timing"
+      },
+      {
+        "name": "lwip.ip_drop",
+        "symbol": "lwip_stats",
+        "offset_bytes": 78,
+        "ty": "u16",
+        "counter": "wrapping",
+        "note": "packets IP dropped; lwIP's own statistics block (LWIP_STATS in lwipopts.h); nothing is added to the firmware to observe it. STAT_COUNTER is u16 here (LWIP_STATS_LARGE off) so it wraps every few seconds under load and is declared wrapping. Cacheable AXISRAM: reads can lag the core by write-back timing"
+      },
+      {
+        "name": "lwip.udp_recv",
+        "symbol": "lwip_stats",
+        "offset_bytes": 122,
+        "ty": "u16",
+        "counter": "wrapping",
+        "note": "datagrams delivered to UDP; lwIP's own statistics block (LWIP_STATS in lwipopts.h); nothing is added to the firmware to observe it. STAT_COUNTER is u16 here (LWIP_STATS_LARGE off) so it wraps every few seconds under load and is declared wrapping. Cacheable AXISRAM: reads can lag the core by write-back timing"
+      },
+      {
+        "name": "lwip.udp_drop",
+        "symbol": "lwip_stats",
+        "offset_bytes": 126,
+        "ty": "u16",
+        "counter": "wrapping",
+        "note": "datagrams UDP dropped (no PCB, or the receive queue is full); lwIP's own statistics block (LWIP_STATS in lwipopts.h); nothing is added to the firmware to observe it. STAT_COUNTER is u16 here (LWIP_STATS_LARGE off) so it wraps every few seconds under load and is declared wrapping. Cacheable AXISRAM: reads can lag the core by write-back timing"
+      },
+      {
+        "name": "lwip.mem_used",
+        "symbol": "lwip_stats",
+        "offset_bytes": 172,
+        "ty": "u16",
+        "note": "heap bytes in use right now (a level, not a counter); lwIP's own statistics block (LWIP_STATS in lwipopts.h); nothing is added to the firmware to observe it. STAT_COUNTER is u16 here (LWIP_STATS_LARGE off) so it wraps every few seconds under load and is declared wrapping. Cacheable AXISRAM: reads can lag the core by write-back timing"
+      }
+    ],
+    "coalesce_gap_bytes": 128,
+    "precondition": {
+      "peripheral": "RCC_S",
+      "register": "RCC_AHB5ENR",
+      "mask": "0x02000000",
+      "equals": "0x02000000",
+      "description": "ETH1 clock disabled (RCC_AHB5ENR.ETH1EN clear): the block is unclocked and reads return zeros, not data"
+    }
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rxq_packets"
+      },
+      "unit": "pkts",
+      "display": "graph",
+      "group": "Queues",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rxq_fill"
+      },
+      "display": "enum",
+      "group": "Queues",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rxq_read_state"
+      },
+      "display": "enum",
+      "group": "Queues",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.txq_read_state"
+      },
+      "display": "enum",
+      "group": "Queues",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.mac_rx_state"
+      },
+      "display": "enum",
+      "group": "MAC",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.mac_tx_state"
+      },
+      "display": "enum",
+      "group": "MAC",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.tx_rate"
+      },
+      "unit": "pkts/s",
+      "display": "graph",
+      "group": "Frames",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rx_rate"
+      },
+      "unit": "pkts/s",
+      "display": "graph",
+      "group": "Frames",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.tx_dma_state"
+      },
+      "display": "enum",
+      "group": "DMA",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rx_dma_state"
+      },
+      "display": "enum",
+      "group": "DMA",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_ring"
+      },
+      "unit": "desc",
+      "display": "level",
+      "group": "DMA",
+      "min": 0,
+      "max": 4,
+      "warn": 3,
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.tx_good"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Frames",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_good"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Frames",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_crc_err"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Errors",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_align_err"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Errors",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_missed"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Errors",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.dma_missed"
+      },
+      "unit": "pkts",
+      "display": "counter",
+      "group": "Errors",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.mtl_txq_dbg"
+      },
+      "display": "graph",
+      "group": "Queues",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.mtl_rxq_dbg"
+      },
+      "display": "graph",
+      "group": "Queues",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.rx_ring_cur"
+      },
+      "display": "graph",
+      "group": "DMA",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.dma_debug"
+      },
+      "display": "graph",
+      "group": "DMA",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "eth.dma_ch0"
+      },
+      "display": "graph",
+      "group": "DMA",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rx_missed_frames"
+      },
+      "unit": "frames",
+      "group": "MTL",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.rx_fifo_overflow"
+      },
+      "unit": "frames",
+      "group": "MTL",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name": "eth.dma_missed_frames"
+      },
+      "unit": "frames",
+      "group": "DMA",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "lwip.mem_used"
+      },
+      "unit": "B",
+      "group": "Stack",
+      "display": "gauge",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "lwip.udp_drop"
+      },
+      "group": "Stack",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "lwip.ip_drop"
+      },
+      "group": "Stack",
+      "interpolation": "step",
+      "graph": true
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name_prefix": "eth."
+      },
+      "group": "Ethernet",
+      "interpolation": "step",
+      "graph": false
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name_prefix": "lwip."
+      },
+      "group": "Stack",
+      "interpolation": "step",
+      "graph": false
+    }
+  ],
+  "series_kinds": [],
+  "namespaces": [],
+  "verdicts": [
+    {
+      "id": "app-not-draining",
+      "name": "Application not draining",
+      "severity": "warning",
+      "when": {
+        "type": "counter_stalled",
+        "channel": "lwip.ip_recv",
+        "while_advances": "eth.rx_good",
+        "window_ms": 250,
+        "min_advance": 50
+      },
+      "explain": "Frames kept arriving at the MAC while the stack stopped accepting them: the receive path (driver task, buffer pool, or the consumer of the data) is not keeping up, so descriptors are never handed back to the DMA. Check whether the consumer task is running and whether the RX buffer pool is exhausted by unread data queued on sockets. Detected from counters rather than from ring occupancy: a stall shorter than the poll interval never appears in an instantaneous level, but both counters still record it.",
+      "evidence": [
+        "lwip.ip_recv",
+        "eth.rx_good",
+        "eth.rx_ring",
+        "eth.rx_dma_state",
+        "eth.rx_missed_frames",
+        "lwip.mem_used"
+      ]
+    },
+    {
+      "id": "rx-frames-missed",
+      "name": "RX frames missed by the MAC",
+      "severity": "error",
+      "when": {
+        "type": "value_at_or_above",
+        "channel": "eth.rx_missed_frames",
+        "value": 1
+      },
+      "explain": "The MAC dropped incoming frames because no descriptor was available. This is packet LOSS on the receive side, downstream of a ring the application is not draining. The value is frames lost within one poll interval (MTLRXQ0MPOCR.MISPKTCNT is clear-on-read), not a running total.",
+      "evidence": [
+        "eth.rx_missed_frames",
+        "eth.rx_fifo_overflow",
+        "eth.rx_ring",
+        "eth.rx_dma_state",
+        "lwip.ip_recv"
+      ]
+    },
+    {
+      "id": "rx-crc-errors",
+      "name": "CRC errors on the wire",
+      "severity": "error",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "eth.rx_crc_err"
+      },
+      "explain": "Frames arrived with bad checksums: physical-layer trouble (cable, connector, PHY negotiation, EMI), not a software problem.",
+      "evidence": [
+        "eth.rx_crc_err",
+        "eth.rx_align_err",
+        "eth.mac_config"
+      ]
+    },
+    {
+      "id": "rx-stopped",
+      "name": "RX stopped while TX continues",
+      "severity": "warning",
+      "when": {
+        "type": "counter_stalled",
+        "channel": "eth.rx_good",
+        "while_advances": "eth.tx_good",
+        "window_ms": 1000
+      },
+      "explain": "The MAC keeps transmitting but nothing is being received. Suspect the receive path specifically: RX DMA state, buffer availability, or the peer no longer sending.",
+      "evidence": [
+        "eth.rx_rate",
+        "eth.tx_rate",
+        "eth.rx_dma_state",
+        "eth.tx_dma_state"
+      ]
+    },
+    {
+      "id": "rx-fifo-overflow",
+      "name": "RX FIFO overflowed",
+      "severity": "error",
+      "when": {
+        "type": "value_at_or_above",
+        "channel": "eth.rx_fifo_overflow",
+        "value": 1
+      },
+      "explain": "Frames were lost inside the MAC's receive FIFO: the MTL queue filled faster than the DMA drained it into memory. Unlike missed frames (no descriptor), this points at bus/DMA throughput or a burst above what the queue depth absorbs. Value is frames lost in one poll interval (clear-on-read).",
+      "evidence": [
+        "eth.rx_fifo_overflow",
+        "eth.rxq_fill",
+        "eth.rxq_packets",
+        "eth.rx_missed_frames",
+        "eth.rx_ring"
+      ]
+    },
+    {
+      "id": "rx-ring-saturated",
+      "name": "RX descriptor ring saturated",
+      "severity": "suspicious",
+      "when": {
+        "type": "sustained_at_or_above",
+        "channel": "eth.rx_ring",
+        "value": 3,
+        "sustained_ms": 100
+      },
+      "explain": "The RX descriptor ring stayed full: descriptors are filled by the DMA and not reclaimed. Only visible when the stall lasts longer than the poll interval, so its absence proves nothing - read it as confirmation when it does fire.",
+      "evidence": [
+        "eth.rx_ring",
+        "eth.rx_ring_cur",
+        "eth.rx_dma_state",
+        "eth.rx_missed_frames"
+      ]
+    },
+    {
+      "id": "stack-dropping",
+      "name": "Datagrams dropped by the stack",
+      "severity": "warning",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "lwip.udp_drop"
+      },
+      "explain": "The stack received datagrams and threw them away: no PCB is bound for that port, or the receive queue of a socket nobody is reading is full. Loss above the MAC, so the Ethernet counters stay clean.",
+      "evidence": [
+        "lwip.udp_drop",
+        "lwip.udp_recv",
+        "lwip.mem_used",
+        "eth.rx_good"
+      ]
+    }
+  ],
+  "derived": [
+    {
+      "type": "field",
+      "name": "eth.rx_dma_state",
+      "source": "eth.dma_debug",
+      "shift": 8,
+      "mask": "0xF",
+      "values": {
+        "0": "STOPPED",
+        "1": "FETCHING",
+        "3": "WAITING",
+        "4": "SUSPENDED",
+        "5": "CLOSING",
+        "6": "TIMESTAMP_WR",
+        "7": "TRANSFERRING"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.tx_dma_state",
+      "source": "eth.dma_debug",
+      "shift": 12,
+      "mask": "0xF",
+      "values": {
+        "0": "STOPPED",
+        "1": "FETCHING",
+        "2": "WAITING",
+        "3": "READING",
+        "4": "TIMESTAMP_WR",
+        "6": "SUSPENDED",
+        "7": "CLOSING"
+      }
+    },
+    {
+      "type": "rate",
+      "name": "eth.rx_rate",
+      "source": "eth.rx_good",
+      "unit": "pkts/s"
+    },
+    {
+      "type": "rate",
+      "name": "eth.tx_rate",
+      "source": "eth.tx_good",
+      "unit": "pkts/s"
+    },
+    {
+      "type": "field",
+      "name": "eth.mac_tx_state",
+      "source": "eth.mac_debug",
+      "shift": 17,
+      "mask": "0x3",
+      "values": {
+        "0": "IDLE",
+        "1": "WAITING",
+        "2": "PAUSE",
+        "3": "TRANSFERRING"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.mac_rx_state",
+      "source": "eth.mac_debug",
+      "shift": 1,
+      "mask": "0x3",
+      "values": {
+        "0": "IDLE",
+        "1": "READING",
+        "2": "STATUS",
+        "3": "FLUSHING"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.txq_read_state",
+      "source": "eth.mtl_txq_dbg",
+      "shift": 1,
+      "mask": "0x3",
+      "values": {
+        "0": "IDLE",
+        "1": "READ",
+        "2": "WAITING",
+        "3": "FLUSHING"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.rxq_read_state",
+      "source": "eth.mtl_rxq_dbg",
+      "shift": 1,
+      "mask": "0x3",
+      "values": {
+        "0": "IDLE",
+        "1": "READING",
+        "2": "STATUS",
+        "3": "FLUSHING"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.rxq_fill",
+      "source": "eth.mtl_rxq_dbg",
+      "shift": 4,
+      "mask": "0x3",
+      "values": {
+        "0": "EMPTY",
+        "1": "BELOW_THRESH",
+        "2": "ABOVE_THRESH",
+        "3": "FULL"
+      }
+    },
+    {
+      "type": "field",
+      "name": "eth.rxq_packets",
+      "source": "eth.mtl_rxq_dbg",
+      "shift": 16,
+      "mask": "0x3FFF"
+    },
+    {
+      "type": "field",
+      "name": "eth.rx_missed_frames",
+      "source": "eth.rx_missed",
+      "shift": 16,
+      "mask": "0x7FF"
+    },
+    {
+      "type": "field",
+      "name": "eth.rx_fifo_overflow",
+      "source": "eth.rx_missed",
+      "shift": 0,
+      "mask": "0x7FF"
+    },
+    {
+      "type": "field",
+      "name": "eth.dma_missed_frames",
+      "source": "eth.dma_missed",
+      "shift": 0,
+      "mask": "0x7FF"
+    }
+  ],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Traffic",
+        "view": "cards",
+        "description": "MAC counter observations and derived rates. Host polling can miss brief state transitions.",
+        "fields": [
+          {
+            "channel": "eth.rx_rate",
+            "label": "MAC receive rate",
+            "unit": "pkts/s"
+          },
+          {
+            "channel": "eth.tx_rate",
+            "label": "MAC transmit rate",
+            "unit": "pkts/s"
+          },
+          {
+            "channel": "eth.rx_good",
+            "label": "Received good frames"
+          },
+          {
+            "channel": "eth.tx_good",
+            "label": "Transmitted good frames"
+          }
+        ],
+        "checks": [
+          "rx-stopped"
+        ]
+      },
+      {
+        "title": "Receive path",
+        "view": "table",
+        "description": "Descriptor occupancy and queue/state snapshots describe the instant sampled. A brief stall can occur between observations.",
+        "fields": [
+          {
+            "channel": "eth.rx_ring",
+            "label": "Descriptors awaiting the application",
+            "unit": "desc"
+          },
+          {
+            "channel": "eth.rxq_packets",
+            "label": "Queued receive packets",
+            "unit": "pkts"
+          },
+          {
+            "channel": "eth.rxq_fill",
+            "label": "Receive queue fill state"
+          },
+          {
+            "channel": "eth.rx_dma_state",
+            "label": "Receive DMA state",
+            "group": [
+              "DMA"
+            ]
+          },
+          {
+            "channel": "eth.rx_ring_cur",
+            "label": "Current receive descriptor address",
+            "group": [
+              "DMA"
+            ]
+          },
+          {
+            "channel": "eth.rxq_read_state",
+            "label": "Receive queue read state",
+            "group": [
+              "Queue"
+            ]
+          },
+          {
+            "channel": "eth.mac_rx_state",
+            "label": "MAC receive state",
+            "group": [
+              "MAC"
+            ]
+          }
+        ],
+        "checks": [
+          "rx-ring-saturated"
+        ]
+      },
+      {
+        "title": "Transmit path",
+        "view": "table",
+        "description": "Decoded controller states from the sampled status registers.",
+        "fields": [
+          {
+            "channel": "eth.tx_dma_state",
+            "label": "Transmit DMA state"
+          },
+          {
+            "channel": "eth.txq_read_state",
+            "label": "Transmit queue read state"
+          },
+          {
+            "channel": "eth.mac_tx_state",
+            "label": "MAC transmit state"
+          }
+        ]
+      },
+      {
+        "title": "Errors and drops",
+        "view": "table",
+        "description": "Missed-frame and overflow fields come from consuming counters and describe read intervals. CRC/alignment and stack drops are cumulative.",
+        "fields": [
+          {
+            "channel": "eth.rx_crc_err",
+            "label": "CRC errors",
+            "group": [
+              "Wire"
+            ]
+          },
+          {
+            "channel": "eth.rx_align_err",
+            "label": "Alignment errors",
+            "group": [
+              "Wire"
+            ]
+          },
+          {
+            "channel": "eth.rx_missed_frames",
+            "label": "Frames missed in this read interval",
+            "group": [
+              "Receive"
+            ]
+          },
+          {
+            "channel": "eth.rx_fifo_overflow",
+            "label": "FIFO overflow count in this read interval",
+            "group": [
+              "Receive"
+            ]
+          },
+          {
+            "channel": "eth.dma_missed_frames",
+            "label": "DMA misses in this read interval",
+            "group": [
+              "DMA"
+            ]
+          },
+          {
+            "channel": "lwip.ip_drop",
+            "label": "IP packets dropped",
+            "group": [
+              "Stack"
+            ]
+          },
+          {
+            "channel": "lwip.udp_drop",
+            "label": "UDP datagrams dropped",
+            "group": [
+              "Stack"
+            ]
+          }
+        ],
+        "checks": [
+          "rx-frames-missed",
+          "rx-crc-errors",
+          "rx-fifo-overflow",
+          "stack-dropping"
+        ]
+      },
+      {
+        "title": "Network stack",
+        "view": "table",
+        "description": "Application-owned lwIP counters. Offsets and widths must match this exact N6 demo ELF and its lwIP configuration.",
+        "fields": [
+          {
+            "channel": "lwip.ip_recv",
+            "label": "IP packets accepted"
+          },
+          {
+            "channel": "lwip.udp_recv",
+            "label": "UDP datagrams accepted"
+          },
+          {
+            "channel": "lwip.mem_used",
+            "label": "Heap bytes in use",
+            "unit": "B"
+          }
+        ],
+        "checks": [
+          "app-not-draining"
+        ]
+      },
+      {
+        "title": "Raw registers and access limits",
+        "view": "table",
+        "description": "Registers, addresses and packed fields are kept out of graphs by default. PHY MDIO access remains unsafe and unavailable; grouping does not authorize a read.",
+        "fields": [
+          {
+            "channel": "eth.mmc_control",
+            "label": "MMC control",
+            "group": [
+              "MAC"
+            ]
+          },
+          {
+            "channel": "eth.mac_config",
+            "label": "MAC configuration",
+            "group": [
+              "MAC"
+            ]
+          },
+          {
+            "channel": "eth.mac_debug",
+            "label": "MAC debug",
+            "group": [
+              "MAC"
+            ]
+          },
+          {
+            "channel": "eth.mtl_txq_dbg",
+            "label": "Transmit queue debug",
+            "group": [
+              "Queues"
+            ]
+          },
+          {
+            "channel": "eth.mtl_rxq_dbg",
+            "label": "Receive queue debug",
+            "group": [
+              "Queues"
+            ]
+          },
+          {
+            "channel": "eth.rx_missed",
+            "label": "Packed MTL missed/overflow sample",
+            "group": [
+              "Consuming counters"
+            ]
+          },
+          {
+            "channel": "eth.dma_missed",
+            "label": "Packed DMA missed sample",
+            "group": [
+              "Consuming counters"
+            ]
+          },
+          {
+            "channel": "eth.dma_debug",
+            "label": "DMA debug",
+            "group": [
+              "DMA"
+            ]
+          },
+          {
+            "channel": "eth.dma_ch0",
+            "label": "DMA channel status",
+            "group": [
+              "DMA"
+            ]
+          },
+          {
+            "channel": "eth.phy_link",
+            "label": "PHY link access (not sampled)",
+            "group": [
+              "Access limits"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

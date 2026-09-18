@@ -1,0 +1,13 @@
+{
+    "id": "com.joulescope.js320",
+    "name": "Joulescope",
+    "version": "0.1.0",
+    "domain_api": 1,
+    "publisher": "Joulescope",
+    "channels": [
+        {"match": {"ns": "external", "name": "MCU current"}, "group": "Power"},
+        {"match": {"ns": "external", "name": "MCU power"}, "group": "Power"}
+    ],
+    "series_kinds": [],
+    "namespaces": []
+}

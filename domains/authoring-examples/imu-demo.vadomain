@@ -1,0 +1,17 @@
+{
+    "id": "com.bkpt.demo.imu",
+    "name": "IMU Demo",
+    "version": "0.1.0",
+    "domain_api": 1,
+    "publisher": "BKPT Labs",
+    "channels": [
+        {"match": {"ns": "user_trace", "name": "imu.heading"}, "unit": "deg", "display": "angle", "group": "Orientation"},
+        {"match": {"ns": "user_trace", "name": "imu.temp"}, "unit": "degC", "display": "gauge", "group": "Environment"},
+        {"match": {"ns": "user_trace", "name": "imu.motion"}, "display": "toggle", "group": "Motion"},
+        {"match": {"ns": "user_trace", "name": "pwr.stage"}, "display": "bar", "group": "Power"},
+        {"match": {"ns": "user_trace", "name_prefix": "imu.a"}, "unit": "m/s2", "group": "Accelerometer"},
+        {"match": {"ns": "user_trace", "name_prefix": "imu."}, "group": "IMU"}
+    ],
+    "series_kinds": [],
+    "namespaces": ["imu"]
+}

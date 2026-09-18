@@ -1,0 +1,2225 @@
+{
+  "id": "com.bkpt.ble.gatt-2",
+  "name": "BLE GATT slots 2 and 3",
+  "version": "0.1.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "rate_hz": 1,
+    "channels": [
+      {
+        "name": "ble.characteristics.2.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.service",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "service"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.declaration",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "declaration"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value_handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value_handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.cccd_handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "cccd_handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.properties",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "properties"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.max_length",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "max_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.length",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.captured",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "captured"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value_origin",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value_origin"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.cccd",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "cccd"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.writes",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "writes"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.2.updates",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "updates"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.2.update_ok",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "update_ok"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.2.last_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "last_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.2.value.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.service",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "service"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.declaration",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "declaration"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value_handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value_handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.cccd_handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "cccd_handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.properties",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "properties"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.max_length",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "max_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.length",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.captured",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "captured"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value_origin",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value_origin"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.cccd",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "cccd"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.writes",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "writes"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.3.updates",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "updates"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.3.update_ok",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "update_ok"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.characteristics.3.last_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "last_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics.3.value.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "value"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.present"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.service"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.declaration"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value_handle"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.cccd_handle"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "names": {
+        "1": "16 bit",
+        "2": "128 bit"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.properties"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.max_length"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.length"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.captured"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value_origin"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "names": {
+        "0": "No observation",
+        "1": "Accepted local update",
+        "2": "Remote write callback",
+        "3": "Offset fragment; not a complete value"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.cccd"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "names": {
+        "0": "Disabled",
+        "1": "Notifications",
+        "2": "Indications",
+        "3": "Notifications and indications"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.writes"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.updates"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.update_ok"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.last_status"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value.0"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value.1"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value.2"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.2.value.3"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.present"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.service"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.declaration"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value_handle"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.cccd_handle"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "names": {
+        "1": "16 bit",
+        "2": "128 bit"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.properties"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.max_length"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.length"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.captured"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value_origin"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "names": {
+        "0": "No observation",
+        "1": "Accepted local update",
+        "2": "Remote write callback",
+        "3": "Offset fragment; not a complete value"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.cccd"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "names": {
+        "0": "Disabled",
+        "1": "Notifications",
+        "2": "Indications",
+        "3": "Notifications and indications"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.writes"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.updates"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.update_ok"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.last_status"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value.0"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value.1"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value.2"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics.3.value.3"
+      },
+      "interpolation": "step",
+      "group": "Characteristic slot 3",
+      "display": "register"
+    }
+  ],
+  "derived": [
+    {
+      "type": "field",
+      "name": "ble.characteristics.2.property.1",
+      "source": "ble.characteristics.2.properties",
+      "shift": 1,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.2.property.2",
+      "source": "ble.characteristics.2.properties",
+      "shift": 2,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.2.property.3",
+      "source": "ble.characteristics.2.properties",
+      "shift": 3,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.2.property.4",
+      "source": "ble.characteristics.2.properties",
+      "shift": 4,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.2.property.5",
+      "source": "ble.characteristics.2.properties",
+      "shift": 5,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.3.property.1",
+      "source": "ble.characteristics.3.properties",
+      "shift": 1,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.3.property.2",
+      "source": "ble.characteristics.3.properties",
+      "shift": 2,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.3.property.3",
+      "source": "ble.characteristics.3.properties",
+      "shift": 3,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.3.property.4",
+      "source": "ble.characteristics.3.properties",
+      "shift": 4,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "type": "field",
+      "name": "ble.characteristics.3.property.5",
+      "source": "ble.characteristics.3.properties",
+      "shift": 5,
+      "mask": "0x1",
+      "values": {
+        "0": "No",
+        "1": "Yes"
+      }
+    }
+  ],
+  "verdicts": [],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Characteristic slot 2",
+        "view": "table",
+        "description": "Present=0 means unused. Handles, UUIDs and properties come from successful registration. Value origin=0 means no observed value. Payload is the retained 16-byte prefix in four little-endian words. Values and counters are application observations; update success does not prove client receipt. CCCD is for the single current connection.",
+        "fields": [
+          {
+            "channel": "ble.characteristics.2.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.characteristics.2.service",
+            "label": "Parent service handle"
+          },
+          {
+            "channel": "ble.characteristics.2.declaration",
+            "label": "Characteristic declaration handle",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value_handle",
+            "label": "Value handle",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.cccd_handle",
+            "label": "CCCD handle (0 = none)",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.uuid_type",
+            "label": "UUID type",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.properties",
+            "label": "Property bitmask",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.max_length",
+            "label": "Maximum value bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.length",
+            "label": "Last observed payload bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.captured",
+            "label": "Retained prefix bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value_origin",
+            "label": "Value source",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.cccd",
+            "label": "Client subscription",
+            "group": [
+              "Subscription"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.writes",
+            "label": "Remote value writes observed",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.updates",
+            "label": "Local update requests",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.update_ok",
+            "label": "Local updates accepted",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.last_status",
+            "label": "Last local update status",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value.0",
+            "label": "Payload bytes 0-3 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value.1",
+            "label": "Payload bytes 4-7 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value.2",
+            "label": "Payload bytes 8-11 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.value.3",
+            "label": "Payload bytes 12-15 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.property.1",
+            "label": "Readable",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.property.2",
+            "label": "Write without response",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.property.3",
+            "label": "Write with response",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.property.4",
+            "label": "Notifiable",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.2.property.5",
+            "label": "Indicatable",
+            "group": [
+              "Properties"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Characteristic slot 3",
+        "view": "table",
+        "description": "Present=0 means unused. Handles, UUIDs and properties come from successful registration. Value origin=0 means no observed value. Payload is the retained 16-byte prefix in four little-endian words. Values and counters are application observations; update success does not prove client receipt. CCCD is for the single current connection.",
+        "fields": [
+          {
+            "channel": "ble.characteristics.3.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.characteristics.3.service",
+            "label": "Parent service handle"
+          },
+          {
+            "channel": "ble.characteristics.3.declaration",
+            "label": "Characteristic declaration handle",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value_handle",
+            "label": "Value handle",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.cccd_handle",
+            "label": "CCCD handle (0 = none)",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.uuid_type",
+            "label": "UUID type",
+            "group": [
+              "Identity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.properties",
+            "label": "Property bitmask",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.max_length",
+            "label": "Maximum value bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.length",
+            "label": "Last observed payload bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.captured",
+            "label": "Retained prefix bytes",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value_origin",
+            "label": "Value source",
+            "group": [
+              "Value"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.cccd",
+            "label": "Client subscription",
+            "group": [
+              "Subscription"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.writes",
+            "label": "Remote value writes observed",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.updates",
+            "label": "Local update requests",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.update_ok",
+            "label": "Local updates accepted",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.last_status",
+            "label": "Last local update status",
+            "group": [
+              "Activity"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "Identity",
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value.0",
+            "label": "Payload bytes 0-3 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value.1",
+            "label": "Payload bytes 4-7 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value.2",
+            "label": "Payload bytes 8-11 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.value.3",
+            "label": "Payload bytes 12-15 (little-endian word)",
+            "group": [
+              "Value",
+              "Payload"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.property.1",
+            "label": "Readable",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.property.2",
+            "label": "Write without response",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.property.3",
+            "label": "Write with response",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.property.4",
+            "label": "Notifiable",
+            "group": [
+              "Properties"
+            ]
+          },
+          {
+            "channel": "ble.characteristics.3.property.5",
+            "label": "Indicatable",
+            "group": [
+              "Properties"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

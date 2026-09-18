@@ -1,0 +1,305 @@
+{
+  "id": "com.bkpt.ble.profile.st-p2p",
+  "name": "BLE ST P2P",
+  "version": "0.2.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "rate_hz": 2,
+    "channels": [
+      {
+        "name": "p2p.Notification_Status",
+        "structured": {
+          "symbol": "P2P_Server_App_Context",
+          "steps": [
+            {
+              "op": "member",
+              "name": "Notification_Status"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "p2p.LedControl.Led1",
+        "structured": {
+          "symbol": "P2P_Server_App_Context",
+          "steps": [
+            {
+              "op": "member",
+              "name": "LedControl"
+            },
+            {
+              "op": "member",
+              "name": "Led1"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "p2p.ButtonControl.ButtonStatus",
+        "structured": {
+          "symbol": "P2P_Server_App_Context",
+          "steps": [
+            {
+              "op": "member",
+              "name": "ButtonControl"
+            },
+            {
+              "op": "member",
+              "name": "ButtonStatus"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.button_presses",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "button_presses"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.notifications_skipped",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "notifications_skipped"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "command.request_seq",
+        "structured": {
+          "symbol": "domain_command",
+          "steps": [
+            {
+              "op": "member",
+              "name": "request_seq"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "command.response_seq",
+        "structured": {
+          "symbol": "domain_command",
+          "steps": [
+            {
+              "op": "member",
+              "name": "response_seq"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "command.status",
+        "structured": {
+          "symbol": "domain_command",
+          "steps": [
+            {
+              "op": "member",
+              "name": "status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "p2p.Notification_Status"
+      },
+      "interpolation": "step",
+      "group": "LED and button",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "p2p.LedControl.Led1"
+      },
+      "interpolation": "step",
+      "group": "LED and button",
+      "names": {
+        "0": "Off",
+        "1": "On"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "p2p.ButtonControl.ButtonStatus"
+      },
+      "interpolation": "step",
+      "group": "LED and button",
+      "names": {
+        "0": "0",
+        "1": "1"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.button_presses"
+      },
+      "interpolation": "step",
+      "group": "LED and button"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.notifications_skipped"
+      },
+      "interpolation": "step",
+      "group": "LED and button"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "command.request_seq"
+      },
+      "interpolation": "step",
+      "group": "Application commands"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "command.response_seq"
+      },
+      "interpolation": "step",
+      "group": "Application commands"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "command.status"
+      },
+      "interpolation": "step",
+      "group": "Application commands",
+      "names": {
+        "0": "Accepted",
+        "65537": "Malformed request",
+        "65538": "Application not ready",
+        "65539": "Unsupported operation or LED value"
+      }
+    }
+  ],
+  "derived": [],
+  "verdicts": [],
+  "presentation": {
+    "sections": [
+      {
+        "title": "LED and button",
+        "view": "cards",
+        "description": "Optional profile decoder for ST's P2P application context. Missing P2P symbols make this profile unavailable while the generic GATT domains still work. LED is applied application state; button is local state even when notifications are disabled.",
+        "fields": [
+          {
+            "channel": "p2p.Notification_Status",
+            "label": "Button notifications enabled"
+          },
+          {
+            "channel": "p2p.LedControl.Led1",
+            "label": "Blue LED state",
+            "action": "set_led"
+          },
+          {
+            "channel": "p2p.ButtonControl.ButtonStatus",
+            "label": "Button toggle value"
+          },
+          {
+            "channel": "ble.button_presses",
+            "label": "Button actions since boot"
+          },
+          {
+            "channel": "ble.notifications_skipped",
+            "label": "Button actions without subscription"
+          }
+        ]
+      },
+      {
+        "title": "Application commands",
+        "view": "table",
+        "description": "Send calls the application's LED handler and updates the readable P2P LED characteristic. An acknowledgement is a local application result; it does not prove phone receipt.",
+        "fields": [
+          {
+            "channel": "command.request_seq",
+            "label": "Published request"
+          },
+          {
+            "channel": "command.response_seq",
+            "label": "Completed request"
+          },
+          {
+            "channel": "command.status",
+            "label": "Application result"
+          }
+        ]
+      }
+    ]
+  },
+  "actions": [
+    {
+      "id": "set_led",
+      "label": "Blue LED",
+      "input": {
+        "ty": "u8",
+        "choices": [
+          {
+            "value": "0",
+            "label": "Off"
+          },
+          {
+            "value": "1",
+            "label": "On"
+          }
+        ]
+      },
+      "target": {
+        "kind": "mailbox",
+        "symbol": "domain_command",
+        "operation": 1,
+        "timeout_ms": 3000
+      },
+      "completion": "application"
+    }
+  ]
+}

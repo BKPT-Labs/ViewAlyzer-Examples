@@ -1,0 +1,2649 @@
+{
+  "id": "com.bkpt.ble.overview",
+  "name": "BLE overview",
+  "version": "0.1.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "rate_hz": 2,
+    "channels": [
+      {
+        "name": "ble.advertising",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "advertising"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.connected",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "connected"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.connection_handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "connection_handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.connects",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "connects"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.disconnects",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "disconnects"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.disconnect_reason",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "disconnect_reason"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.interval_units",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "interval_units"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.latency",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "latency"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.timeout_units",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "timeout_units"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.tx_phy",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_phy"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.rx_phy",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "rx_phy"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.att_mtu",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "att_mtu"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.encrypted",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "encrypted"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.abi",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "abi"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.tick_ms",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tick_ms"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.cpu2_ready",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "cpu2_ready"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.stack_version",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "stack_version"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.fus_version",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "fus_version"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.stack_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "stack_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.commands",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "commands"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.command_pending",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "command_pending"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.last_opcode",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "last_opcode"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.last_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "last_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.command_errors",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "command_errors"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.last_error_opcode",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "last_error_opcode"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.last_error_status",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "last_error_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.events",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "events"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.malformed_events",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "malformed_events"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.registry_overflows",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "registry_overflows"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.value_truncations",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "value_truncations"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "counter": "wrapping"
+      },
+      {
+        "name": "ble.services_count",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services_count"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.characteristics_count",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "characteristics_count"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.journal_overwritten",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "journal_overwritten"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.0.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.1.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.2.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 2
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.present",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "present"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.handle",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "handle"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.uuid_type",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid_type"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.uuid.0",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 0
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.uuid.1",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 1
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.uuid.2",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 2
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      },
+      {
+        "name": "ble.services.3.uuid.3",
+        "structured": {
+          "symbol": "ble_observer",
+          "steps": [
+            {
+              "op": "member",
+              "name": "services"
+            },
+            {
+              "op": "index",
+              "index": 3
+            },
+            {
+              "op": "member",
+              "name": "uuid"
+            },
+            {
+              "op": "index",
+              "index": 3
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.advertising"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.connected"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.connection_handle"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.connects"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.disconnects"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.disconnect_reason"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "None",
+        "8": "Supervision timeout",
+        "19": "Remote user terminated",
+        "22": "Local host terminated"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.interval_units"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.latency"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.timeout_units"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.tx_phy"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "Unknown",
+        "1": "1 Mbit/s",
+        "2": "2 Mbit/s",
+        "3": "Coded"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.rx_phy"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "Unknown",
+        "1": "1 Mbit/s",
+        "2": "2 Mbit/s",
+        "3": "Coded"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.att_mtu"
+      },
+      "interpolation": "step",
+      "group": "Connection"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.encrypted"
+      },
+      "interpolation": "step",
+      "group": "Connection",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.abi"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.tick_ms"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.cpu2_ready"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.stack_version"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.fus_version"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.stack_type"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "1": "BLE full stack"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.commands"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.command_pending"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.last_opcode"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "64641": "aci_gap_set_non_discoverable",
+        "64642": "aci_gap_set_limited_discoverable",
+        "64643": "aci_gap_set_discoverable",
+        "64644": "aci_gap_set_direct_connectable",
+        "64645": "aci_gap_set_io_capability",
+        "64646": "aci_gap_set_authentication_requirement",
+        "64647": "aci_gap_set_authorization_requirement",
+        "64648": "aci_gap_pass_key_resp",
+        "64649": "aci_gap_authorization_resp",
+        "64650": "aci_gap_init",
+        "64651": "aci_gap_set_non_connectable",
+        "64652": "aci_gap_set_undirected_connectable",
+        "64653": "aci_gap_peripheral_security_req",
+        "64654": "aci_gap_update_adv_data",
+        "64655": "aci_gap_delete_ad_type",
+        "64656": "aci_gap_get_security_level",
+        "64657": "aci_gap_set_event_mask",
+        "64658": "aci_gap_configure_filter_accept_list",
+        "64659": "aci_gap_terminate",
+        "64660": "aci_gap_clear_security_db",
+        "64661": "aci_gap_allow_rebond",
+        "64662": "aci_gap_start_limited_discovery_proc",
+        "64663": "aci_gap_start_general_discovery_proc",
+        "64665": "aci_gap_start_auto_connection_establish_proc",
+        "64666": "aci_gap_start_general_connection_establish_proc",
+        "64667": "aci_gap_start_selective_connection_establish_proc",
+        "64668": "aci_gap_create_connection",
+        "64669": "aci_gap_terminate_gap_proc",
+        "64670": "aci_gap_start_connection_update",
+        "64671": "aci_gap_send_pairing_req",
+        "64673": "aci_gap_set_broadcast_mode",
+        "64674": "aci_gap_start_observation_proc",
+        "64675": "aci_gap_get_bonded_devices",
+        "64676": "aci_gap_check_bonded_device",
+        "64677": "aci_gap_numeric_comparison_value_confirm_yesno",
+        "64678": "aci_gap_passkey_input",
+        "64679": "aci_gap_get_oob_data",
+        "64680": "aci_gap_set_oob_data",
+        "64682": "aci_gap_remove_bonded_device",
+        "64683": "aci_gap_add_devices_to_list",
+        "64685": "aci_gap_pairing_request_reply",
+        "64688": "aci_gap_additional_beacon_start",
+        "64689": "aci_gap_additional_beacon_stop",
+        "64690": "aci_gap_additional_beacon_set_data",
+        "64704": "aci_gap_adv_set_configuration",
+        "64705": "aci_gap_adv_set_enable",
+        "64706": "aci_gap_adv_set_adv_data",
+        "64707": "aci_gap_adv_set_scan_resp_data",
+        "64708": "aci_gap_adv_remove_set",
+        "64709": "aci_gap_adv_clear_sets",
+        "64710": "aci_gap_adv_set_random_address",
+        "64720": "aci_gap_ext_start_scan",
+        "64721": "aci_gap_ext_create_connection",
+        "64769": "aci_gatt_init",
+        "64770": "aci_gatt_add_service",
+        "64771": "aci_gatt_include_service",
+        "64772": "aci_gatt_add_char",
+        "64773": "aci_gatt_add_char_desc",
+        "64774": "aci_gatt_update_char_value",
+        "64775": "aci_gatt_del_char",
+        "64776": "aci_gatt_del_service",
+        "64777": "aci_gatt_del_include_service",
+        "64778": "aci_gatt_set_event_mask",
+        "64779": "aci_gatt_exchange_config",
+        "64780": "aci_att_find_info_req",
+        "64781": "aci_att_find_by_type_value_req",
+        "64782": "aci_att_read_by_type_req",
+        "64783": "aci_att_read_by_group_type_req",
+        "64784": "aci_att_prepare_write_req",
+        "64785": "aci_att_execute_write_req",
+        "64786": "aci_gatt_disc_all_primary_services",
+        "64787": "aci_gatt_disc_primary_service_by_uuid",
+        "64788": "aci_gatt_find_included_services",
+        "64789": "aci_gatt_disc_all_char_of_service",
+        "64790": "aci_gatt_disc_char_by_uuid",
+        "64791": "aci_gatt_disc_all_char_desc",
+        "64792": "aci_gatt_read_char_value",
+        "64793": "aci_gatt_read_using_char_uuid",
+        "64794": "aci_gatt_read_long_char_value",
+        "64795": "aci_gatt_read_multiple_char_value",
+        "64796": "aci_gatt_write_char_value",
+        "64797": "aci_gatt_write_long_char_value",
+        "64798": "aci_gatt_write_char_reliable",
+        "64803": "aci_gatt_write_without_resp",
+        "64804": "aci_gatt_signed_write_without_resp",
+        "64805": "aci_gatt_confirm_indication",
+        "64806": "aci_gatt_permit_write",
+        "64807": "aci_gatt_permit_read",
+        "64808": "aci_gatt_set_security_permission",
+        "64809": "aci_gatt_set_desc_value",
+        "64810": "aci_gatt_read_handle_value",
+        "64812": "aci_gatt_update_char_value_ext",
+        "64814": "aci_gatt_set_access_permission",
+        "64816": "aci_gatt_store_db",
+        "64817": "aci_gatt_send_mult_notification",
+        "64818": "aci_gatt_read_multiple_var_char_value",
+        "64832": "aci_gatt_write_without_resp_ext",
+        "64833": "aci_gatt_write_with_resp_ext",
+        "65280": "aci_reset",
+        "65281": "aci_get_information",
+        "65282": "aci_write_config_data",
+        "65283": "aci_read_config_data",
+        "64524": "aci_hal_write_config_data",
+        "64525": "aci_hal_read_config_data",
+        "64527": "aci_hal_set_tx_power_level",
+        "64532": "aci_hal_le_tx_test_packet_number",
+        "64533": "aci_hal_tone_start",
+        "64534": "aci_hal_tone_stop",
+        "64535": "aci_hal_get_link_status",
+        "64536": "aci_hal_set_radio_activity_mask",
+        "64537": "aci_hal_get_anchor_period",
+        "64538": "aci_hal_set_event_mask",
+        "64544": "aci_hal_set_peripheral_latency",
+        "64546": "aci_hal_read_rssi",
+        "64559": "aci_hal_ead_encrypt_decrypt",
+        "64560": "aci_hal_read_radio_reg",
+        "64561": "aci_hal_write_radio_reg",
+        "64562": "aci_hal_read_raw_rssi",
+        "64563": "aci_hal_rx_start",
+        "64564": "aci_hal_rx_stop",
+        "1030": "hci_disconnect",
+        "1053": "hci_read_remote_version_information",
+        "3073": "hci_set_event_mask",
+        "3075": "hci_reset",
+        "3117": "hci_read_transmit_power_level",
+        "3121": "hci_set_controller_to_host_flow_control",
+        "3123": "hci_host_buffer_size",
+        "3125": "hci_host_number_of_completed_packets",
+        "4097": "hci_read_local_version_information",
+        "4098": "hci_read_local_supported_commands",
+        "4099": "hci_read_local_supported_features",
+        "4105": "hci_read_bd_addr",
+        "5125": "hci_read_rssi",
+        "8193": "hci_le_set_event_mask",
+        "8194": "hci_le_read_buffer_size",
+        "8195": "hci_le_read_local_supported_features_page_0",
+        "8197": "hci_le_set_random_address",
+        "8198": "hci_le_set_advertising_parameters",
+        "8199": "hci_le_read_advertising_physical_channel_tx_power",
+        "8200": "hci_le_set_advertising_data",
+        "8201": "hci_le_set_scan_response_data",
+        "8202": "hci_le_set_advertising_enable",
+        "8203": "hci_le_set_scan_parameters",
+        "8204": "hci_le_set_scan_enable",
+        "8205": "hci_le_create_connection",
+        "8206": "hci_le_create_connection_cancel",
+        "8207": "hci_le_read_filter_accept_list_size",
+        "8208": "hci_le_clear_filter_accept_list",
+        "8209": "hci_le_add_device_to_filter_accept_list",
+        "8210": "hci_le_remove_device_from_filter_accept_list",
+        "8211": "hci_le_connection_update",
+        "8212": "hci_le_set_host_channel_classification",
+        "8213": "hci_le_read_channel_map",
+        "8214": "hci_le_read_remote_features_page_0",
+        "8215": "hci_le_encrypt",
+        "8216": "hci_le_rand",
+        "8217": "hci_le_enable_encryption",
+        "8218": "hci_le_long_term_key_request_reply",
+        "8219": "hci_le_long_term_key_request_negative_reply",
+        "8220": "hci_le_read_supported_states",
+        "8221": "hci_le_receiver_test",
+        "8222": "hci_le_transmitter_test",
+        "8223": "hci_le_test_end",
+        "8226": "hci_le_set_data_length",
+        "8227": "hci_le_read_suggested_default_data_length",
+        "8228": "hci_le_write_suggested_default_data_length",
+        "8229": "hci_le_read_local_p256_public_key",
+        "8230": "hci_le_generate_dhkey",
+        "8231": "hci_le_add_device_to_resolving_list",
+        "8232": "hci_le_remove_device_from_resolving_list",
+        "8233": "hci_le_clear_resolving_list",
+        "8234": "hci_le_read_resolving_list_size",
+        "8235": "hci_le_read_peer_resolvable_address",
+        "8236": "hci_le_read_local_resolvable_address",
+        "8237": "hci_le_set_address_resolution_enable",
+        "8238": "hci_le_set_resolvable_private_address_timeout",
+        "8239": "hci_le_read_maximum_data_length",
+        "8240": "hci_le_read_phy",
+        "8241": "hci_le_set_default_phy",
+        "8242": "hci_le_set_phy",
+        "8243": "hci_le_receiver_test_v2",
+        "8244": "hci_le_transmitter_test_v2",
+        "8245": "hci_le_set_advertising_set_random_address",
+        "8246": "hci_le_set_extended_advertising_parameters",
+        "8247": "hci_le_set_extended_advertising_data",
+        "8248": "hci_le_set_extended_scan_response_data",
+        "8249": "hci_le_set_extended_advertising_enable",
+        "8250": "hci_le_read_maximum_advertising_data_length",
+        "8251": "hci_le_read_number_of_supported_advertising_sets",
+        "8252": "hci_le_remove_advertising_set",
+        "8253": "hci_le_clear_advertising_sets",
+        "8257": "hci_le_set_extended_scan_parameters",
+        "8258": "hci_le_set_extended_scan_enable",
+        "8259": "hci_le_extended_create_connection",
+        "8267": "hci_le_read_transmit_power",
+        "8268": "hci_le_read_rf_path_compensation",
+        "8269": "hci_le_write_rf_path_compensation",
+        "8270": "hci_le_set_privacy_mode",
+        "8286": "hci_le_generate_dhkey_v2",
+        "8350": "hci_le_set_resolvable_private_address_timeout_v2",
+        "64897": "aci_l2cap_connection_parameter_update_req",
+        "64898": "aci_l2cap_connection_parameter_update_resp",
+        "64904": "aci_l2cap_coc_connect",
+        "64905": "aci_l2cap_coc_connect_confirm",
+        "64906": "aci_l2cap_coc_reconf",
+        "64907": "aci_l2cap_coc_reconf_confirm",
+        "64908": "aci_l2cap_coc_disconnect",
+        "64909": "aci_l2cap_coc_flow_control",
+        "64910": "aci_l2cap_coc_tx_data"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.last_status"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.command_errors"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.last_error_opcode"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "64641": "aci_gap_set_non_discoverable",
+        "64642": "aci_gap_set_limited_discoverable",
+        "64643": "aci_gap_set_discoverable",
+        "64644": "aci_gap_set_direct_connectable",
+        "64645": "aci_gap_set_io_capability",
+        "64646": "aci_gap_set_authentication_requirement",
+        "64647": "aci_gap_set_authorization_requirement",
+        "64648": "aci_gap_pass_key_resp",
+        "64649": "aci_gap_authorization_resp",
+        "64650": "aci_gap_init",
+        "64651": "aci_gap_set_non_connectable",
+        "64652": "aci_gap_set_undirected_connectable",
+        "64653": "aci_gap_peripheral_security_req",
+        "64654": "aci_gap_update_adv_data",
+        "64655": "aci_gap_delete_ad_type",
+        "64656": "aci_gap_get_security_level",
+        "64657": "aci_gap_set_event_mask",
+        "64658": "aci_gap_configure_filter_accept_list",
+        "64659": "aci_gap_terminate",
+        "64660": "aci_gap_clear_security_db",
+        "64661": "aci_gap_allow_rebond",
+        "64662": "aci_gap_start_limited_discovery_proc",
+        "64663": "aci_gap_start_general_discovery_proc",
+        "64665": "aci_gap_start_auto_connection_establish_proc",
+        "64666": "aci_gap_start_general_connection_establish_proc",
+        "64667": "aci_gap_start_selective_connection_establish_proc",
+        "64668": "aci_gap_create_connection",
+        "64669": "aci_gap_terminate_gap_proc",
+        "64670": "aci_gap_start_connection_update",
+        "64671": "aci_gap_send_pairing_req",
+        "64673": "aci_gap_set_broadcast_mode",
+        "64674": "aci_gap_start_observation_proc",
+        "64675": "aci_gap_get_bonded_devices",
+        "64676": "aci_gap_check_bonded_device",
+        "64677": "aci_gap_numeric_comparison_value_confirm_yesno",
+        "64678": "aci_gap_passkey_input",
+        "64679": "aci_gap_get_oob_data",
+        "64680": "aci_gap_set_oob_data",
+        "64682": "aci_gap_remove_bonded_device",
+        "64683": "aci_gap_add_devices_to_list",
+        "64685": "aci_gap_pairing_request_reply",
+        "64688": "aci_gap_additional_beacon_start",
+        "64689": "aci_gap_additional_beacon_stop",
+        "64690": "aci_gap_additional_beacon_set_data",
+        "64704": "aci_gap_adv_set_configuration",
+        "64705": "aci_gap_adv_set_enable",
+        "64706": "aci_gap_adv_set_adv_data",
+        "64707": "aci_gap_adv_set_scan_resp_data",
+        "64708": "aci_gap_adv_remove_set",
+        "64709": "aci_gap_adv_clear_sets",
+        "64710": "aci_gap_adv_set_random_address",
+        "64720": "aci_gap_ext_start_scan",
+        "64721": "aci_gap_ext_create_connection",
+        "64769": "aci_gatt_init",
+        "64770": "aci_gatt_add_service",
+        "64771": "aci_gatt_include_service",
+        "64772": "aci_gatt_add_char",
+        "64773": "aci_gatt_add_char_desc",
+        "64774": "aci_gatt_update_char_value",
+        "64775": "aci_gatt_del_char",
+        "64776": "aci_gatt_del_service",
+        "64777": "aci_gatt_del_include_service",
+        "64778": "aci_gatt_set_event_mask",
+        "64779": "aci_gatt_exchange_config",
+        "64780": "aci_att_find_info_req",
+        "64781": "aci_att_find_by_type_value_req",
+        "64782": "aci_att_read_by_type_req",
+        "64783": "aci_att_read_by_group_type_req",
+        "64784": "aci_att_prepare_write_req",
+        "64785": "aci_att_execute_write_req",
+        "64786": "aci_gatt_disc_all_primary_services",
+        "64787": "aci_gatt_disc_primary_service_by_uuid",
+        "64788": "aci_gatt_find_included_services",
+        "64789": "aci_gatt_disc_all_char_of_service",
+        "64790": "aci_gatt_disc_char_by_uuid",
+        "64791": "aci_gatt_disc_all_char_desc",
+        "64792": "aci_gatt_read_char_value",
+        "64793": "aci_gatt_read_using_char_uuid",
+        "64794": "aci_gatt_read_long_char_value",
+        "64795": "aci_gatt_read_multiple_char_value",
+        "64796": "aci_gatt_write_char_value",
+        "64797": "aci_gatt_write_long_char_value",
+        "64798": "aci_gatt_write_char_reliable",
+        "64803": "aci_gatt_write_without_resp",
+        "64804": "aci_gatt_signed_write_without_resp",
+        "64805": "aci_gatt_confirm_indication",
+        "64806": "aci_gatt_permit_write",
+        "64807": "aci_gatt_permit_read",
+        "64808": "aci_gatt_set_security_permission",
+        "64809": "aci_gatt_set_desc_value",
+        "64810": "aci_gatt_read_handle_value",
+        "64812": "aci_gatt_update_char_value_ext",
+        "64814": "aci_gatt_set_access_permission",
+        "64816": "aci_gatt_store_db",
+        "64817": "aci_gatt_send_mult_notification",
+        "64818": "aci_gatt_read_multiple_var_char_value",
+        "64832": "aci_gatt_write_without_resp_ext",
+        "64833": "aci_gatt_write_with_resp_ext",
+        "65280": "aci_reset",
+        "65281": "aci_get_information",
+        "65282": "aci_write_config_data",
+        "65283": "aci_read_config_data",
+        "64524": "aci_hal_write_config_data",
+        "64525": "aci_hal_read_config_data",
+        "64527": "aci_hal_set_tx_power_level",
+        "64532": "aci_hal_le_tx_test_packet_number",
+        "64533": "aci_hal_tone_start",
+        "64534": "aci_hal_tone_stop",
+        "64535": "aci_hal_get_link_status",
+        "64536": "aci_hal_set_radio_activity_mask",
+        "64537": "aci_hal_get_anchor_period",
+        "64538": "aci_hal_set_event_mask",
+        "64544": "aci_hal_set_peripheral_latency",
+        "64546": "aci_hal_read_rssi",
+        "64559": "aci_hal_ead_encrypt_decrypt",
+        "64560": "aci_hal_read_radio_reg",
+        "64561": "aci_hal_write_radio_reg",
+        "64562": "aci_hal_read_raw_rssi",
+        "64563": "aci_hal_rx_start",
+        "64564": "aci_hal_rx_stop",
+        "1030": "hci_disconnect",
+        "1053": "hci_read_remote_version_information",
+        "3073": "hci_set_event_mask",
+        "3075": "hci_reset",
+        "3117": "hci_read_transmit_power_level",
+        "3121": "hci_set_controller_to_host_flow_control",
+        "3123": "hci_host_buffer_size",
+        "3125": "hci_host_number_of_completed_packets",
+        "4097": "hci_read_local_version_information",
+        "4098": "hci_read_local_supported_commands",
+        "4099": "hci_read_local_supported_features",
+        "4105": "hci_read_bd_addr",
+        "5125": "hci_read_rssi",
+        "8193": "hci_le_set_event_mask",
+        "8194": "hci_le_read_buffer_size",
+        "8195": "hci_le_read_local_supported_features_page_0",
+        "8197": "hci_le_set_random_address",
+        "8198": "hci_le_set_advertising_parameters",
+        "8199": "hci_le_read_advertising_physical_channel_tx_power",
+        "8200": "hci_le_set_advertising_data",
+        "8201": "hci_le_set_scan_response_data",
+        "8202": "hci_le_set_advertising_enable",
+        "8203": "hci_le_set_scan_parameters",
+        "8204": "hci_le_set_scan_enable",
+        "8205": "hci_le_create_connection",
+        "8206": "hci_le_create_connection_cancel",
+        "8207": "hci_le_read_filter_accept_list_size",
+        "8208": "hci_le_clear_filter_accept_list",
+        "8209": "hci_le_add_device_to_filter_accept_list",
+        "8210": "hci_le_remove_device_from_filter_accept_list",
+        "8211": "hci_le_connection_update",
+        "8212": "hci_le_set_host_channel_classification",
+        "8213": "hci_le_read_channel_map",
+        "8214": "hci_le_read_remote_features_page_0",
+        "8215": "hci_le_encrypt",
+        "8216": "hci_le_rand",
+        "8217": "hci_le_enable_encryption",
+        "8218": "hci_le_long_term_key_request_reply",
+        "8219": "hci_le_long_term_key_request_negative_reply",
+        "8220": "hci_le_read_supported_states",
+        "8221": "hci_le_receiver_test",
+        "8222": "hci_le_transmitter_test",
+        "8223": "hci_le_test_end",
+        "8226": "hci_le_set_data_length",
+        "8227": "hci_le_read_suggested_default_data_length",
+        "8228": "hci_le_write_suggested_default_data_length",
+        "8229": "hci_le_read_local_p256_public_key",
+        "8230": "hci_le_generate_dhkey",
+        "8231": "hci_le_add_device_to_resolving_list",
+        "8232": "hci_le_remove_device_from_resolving_list",
+        "8233": "hci_le_clear_resolving_list",
+        "8234": "hci_le_read_resolving_list_size",
+        "8235": "hci_le_read_peer_resolvable_address",
+        "8236": "hci_le_read_local_resolvable_address",
+        "8237": "hci_le_set_address_resolution_enable",
+        "8238": "hci_le_set_resolvable_private_address_timeout",
+        "8239": "hci_le_read_maximum_data_length",
+        "8240": "hci_le_read_phy",
+        "8241": "hci_le_set_default_phy",
+        "8242": "hci_le_set_phy",
+        "8243": "hci_le_receiver_test_v2",
+        "8244": "hci_le_transmitter_test_v2",
+        "8245": "hci_le_set_advertising_set_random_address",
+        "8246": "hci_le_set_extended_advertising_parameters",
+        "8247": "hci_le_set_extended_advertising_data",
+        "8248": "hci_le_set_extended_scan_response_data",
+        "8249": "hci_le_set_extended_advertising_enable",
+        "8250": "hci_le_read_maximum_advertising_data_length",
+        "8251": "hci_le_read_number_of_supported_advertising_sets",
+        "8252": "hci_le_remove_advertising_set",
+        "8253": "hci_le_clear_advertising_sets",
+        "8257": "hci_le_set_extended_scan_parameters",
+        "8258": "hci_le_set_extended_scan_enable",
+        "8259": "hci_le_extended_create_connection",
+        "8267": "hci_le_read_transmit_power",
+        "8268": "hci_le_read_rf_path_compensation",
+        "8269": "hci_le_write_rf_path_compensation",
+        "8270": "hci_le_set_privacy_mode",
+        "8286": "hci_le_generate_dhkey_v2",
+        "8350": "hci_le_set_resolvable_private_address_timeout_v2",
+        "64897": "aci_l2cap_connection_parameter_update_req",
+        "64898": "aci_l2cap_connection_parameter_update_resp",
+        "64904": "aci_l2cap_coc_connect",
+        "64905": "aci_l2cap_coc_connect_confirm",
+        "64906": "aci_l2cap_coc_reconf",
+        "64907": "aci_l2cap_coc_reconf_confirm",
+        "64908": "aci_l2cap_coc_disconnect",
+        "64909": "aci_l2cap_coc_flow_control",
+        "64910": "aci_l2cap_coc_tx_data"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.last_error_status"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health",
+      "names": {
+        "0": "Success",
+        "89": "Dev in blacklist",
+        "90": "Csrk not found",
+        "91": "Irk not found",
+        "92": "Dev not found",
+        "94": "Dev not bonded",
+        "96": "Invalid handle",
+        "97": "Out of handle",
+        "98": "Invalid operation",
+        "100": "Insufficient resources",
+        "101": "Sec permission error",
+        "112": "Address not resolved",
+        "130": "No valid slot",
+        "131": "Scan window short",
+        "132": "New interval failed",
+        "133": "Interval too large",
+        "134": "Length failed",
+        "145": "Failed",
+        "146": "Invalid params",
+        "147": "Busy",
+        "149": "Pending",
+        "151": "Error",
+        "152": "Out of memory",
+        "255": "Timeout",
+        "256": "Transport failure",
+        "257": "No response status"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.events"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.malformed_events"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.registry_overflows"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.value_truncations"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services_count"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.characteristics_count"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.journal_overwritten"
+      },
+      "interpolation": "step",
+      "group": "Command outcomes and observation health"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.present"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.handle"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.0.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Service slot 0",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.present"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.handle"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.1.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Service slot 1",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.present"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.handle"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.2.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Service slot 2",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.present"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3",
+      "names": {
+        "0": "No",
+        "1": "Yes"
+      }
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.handle"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.uuid_type"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.uuid.0"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.uuid.1"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.uuid.2"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3",
+      "display": "register"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "ble.services.3.uuid.3"
+      },
+      "interpolation": "step",
+      "group": "Service slot 3",
+      "display": "register"
+    }
+  ],
+  "derived": [],
+  "verdicts": [
+    {
+      "id": "command-errors",
+      "name": "A command returned non-success",
+      "severity": "warning",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "ble.command_errors"
+      },
+      "explain": "The retained command error count increased. Inspect the retained opcode/status and journal; an accepted GATT update is not remote delivery.",
+      "evidence": [
+        "ble.command_errors"
+      ]
+    },
+    {
+      "id": "registry-full",
+      "name": "Observation registry capacity exceeded",
+      "severity": "warning",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "ble.registry_overflows"
+      },
+      "explain": "The firmware omitted an object because its fixed registry is full. Increase adapter capacity and generate matching bounded descriptor pages.",
+      "evidence": [
+        "ble.registry_overflows"
+      ]
+    },
+    {
+      "id": "command-pending",
+      "name": "Command response still pending",
+      "severity": "warning",
+      "when": {
+        "type": "sustained_at_or_above",
+        "channel": "ble.command_pending",
+        "value": 1,
+        "sustained_ms": 2000
+      },
+      "explain": "A command has remained pending across at least two seconds of running samples. Inspect shared transport flags and application execution. Halting pauses observations.",
+      "evidence": [
+        "ble.command_pending"
+      ]
+    }
+  ],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Connection",
+        "view": "cards",
+        "description": "Single-link peripheral observation ABI 1. Connection intervals use 1.25 ms units; supervision timeout uses 10 ms units. Values persist until superseded; disconnected timing/PHY values describe the previous link.",
+        "fields": [
+          {
+            "channel": "ble.advertising",
+            "label": "Advertising"
+          },
+          {
+            "channel": "ble.connected",
+            "label": "Connected"
+          },
+          {
+            "channel": "ble.connection_handle",
+            "label": "Connection handle (65535 = none)"
+          },
+          {
+            "channel": "ble.connects",
+            "label": "Successful connections"
+          },
+          {
+            "channel": "ble.disconnects",
+            "label": "Disconnections"
+          },
+          {
+            "channel": "ble.disconnect_reason",
+            "label": "Last disconnect reason"
+          },
+          {
+            "channel": "ble.interval_units",
+            "label": "Connection interval (1.25 ms units)"
+          },
+          {
+            "channel": "ble.latency",
+            "label": "Peripheral latency (events)"
+          },
+          {
+            "channel": "ble.timeout_units",
+            "label": "Supervision timeout (10 ms units)"
+          },
+          {
+            "channel": "ble.tx_phy",
+            "label": "TX PHY"
+          },
+          {
+            "channel": "ble.rx_phy",
+            "label": "RX PHY"
+          },
+          {
+            "channel": "ble.att_mtu",
+            "label": "ATT MTU (0 = no link)"
+          },
+          {
+            "channel": "ble.encrypted",
+            "label": "Link encrypted"
+          }
+        ]
+      },
+      {
+        "title": "Command outcomes and observation health",
+        "view": "table",
+        "description": "Firmware-retained application observation. Polls may span updates; halt for a consistent snapshot. Not private CPU2 state or proof of radio delivery.",
+        "fields": [
+          {
+            "channel": "ble.abi",
+            "label": "Observation ABI"
+          },
+          {
+            "channel": "ble.tick_ms",
+            "label": "Application uptime"
+          },
+          {
+            "channel": "ble.cpu2_ready",
+            "label": "CPU2 ready event observed"
+          },
+          {
+            "channel": "ble.stack_version",
+            "label": "Wireless version (major:minor:patch packed)"
+          },
+          {
+            "channel": "ble.fus_version",
+            "label": "FUS version (major:minor:patch packed)"
+          },
+          {
+            "channel": "ble.stack_type",
+            "label": "Wireless stack type"
+          },
+          {
+            "channel": "ble.commands",
+            "label": "HCI/ACI requests since boot"
+          },
+          {
+            "channel": "ble.command_pending",
+            "label": "Command awaiting response"
+          },
+          {
+            "channel": "ble.last_opcode",
+            "label": "Last command"
+          },
+          {
+            "channel": "ble.last_status",
+            "label": "Last command status"
+          },
+          {
+            "channel": "ble.command_errors",
+            "label": "Non-success command outcomes"
+          },
+          {
+            "channel": "ble.last_error_opcode",
+            "label": "Last failed command (retained)"
+          },
+          {
+            "channel": "ble.last_error_status",
+            "label": "Last error status (retained)"
+          },
+          {
+            "channel": "ble.events",
+            "label": "Asynchronous events since boot"
+          },
+          {
+            "channel": "ble.malformed_events",
+            "label": "Rejected malformed application events"
+          },
+          {
+            "channel": "ble.registry_overflows",
+            "label": "Observations omitted: registry full"
+          },
+          {
+            "channel": "ble.value_truncations",
+            "label": "Payload observations longer than 16 bytes"
+          },
+          {
+            "channel": "ble.services_count",
+            "label": "Registered services observed"
+          },
+          {
+            "channel": "ble.characteristics_count",
+            "label": "Registered characteristics observed"
+          },
+          {
+            "channel": "ble.journal_overwritten",
+            "label": "Journal slots overwritten since boot"
+          }
+        ],
+        "checks": [
+          "command-errors",
+          "registry-full",
+          "command-pending"
+        ]
+      },
+      {
+        "title": "Service slot 0",
+        "view": "table",
+        "description": "Present=0 means unused. These are successful application add-service calls, not an enumeration of CPU2's entire database; GAP/GATT built-ins are not intercepted. UUID words 3,2,1,0 form the 128-bit UUID in hexadecimal; type 1 uses word 0's low 16 bits.",
+        "fields": [
+          {
+            "channel": "ble.services.0.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.services.0.handle",
+            "label": "Service handle"
+          },
+          {
+            "channel": "ble.services.0.uuid_type",
+            "label": "UUID type (1=16 bit, 2=128 bit)"
+          },
+          {
+            "channel": "ble.services.0.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.0.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.0.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.0.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Service slot 1",
+        "view": "table",
+        "description": "Present=0 means unused. These are successful application add-service calls, not an enumeration of CPU2's entire database; GAP/GATT built-ins are not intercepted. UUID words 3,2,1,0 form the 128-bit UUID in hexadecimal; type 1 uses word 0's low 16 bits.",
+        "fields": [
+          {
+            "channel": "ble.services.1.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.services.1.handle",
+            "label": "Service handle"
+          },
+          {
+            "channel": "ble.services.1.uuid_type",
+            "label": "UUID type (1=16 bit, 2=128 bit)"
+          },
+          {
+            "channel": "ble.services.1.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.1.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.1.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.1.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Service slot 2",
+        "view": "table",
+        "description": "Present=0 means unused. These are successful application add-service calls, not an enumeration of CPU2's entire database; GAP/GATT built-ins are not intercepted. UUID words 3,2,1,0 form the 128-bit UUID in hexadecimal; type 1 uses word 0's low 16 bits.",
+        "fields": [
+          {
+            "channel": "ble.services.2.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.services.2.handle",
+            "label": "Service handle"
+          },
+          {
+            "channel": "ble.services.2.uuid_type",
+            "label": "UUID type (1=16 bit, 2=128 bit)"
+          },
+          {
+            "channel": "ble.services.2.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.2.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.2.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.2.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Service slot 3",
+        "view": "table",
+        "description": "Present=0 means unused. These are successful application add-service calls, not an enumeration of CPU2's entire database; GAP/GATT built-ins are not intercepted. UUID words 3,2,1,0 form the 128-bit UUID in hexadecimal; type 1 uses word 0's low 16 bits.",
+        "fields": [
+          {
+            "channel": "ble.services.3.present",
+            "label": "Present"
+          },
+          {
+            "channel": "ble.services.3.handle",
+            "label": "Service handle"
+          },
+          {
+            "channel": "ble.services.3.uuid_type",
+            "label": "UUID type (1=16 bit, 2=128 bit)"
+          },
+          {
+            "channel": "ble.services.3.uuid.0",
+            "label": "UUID word 0 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.3.uuid.1",
+            "label": "UUID word 1 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.3.uuid.2",
+            "label": "UUID word 2 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          },
+          {
+            "channel": "ble.services.3.uuid.3",
+            "label": "UUID word 3 (least-significant first)",
+            "group": [
+              "UUID"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

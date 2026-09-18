@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/BKPT-Labs/ViewAlyzer-Examples",
+  "domains": [
+    {
+      "file": "catalog/stm32u575-usbx-threadx.vadomain",
+      "slug": "stm32u575-usbx-threadx",
+      "title": "STM32U575 USBX / ThreadX",
+      "family": "USB",
+      "kind": "Probe sampled",
+      "summary": "USB controller, CDC transfers, ThreadX waits, error reports, control queue and allocator pressure.",
+      "requires": "STM32U575 SVD and matching USBX CDC ACM / ThreadX Debug ELF"
+    },
+    {
+      "file": "catalog/stm32-ethernet.vadomain",
+      "slug": "stm32-ethernet",
+      "title": "STM32N6 Ethernet / lwIP",
+      "family": "Ethernet",
+      "kind": "Probe sampled",
+      "summary": "Follow frames from the MAC through DMA descriptors and lwIP; distinguish receive pressure, wire errors and stack drops.",
+      "requires": "STM32N657 ETH_S / RCC_S SVD and exact N6 demo ELF / lwIP layout"
+    },
+    {
+      "file": "catalog/imu-6dof.vadomain",
+      "slug": "imu-6dof",
+      "title": "STM32WB six-axis IMU",
+      "family": "Motion",
+      "kind": "Probe sampled",
+      "summary": "Sensor samples, configuration and consumption rate reveal a stalled reader, bus errors or a reader falling behind the sensor.",
+      "requires": "STM32WB5MM-DK ISM330DHCX firmware mirrors, matching ELF and STM32WB55_CM4 SVD"
+    },
+    {
+      "file": "catalog/joulescope.vadomain",
+      "slug": "joulescope",
+      "title": "Joulescope power channels",
+      "family": "Recorded channels",
+      "kind": "Channel styling",
+      "summary": "Group imported MCU current and power traces under Power.",
+      "requires": "Existing external MCU current / MCU power channels; recorder or import pipeline supplied separately"
+    },
+    {
+      "file": "catalog/ble-overview.vadomain",
+      "slug": "ble-overview",
+      "title": "BLE overview",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Connection, command outcomes, retained errors, service registrations and observer capacity.",
+      "requires": "STM32WB BLE observation ABI 1 and matching Debug ELF",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-gatt-1.vadomain",
+      "slug": "ble-gatt-1",
+      "title": "BLE GATT slots 0 and 1",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Registered characteristic identity, properties, retained values, subscriptions and write/update outcomes.",
+      "requires": "BLE observation ABI 1; characteristic slots 0 and 1 must be populated to show values",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-gatt-2.vadomain",
+      "slug": "ble-gatt-2",
+      "title": "BLE GATT slots 2 and 3",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Registered characteristic identity, properties, retained values, subscriptions and write/update outcomes.",
+      "requires": "BLE observation ABI 1; characteristic slots 2 and 3 must be populated to show values",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-gatt-3.vadomain",
+      "slug": "ble-gatt-3",
+      "title": "BLE GATT slots 4 and 5",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Registered characteristic identity, properties, retained values, subscriptions and write/update outcomes.",
+      "requires": "BLE observation ABI 1; characteristic slots 4 and 5 must be populated to show values",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-gatt-4.vadomain",
+      "slug": "ble-gatt-4",
+      "title": "BLE GATT slots 6 and 7",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Registered characteristic identity, properties, retained values, subscriptions and write/update outcomes.",
+      "requires": "BLE observation ABI 1; characteristic slots 6 and 7 must be populated to show values",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-profile-st-p2p.vadomain",
+      "slug": "ble-profile-st-p2p",
+      "title": "BLE ST peer-to-peer profile",
+      "family": "BLE",
+      "kind": "Firmware observations + action",
+      "summary": "LED/button state, skipped notifications and an explicit application-mediated LED command.",
+      "requires": "ST P2P symbols; command mailbox ABI 1 and typed-actions-v1 for Send in BKPT Debug",
+      "notes": "ble-p2p"
+    },
+    {
+      "file": "catalog/ble-stm32wb-transport.vadomain",
+      "slug": "ble-stm32wb-transport",
+      "title": "BLE STM32WB shared transport",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Application snapshots of IPCC channel flags and the M4 interrupt mask.",
+      "requires": "STM32WB BLE observation ABI 1; firmware must refresh IPCC snapshots",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-journal-1.vadomain",
+      "slug": "ble-journal-1",
+      "title": "BLE activity slots 0-7",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Retained command outcomes and significant asynchronous events in eight physical journal slots.",
+      "requires": "BLE observation ABI 1; combine both journal pages for the 16-slot retained window",
+      "notes": "ble"
+    },
+    {
+      "file": "catalog/ble-journal-2.vadomain",
+      "slug": "ble-journal-2",
+      "title": "BLE activity slots 8-15",
+      "family": "BLE",
+      "kind": "Firmware observations",
+      "summary": "Retained command outcomes and significant asynchronous events in eight physical journal slots.",
+      "requires": "BLE observation ABI 1; combine both journal pages for the 16-slot retained window",
+      "notes": "ble"
+    },
+    {
+      "file": "authoring-examples/imu-demo.vadomain",
+      "slug": "imu-demo",
+      "title": "IMU channel styling example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "A presentation-only template for user_trace channels; no matching firmware producer is supplied.",
+      "requires": "Adapt to actual recorder channel names and units; not STM32WB sensor support"
+    },
+    {
+      "file": "authoring-examples/counter.vadomain",
+      "slug": "example-counter",
+      "title": "Packet counter example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "Wrapping counters, a derived rate and an error-count finding.",
+      "requires": "Firmware must supply packets_completed and packet_errors"
+    },
+    {
+      "file": "authoring-examples/ethernet.vadomain",
+      "slug": "example-ethernet",
+      "title": "Ethernet authoring example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "Guarded registers, descriptor ownership and backlog checks for a placeholder MAC.",
+      "requires": "Replace ExampleMCU registers and ring layout with verified target definitions"
+    },
+    {
+      "file": "authoring-examples/middleware.vadomain",
+      "slug": "example-middleware",
+      "title": "Middleware queue example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "Structured pointers, occupancy/capacity cards and consumer-progress checks.",
+      "requires": "Implement or map active_queue, queue_slots, queue_enqueued and queue_drained"
+    },
+    {
+      "file": "authoring-examples/actions.vadomain",
+      "slug": "example-actions",
+      "title": "Typed actions example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "RAM writes, an application mailbox and a register-field action.",
+      "requires": "Implement matching firmware/mailbox/SVD; actions require explicit debugger Send"
+    },
+    {
+      "file": "authoring-examples/instrument.vadomain",
+      "slug": "example-instrument",
+      "title": "Instrument sidecar example",
+      "family": "Authoring examples",
+      "kind": "Authoring example",
+      "summary": "External current samples and a high-current threshold.",
+      "requires": "Supply sensor-recorder executable and synchronization channel; no sidecar included"
+    }
+  ]
+}

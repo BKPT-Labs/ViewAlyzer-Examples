@@ -1,0 +1,1971 @@
+{
+  "id": "com.bkpt.stm32u575.usbx-cdc-threadx",
+  "name": "STM32U575 USBX CDC ACM on ThreadX",
+  "version": "0.3.0",
+  "domain_api": 1,
+  "publisher": "BKPT Labs",
+  "sampled_state": {
+    "svd_device": "STM32U575",
+    "target_device_prefix": [
+      "STM32U575"
+    ],
+    "rate_hz": 20,
+    "ram_read_groups": [
+      {
+        "id": "usb-device",
+        "channels": [
+          "usbx.device_state",
+          "usbx.configuration"
+        ],
+        "max_bytes": 160,
+        "allow_padding": true
+      },
+      {
+        "id": "cdc-control",
+        "channels": [
+          "usbx.baud",
+          "usbx.dtr",
+          "usbx.rts"
+        ],
+        "max_bytes": 16,
+        "allow_padding": true
+      },
+      {
+        "id": "endpoint-1",
+        "channels": [
+          "usbx.ep1.address",
+          "usbx.ep1.status",
+          "usbx.ep1.requested_length",
+          "usbx.ep1.actual_length",
+          "usbx.ep1.completion_code"
+        ],
+        "max_bytes": 64,
+        "allow_padding": true
+      },
+      {
+        "id": "endpoint-2",
+        "channels": [
+          "usbx.ep2.address",
+          "usbx.ep2.status",
+          "usbx.ep2.requested_length",
+          "usbx.ep2.actual_length",
+          "usbx.ep2.completion_code"
+        ],
+        "max_bytes": 64,
+        "allow_padding": true
+      },
+      {
+        "id": "stack-errors",
+        "channels": [
+          "usbx.last_error",
+          "usbx.error_count"
+        ],
+        "max_bytes": 8,
+        "allow_padding": false
+      },
+      {
+        "id": "control-queue",
+        "channels": [
+          "app.control_queue.enqueued",
+          "app.control_queue.capacity",
+          "app.control_queue.available",
+          "app.control_queue.message_words",
+          "app.control_queue.waiters"
+        ],
+        "max_bytes": 40,
+        "allow_padding": true
+      },
+      {
+        "id": "memory-regular",
+        "channels": [
+          "usbx.memory.regular.free",
+          "usbx.memory.regular.total",
+          "usbx.memory.regular.fragments"
+        ],
+        "max_bytes": 20,
+        "allow_padding": true
+      },
+      {
+        "id": "memory-cache_safe",
+        "channels": [
+          "usbx.memory.cache_safe.free",
+          "usbx.memory.cache_safe.total",
+          "usbx.memory.cache_safe.fragments"
+        ],
+        "max_bytes": 20,
+        "allow_padding": true
+      }
+    ],
+    "channels": [
+      {
+        "name": "usb.gahbcfg",
+        "peripheral": "OTG_FS",
+        "register": "GAHBCFG",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "STM32U575 OTG_FS configuration/status. Reading does not acknowledge interrupts.",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "RCC_AHB2ENR1",
+          "mask": "0x4000",
+          "equals": "0x4000",
+          "description": "The USB OTG peripheral clock must be enabled (RCC OTGEN)."
+        }
+      },
+      {
+        "name": "usb.dctl",
+        "peripheral": "OTG_FS",
+        "register": "DCTL",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "STM32U575 OTG_FS configuration/status. Reading does not acknowledge interrupts.",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "RCC_AHB2ENR1",
+          "mask": "0x4000",
+          "equals": "0x4000",
+          "description": "The USB OTG peripheral clock must be enabled (RCC OTGEN)."
+        }
+      },
+      {
+        "name": "usb.dsts",
+        "peripheral": "OTG_FS",
+        "register": "DSTS",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "STM32U575 OTG_FS configuration/status. Reading does not acknowledge interrupts.",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "RCC_AHB2ENR1",
+          "mask": "0x4000",
+          "equals": "0x4000",
+          "description": "The USB OTG peripheral clock must be enabled (RCC OTGEN)."
+        }
+      },
+      {
+        "name": "usb.dcfg",
+        "peripheral": "OTG_FS",
+        "register": "DCFG",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "STM32U575 OTG_FS configuration/status. Reading does not acknowledge interrupts.",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "RCC_AHB2ENR1",
+          "mask": "0x4000",
+          "equals": "0x4000",
+          "description": "The USB OTG peripheral clock must be enabled (RCC OTGEN)."
+        }
+      },
+      {
+        "name": "usb.gintmsk",
+        "peripheral": "OTG_FS",
+        "register": "GINTMSK",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "STM32U575 OTG_FS configuration/status. Reading does not acknowledge interrupts.",
+        "precondition": {
+          "peripheral": "RCC",
+          "register": "RCC_AHB2ENR1",
+          "mask": "0x4000",
+          "equals": "0x4000",
+          "description": "The USB OTG peripheral clock must be enabled (RCC OTGEN)."
+        }
+      },
+      {
+        "name": "usbx.device_state",
+        "structured": {
+          "symbol": "_ux_system_slave",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_slave_device"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_device_state"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.configuration",
+        "structured": {
+          "symbol": "_ux_system_slave",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_slave_device"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_device_configuration_selected"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.baud",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_baudrate"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.dtr",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_data_dtr_state"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.rts",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_data_rts_state"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.ep1.address",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_descriptor"
+            },
+            {
+              "op": "member",
+              "name": "bEndpointAddress"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.ep1.status",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep1.requested_length",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_requested_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep1.actual_length",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_actual_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep1.completion_code",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_completion_code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep2.address",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_next_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_descriptor"
+            },
+            {
+              "op": "member",
+              "name": "bEndpointAddress"
+            }
+          ]
+        },
+        "ty": "u8",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "usbx.ep2.status",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_next_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_status"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep2.requested_length",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_next_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_requested_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep2.actual_length",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_next_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_actual_length"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "usbx.ep2.completion_code",
+        "structured": {
+          "symbol": "cdc_acm",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_class_cdc_acm_interface"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_interface_first_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_next_endpoint"
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_endpoint_transfer_request"
+            },
+            {
+              "op": "member",
+              "name": "ux_slave_transfer_request_completion_code"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Current or most recent endpoint transfer request, sampled. This is not a complete transfer history or a throughput counter. Zero completion code alone does not prove completion."
+      },
+      {
+        "name": "threadx.read_state",
+        "structured": {
+          "symbol": "ux_cdc_read_thread",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_thread_state"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "threadx.write_state",
+        "structured": {
+          "symbol": "ux_cdc_write_thread",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_thread_state"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Read from matching ELF DWARF. Pointer slots are reread; separate fields are not an atomic snapshot."
+      },
+      {
+        "name": "app.tx_in",
+        "symbol": "UserTxBufPtrIn",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "UART producer ring index, not a cumulative byte counter."
+      },
+      {
+        "name": "app.tx_out",
+        "symbol": "UserTxBufPtrOut",
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USB consumer ring index, not a cumulative byte counter."
+      },
+      {
+        "name": "usbx.last_error",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_last_error"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Last code passed to the USBX error handler. It may predate observation and remain after recovery; it is not an active-fault flag."
+      },
+      {
+        "name": "usbx.error_count",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_error_count"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Cumulative calls to the USBX error handler since stack initialization (32-bit; may reset or wrap). Zero does not establish that every API call succeeded.",
+        "counter": "monotonic"
+      },
+      {
+        "name": "app.control_queue.enqueued",
+        "structured": {
+          "symbol": "ux_app_MsgQueue",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_queue_enqueued"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Application USB start/stop control queue, not CDC payload storage. Occupancy is a sample, not an exact peak or a count of full/timeout events. Message size is in 32-bit ULONG words; waiting receivers are normal."
+      },
+      {
+        "name": "app.control_queue.capacity",
+        "structured": {
+          "symbol": "ux_app_MsgQueue",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_queue_capacity"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Application USB start/stop control queue, not CDC payload storage. Occupancy is a sample, not an exact peak or a count of full/timeout events. Message size is in 32-bit ULONG words; waiting receivers are normal."
+      },
+      {
+        "name": "app.control_queue.available",
+        "structured": {
+          "symbol": "ux_app_MsgQueue",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_queue_available_storage"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Application USB start/stop control queue, not CDC payload storage. Occupancy is a sample, not an exact peak or a count of full/timeout events. Message size is in 32-bit ULONG words; waiting receivers are normal."
+      },
+      {
+        "name": "app.control_queue.message_words",
+        "structured": {
+          "symbol": "ux_app_MsgQueue",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_queue_message_size"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Application USB start/stop control queue, not CDC payload storage. Occupancy is a sample, not an exact peak or a count of full/timeout events. Message size is in 32-bit ULONG words; waiting receivers are normal."
+      },
+      {
+        "name": "app.control_queue.waiters",
+        "structured": {
+          "symbol": "ux_app_MsgQueue",
+          "steps": [
+            {
+              "op": "member",
+              "name": "tx_queue_suspended_count"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "Application USB start/stop control queue, not CDC payload storage. Occupancy is a sample, not an exact peak or a count of full/timeout events. Message size is in 32-bit ULONG words; waiting receivers are normal."
+      },
+      {
+        "name": "usbx.memory.regular.free",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_available"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      },
+      {
+        "name": "usbx.memory.regular.total",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_size"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      },
+      {
+        "name": "usbx.memory.regular.fragments",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 0
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_fragments"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      },
+      {
+        "name": "usbx.memory.cache_safe.free",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_available"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      },
+      {
+        "name": "usbx.memory.cache_safe.total",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_size"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      },
+      {
+        "name": "usbx.memory.cache_safe.fragments",
+        "structured": {
+          "symbol": "_ux_system",
+          "steps": [
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_system_memory_byte_pool"
+            },
+            {
+              "op": "index",
+              "index": 1
+            },
+            {
+              "op": "deref"
+            },
+            {
+              "op": "member",
+              "name": "ux_byte_pool_fragments"
+            }
+          ]
+        },
+        "ty": "u32",
+        "safety": "read-safe",
+        "note": "USBX allocator pool, read from the matching ELF. Free bytes do not guarantee a sufficiently large contiguous allocation. Cache-safe memory may share the regular pool; do not sum the pools."
+      }
+    ]
+  },
+  "channels": [
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.last_error"
+      },
+      "display": "enum",
+      "names": {
+        "0": "No error recorded (0)",
+        "255": "Error (UX_ERROR)",
+        "254": "Busy (UX_BUSY)",
+        "253": "Timeout (UX_TIMEOUT)",
+        "252": "Reentry (UX_REENTRY)",
+        "251": "Invalid state (UX_INVALID_STATE)",
+        "250": "Invalid parameter (UX_INVALID_PARAMETER)",
+        "249": "Aborted (UX_ABORTED)",
+        "248": "Math overflow (UX_MATH_OVERFLOW)",
+        "247": "Invalid build option (UX_INVALID_BUILD_OPTION)",
+        "17": "Too many devices (UX_TOO_MANY_DEVICES)",
+        "18": "Memory insufficient (UX_MEMORY_INSUFFICIENT)",
+        "19": "No td available (UX_NO_TD_AVAILABLE)",
+        "20": "No ed available (UX_NO_ED_AVAILABLE)",
+        "21": "Semaphore error (UX_SEMAPHORE_ERROR)",
+        "22": "Thread error (UX_THREAD_ERROR)",
+        "23": "Mutex error (UX_MUTEX_ERROR)",
+        "24": "Event error (UX_EVENT_ERROR)",
+        "25": "Memory corrupted (UX_MEMORY_CORRUPTED)",
+        "26": "Memory array full (UX_MEMORY_ARRAY_FULL)",
+        "27": "Fatal error (UX_FATAL_ERROR)",
+        "28": "Already activated (UX_ALREADY_ACTIVATED)",
+        "33": "Transfer stalled (UX_TRANSFER_STALLED)",
+        "34": "Transfer no answer (UX_TRANSFER_NO_ANSWER)",
+        "35": "Transfer error (UX_TRANSFER_ERROR)",
+        "36": "Transfer missed frame (UX_TRANSFER_MISSED_FRAME)",
+        "37": "Transfer not ready (UX_TRANSFER_NOT_READY)",
+        "38": "Transfer bus reset (UX_TRANSFER_BUS_RESET)",
+        "39": "Transfer buffer overflow (UX_TRANSFER_BUFFER_OVERFLOW)",
+        "40": "Transfer application reset (UX_TRANSFER_APPLICATION_RESET)",
+        "41": "Transfer data less than expected (UX_TRANSFER_DATA_LESS_THAN_EXPECTED)",
+        "49": "Port reset failed (UX_PORT_RESET_FAILED)",
+        "50": "Controller init failed (UX_CONTROLLER_INIT_FAILED)",
+        "51": "Controller dead (UX_CONTROLLER_DEAD)",
+        "65": "No bandwidth available (UX_NO_BANDWIDTH_AVAILABLE)",
+        "66": "Descriptor corrupted (UX_DESCRIPTOR_CORRUPTED)",
+        "67": "Over current condition (UX_OVER_CURRENT_CONDITION)",
+        "68": "Device enumeration failure (UX_DEVICE_ENUMERATION_FAILURE)",
+        "69": "Too many hub ports (UX_TOO_MANY_HUB_PORTS)",
+        "80": "Device handle unknown (UX_DEVICE_HANDLE_UNKNOWN)",
+        "81": "Configuration handle unknown (UX_CONFIGURATION_HANDLE_UNKNOWN)",
+        "82": "Interface handle unknown (UX_INTERFACE_HANDLE_UNKNOWN)",
+        "83": "Endpoint handle unknown (UX_ENDPOINT_HANDLE_UNKNOWN)",
+        "84": "Function not supported (UX_FUNCTION_NOT_SUPPORTED)",
+        "85": "Controller unknown (UX_CONTROLLER_UNKNOWN)",
+        "86": "Port index unknown (UX_PORT_INDEX_UNKNOWN)",
+        "87": "No class match (UX_NO_CLASS_MATCH)",
+        "88": "Host class already installed (UX_HOST_CLASS_ALREADY_INSTALLED)",
+        "89": "Host class unknown (UX_HOST_CLASS_UNKNOWN)",
+        "90": "Connection incompatible (UX_CONNECTION_INCOMPATIBLE)",
+        "91": "Host class instance unknown (UX_HOST_CLASS_INSTANCE_UNKNOWN)",
+        "92": "Transfer timeout (UX_TRANSFER_TIMEOUT)",
+        "93": "Buffer overflow (UX_BUFFER_OVERFLOW)",
+        "94": "No alternate setting (UX_NO_ALTERNATE_SETTING)",
+        "95": "No device connected (UX_NO_DEVICE_CONNECTED)",
+        "96": "Host class protocol error (UX_HOST_CLASS_PROTOCOL_ERROR)",
+        "97": "Host class memory error (UX_HOST_CLASS_MEMORY_ERROR)",
+        "98": "Host class media not supported (UX_HOST_CLASS_MEDIA_NOT_SUPPORTED)",
+        "99": "Class malformed packet received error (UX_CLASS_MALFORMED_PACKET_RECEIVED_ERROR)",
+        "112": "Host class hid report overflow (UX_HOST_CLASS_HID_REPORT_OVERFLOW)",
+        "113": "Host class hid usage overflow (UX_HOST_CLASS_HID_USAGE_OVERFLOW)",
+        "114": "Host class hid tag unsupported (UX_HOST_CLASS_HID_TAG_UNSUPPORTED)",
+        "115": "Host class hid push overflow (UX_HOST_CLASS_HID_PUSH_OVERFLOW)",
+        "116": "Host class hid pop underflow (UX_HOST_CLASS_HID_POP_UNDERFLOW)",
+        "117": "Host class hid collection overflow (UX_HOST_CLASS_HID_COLLECTION_OVERFLOW)",
+        "118": "Host class hid collection underflow (UX_HOST_CLASS_HID_COLLECTION_UNDERFLOW)",
+        "119": "Host class hid min max error (UX_HOST_CLASS_HID_MIN_MAX_ERROR)",
+        "120": "Host class hid delimiter error (UX_HOST_CLASS_HID_DELIMITER_ERROR)",
+        "121": "Host class hid report error (UX_HOST_CLASS_HID_REPORT_ERROR)",
+        "122": "Host class hid periodic report error (UX_HOST_CLASS_HID_PERIODIC_REPORT_ERROR)",
+        "123": "Host class hid unknown (UX_HOST_CLASS_HID_UNKNOWN)",
+        "128": "Host class audio wrong type (UX_HOST_CLASS_AUDIO_WRONG_TYPE)",
+        "129": "Host class audio wrong interface (UX_HOST_CLASS_AUDIO_WRONG_INTERFACE)",
+        "130": "Host class audio wrong frequency (UX_HOST_CLASS_AUDIO_WRONG_FREQUENCY)",
+        "144": "Class eth link state down error (UX_CLASS_ETH_LINK_STATE_DOWN_ERROR)",
+        "145": "Class eth packet pool error (UX_CLASS_ETH_PACKET_POOL_ERROR)",
+        "146": "Class eth packet error (UX_CLASS_ETH_PACKET_ERROR)",
+        "147": "Class eth size error (UX_CLASS_ETH_SIZE_ERROR)"
+      },
+      "group": "USBX / Errors"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep1.completion_code"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Success code (UX_SUCCESS)",
+        "255": "Error (UX_ERROR)",
+        "254": "Busy (UX_BUSY)",
+        "253": "Timeout (UX_TIMEOUT)",
+        "252": "Reentry (UX_REENTRY)",
+        "251": "Invalid state (UX_INVALID_STATE)",
+        "250": "Invalid parameter (UX_INVALID_PARAMETER)",
+        "249": "Aborted (UX_ABORTED)",
+        "248": "Math overflow (UX_MATH_OVERFLOW)",
+        "247": "Invalid build option (UX_INVALID_BUILD_OPTION)",
+        "17": "Too many devices (UX_TOO_MANY_DEVICES)",
+        "18": "Memory insufficient (UX_MEMORY_INSUFFICIENT)",
+        "19": "No td available (UX_NO_TD_AVAILABLE)",
+        "20": "No ed available (UX_NO_ED_AVAILABLE)",
+        "21": "Semaphore error (UX_SEMAPHORE_ERROR)",
+        "22": "Thread error (UX_THREAD_ERROR)",
+        "23": "Mutex error (UX_MUTEX_ERROR)",
+        "24": "Event error (UX_EVENT_ERROR)",
+        "25": "Memory corrupted (UX_MEMORY_CORRUPTED)",
+        "26": "Memory array full (UX_MEMORY_ARRAY_FULL)",
+        "27": "Fatal error (UX_FATAL_ERROR)",
+        "28": "Already activated (UX_ALREADY_ACTIVATED)",
+        "33": "Transfer stalled (UX_TRANSFER_STALLED)",
+        "34": "Transfer no answer (UX_TRANSFER_NO_ANSWER)",
+        "35": "Transfer error (UX_TRANSFER_ERROR)",
+        "36": "Transfer missed frame (UX_TRANSFER_MISSED_FRAME)",
+        "37": "Transfer not ready (UX_TRANSFER_NOT_READY)",
+        "38": "Transfer bus reset (UX_TRANSFER_BUS_RESET)",
+        "39": "Transfer buffer overflow (UX_TRANSFER_BUFFER_OVERFLOW)",
+        "40": "Transfer application reset (UX_TRANSFER_APPLICATION_RESET)",
+        "41": "Transfer data less than expected (UX_TRANSFER_DATA_LESS_THAN_EXPECTED)",
+        "49": "Port reset failed (UX_PORT_RESET_FAILED)",
+        "50": "Controller init failed (UX_CONTROLLER_INIT_FAILED)",
+        "51": "Controller dead (UX_CONTROLLER_DEAD)",
+        "65": "No bandwidth available (UX_NO_BANDWIDTH_AVAILABLE)",
+        "66": "Descriptor corrupted (UX_DESCRIPTOR_CORRUPTED)",
+        "67": "Over current condition (UX_OVER_CURRENT_CONDITION)",
+        "68": "Device enumeration failure (UX_DEVICE_ENUMERATION_FAILURE)",
+        "69": "Too many hub ports (UX_TOO_MANY_HUB_PORTS)",
+        "80": "Device handle unknown (UX_DEVICE_HANDLE_UNKNOWN)",
+        "81": "Configuration handle unknown (UX_CONFIGURATION_HANDLE_UNKNOWN)",
+        "82": "Interface handle unknown (UX_INTERFACE_HANDLE_UNKNOWN)",
+        "83": "Endpoint handle unknown (UX_ENDPOINT_HANDLE_UNKNOWN)",
+        "84": "Function not supported (UX_FUNCTION_NOT_SUPPORTED)",
+        "85": "Controller unknown (UX_CONTROLLER_UNKNOWN)",
+        "86": "Port index unknown (UX_PORT_INDEX_UNKNOWN)",
+        "87": "No class match (UX_NO_CLASS_MATCH)",
+        "88": "Host class already installed (UX_HOST_CLASS_ALREADY_INSTALLED)",
+        "89": "Host class unknown (UX_HOST_CLASS_UNKNOWN)",
+        "90": "Connection incompatible (UX_CONNECTION_INCOMPATIBLE)",
+        "91": "Host class instance unknown (UX_HOST_CLASS_INSTANCE_UNKNOWN)",
+        "92": "Transfer timeout (UX_TRANSFER_TIMEOUT)",
+        "93": "Buffer overflow (UX_BUFFER_OVERFLOW)",
+        "94": "No alternate setting (UX_NO_ALTERNATE_SETTING)",
+        "95": "No device connected (UX_NO_DEVICE_CONNECTED)",
+        "96": "Host class protocol error (UX_HOST_CLASS_PROTOCOL_ERROR)",
+        "97": "Host class memory error (UX_HOST_CLASS_MEMORY_ERROR)",
+        "98": "Host class media not supported (UX_HOST_CLASS_MEDIA_NOT_SUPPORTED)",
+        "99": "Class malformed packet received error (UX_CLASS_MALFORMED_PACKET_RECEIVED_ERROR)",
+        "112": "Host class hid report overflow (UX_HOST_CLASS_HID_REPORT_OVERFLOW)",
+        "113": "Host class hid usage overflow (UX_HOST_CLASS_HID_USAGE_OVERFLOW)",
+        "114": "Host class hid tag unsupported (UX_HOST_CLASS_HID_TAG_UNSUPPORTED)",
+        "115": "Host class hid push overflow (UX_HOST_CLASS_HID_PUSH_OVERFLOW)",
+        "116": "Host class hid pop underflow (UX_HOST_CLASS_HID_POP_UNDERFLOW)",
+        "117": "Host class hid collection overflow (UX_HOST_CLASS_HID_COLLECTION_OVERFLOW)",
+        "118": "Host class hid collection underflow (UX_HOST_CLASS_HID_COLLECTION_UNDERFLOW)",
+        "119": "Host class hid min max error (UX_HOST_CLASS_HID_MIN_MAX_ERROR)",
+        "120": "Host class hid delimiter error (UX_HOST_CLASS_HID_DELIMITER_ERROR)",
+        "121": "Host class hid report error (UX_HOST_CLASS_HID_REPORT_ERROR)",
+        "122": "Host class hid periodic report error (UX_HOST_CLASS_HID_PERIODIC_REPORT_ERROR)",
+        "123": "Host class hid unknown (UX_HOST_CLASS_HID_UNKNOWN)",
+        "128": "Host class audio wrong type (UX_HOST_CLASS_AUDIO_WRONG_TYPE)",
+        "129": "Host class audio wrong interface (UX_HOST_CLASS_AUDIO_WRONG_INTERFACE)",
+        "130": "Host class audio wrong frequency (UX_HOST_CLASS_AUDIO_WRONG_FREQUENCY)",
+        "144": "Class eth link state down error (UX_CLASS_ETH_LINK_STATE_DOWN_ERROR)",
+        "145": "Class eth packet pool error (UX_CLASS_ETH_PACKET_POOL_ERROR)",
+        "146": "Class eth packet error (UX_CLASS_ETH_PACKET_ERROR)",
+        "147": "Class eth size error (UX_CLASS_ETH_SIZE_ERROR)"
+      },
+      "group": "USBX / Errors"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep2.completion_code"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Success code (UX_SUCCESS)",
+        "255": "Error (UX_ERROR)",
+        "254": "Busy (UX_BUSY)",
+        "253": "Timeout (UX_TIMEOUT)",
+        "252": "Reentry (UX_REENTRY)",
+        "251": "Invalid state (UX_INVALID_STATE)",
+        "250": "Invalid parameter (UX_INVALID_PARAMETER)",
+        "249": "Aborted (UX_ABORTED)",
+        "248": "Math overflow (UX_MATH_OVERFLOW)",
+        "247": "Invalid build option (UX_INVALID_BUILD_OPTION)",
+        "17": "Too many devices (UX_TOO_MANY_DEVICES)",
+        "18": "Memory insufficient (UX_MEMORY_INSUFFICIENT)",
+        "19": "No td available (UX_NO_TD_AVAILABLE)",
+        "20": "No ed available (UX_NO_ED_AVAILABLE)",
+        "21": "Semaphore error (UX_SEMAPHORE_ERROR)",
+        "22": "Thread error (UX_THREAD_ERROR)",
+        "23": "Mutex error (UX_MUTEX_ERROR)",
+        "24": "Event error (UX_EVENT_ERROR)",
+        "25": "Memory corrupted (UX_MEMORY_CORRUPTED)",
+        "26": "Memory array full (UX_MEMORY_ARRAY_FULL)",
+        "27": "Fatal error (UX_FATAL_ERROR)",
+        "28": "Already activated (UX_ALREADY_ACTIVATED)",
+        "33": "Transfer stalled (UX_TRANSFER_STALLED)",
+        "34": "Transfer no answer (UX_TRANSFER_NO_ANSWER)",
+        "35": "Transfer error (UX_TRANSFER_ERROR)",
+        "36": "Transfer missed frame (UX_TRANSFER_MISSED_FRAME)",
+        "37": "Transfer not ready (UX_TRANSFER_NOT_READY)",
+        "38": "Transfer bus reset (UX_TRANSFER_BUS_RESET)",
+        "39": "Transfer buffer overflow (UX_TRANSFER_BUFFER_OVERFLOW)",
+        "40": "Transfer application reset (UX_TRANSFER_APPLICATION_RESET)",
+        "41": "Transfer data less than expected (UX_TRANSFER_DATA_LESS_THAN_EXPECTED)",
+        "49": "Port reset failed (UX_PORT_RESET_FAILED)",
+        "50": "Controller init failed (UX_CONTROLLER_INIT_FAILED)",
+        "51": "Controller dead (UX_CONTROLLER_DEAD)",
+        "65": "No bandwidth available (UX_NO_BANDWIDTH_AVAILABLE)",
+        "66": "Descriptor corrupted (UX_DESCRIPTOR_CORRUPTED)",
+        "67": "Over current condition (UX_OVER_CURRENT_CONDITION)",
+        "68": "Device enumeration failure (UX_DEVICE_ENUMERATION_FAILURE)",
+        "69": "Too many hub ports (UX_TOO_MANY_HUB_PORTS)",
+        "80": "Device handle unknown (UX_DEVICE_HANDLE_UNKNOWN)",
+        "81": "Configuration handle unknown (UX_CONFIGURATION_HANDLE_UNKNOWN)",
+        "82": "Interface handle unknown (UX_INTERFACE_HANDLE_UNKNOWN)",
+        "83": "Endpoint handle unknown (UX_ENDPOINT_HANDLE_UNKNOWN)",
+        "84": "Function not supported (UX_FUNCTION_NOT_SUPPORTED)",
+        "85": "Controller unknown (UX_CONTROLLER_UNKNOWN)",
+        "86": "Port index unknown (UX_PORT_INDEX_UNKNOWN)",
+        "87": "No class match (UX_NO_CLASS_MATCH)",
+        "88": "Host class already installed (UX_HOST_CLASS_ALREADY_INSTALLED)",
+        "89": "Host class unknown (UX_HOST_CLASS_UNKNOWN)",
+        "90": "Connection incompatible (UX_CONNECTION_INCOMPATIBLE)",
+        "91": "Host class instance unknown (UX_HOST_CLASS_INSTANCE_UNKNOWN)",
+        "92": "Transfer timeout (UX_TRANSFER_TIMEOUT)",
+        "93": "Buffer overflow (UX_BUFFER_OVERFLOW)",
+        "94": "No alternate setting (UX_NO_ALTERNATE_SETTING)",
+        "95": "No device connected (UX_NO_DEVICE_CONNECTED)",
+        "96": "Host class protocol error (UX_HOST_CLASS_PROTOCOL_ERROR)",
+        "97": "Host class memory error (UX_HOST_CLASS_MEMORY_ERROR)",
+        "98": "Host class media not supported (UX_HOST_CLASS_MEDIA_NOT_SUPPORTED)",
+        "99": "Class malformed packet received error (UX_CLASS_MALFORMED_PACKET_RECEIVED_ERROR)",
+        "112": "Host class hid report overflow (UX_HOST_CLASS_HID_REPORT_OVERFLOW)",
+        "113": "Host class hid usage overflow (UX_HOST_CLASS_HID_USAGE_OVERFLOW)",
+        "114": "Host class hid tag unsupported (UX_HOST_CLASS_HID_TAG_UNSUPPORTED)",
+        "115": "Host class hid push overflow (UX_HOST_CLASS_HID_PUSH_OVERFLOW)",
+        "116": "Host class hid pop underflow (UX_HOST_CLASS_HID_POP_UNDERFLOW)",
+        "117": "Host class hid collection overflow (UX_HOST_CLASS_HID_COLLECTION_OVERFLOW)",
+        "118": "Host class hid collection underflow (UX_HOST_CLASS_HID_COLLECTION_UNDERFLOW)",
+        "119": "Host class hid min max error (UX_HOST_CLASS_HID_MIN_MAX_ERROR)",
+        "120": "Host class hid delimiter error (UX_HOST_CLASS_HID_DELIMITER_ERROR)",
+        "121": "Host class hid report error (UX_HOST_CLASS_HID_REPORT_ERROR)",
+        "122": "Host class hid periodic report error (UX_HOST_CLASS_HID_PERIODIC_REPORT_ERROR)",
+        "123": "Host class hid unknown (UX_HOST_CLASS_HID_UNKNOWN)",
+        "128": "Host class audio wrong type (UX_HOST_CLASS_AUDIO_WRONG_TYPE)",
+        "129": "Host class audio wrong interface (UX_HOST_CLASS_AUDIO_WRONG_INTERFACE)",
+        "130": "Host class audio wrong frequency (UX_HOST_CLASS_AUDIO_WRONG_FREQUENCY)",
+        "144": "Class eth link state down error (UX_CLASS_ETH_LINK_STATE_DOWN_ERROR)",
+        "145": "Class eth packet pool error (UX_CLASS_ETH_PACKET_POOL_ERROR)",
+        "146": "Class eth packet error (UX_CLASS_ETH_PACKET_ERROR)",
+        "147": "Class eth size error (UX_CLASS_ETH_SIZE_ERROR)"
+      },
+      "group": "USBX / Errors"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "threadx.write_state"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Ready",
+        "1": "Completed",
+        "2": "Terminated",
+        "3": "Suspended",
+        "4": "Sleeping",
+        "5": "Queue wait",
+        "6": "Semaphore wait",
+        "7": "Event flags wait",
+        "8": "Block memory wait",
+        "9": "Byte memory wait",
+        "13": "Mutex wait"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "threadx.read_state"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Ready",
+        "1": "Completed",
+        "2": "Terminated",
+        "3": "Suspended",
+        "4": "Sleeping",
+        "5": "Queue wait",
+        "6": "Semaphore wait",
+        "7": "Event flags wait",
+        "8": "Block memory wait",
+        "9": "Byte memory wait",
+        "13": "Mutex wait"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep2.status"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Not pending",
+        "1": "Pending",
+        "2": "Completed",
+        "4": "Aborted"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep2.address"
+      },
+      "display": "enum",
+      "names": {
+        "1": "0x01 - OUT (host to device)",
+        "129": "0x81 - IN (device to host)",
+        "2": "0x02 - OUT (host to device)",
+        "130": "0x82 - IN (device to host)"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep1.status"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Not pending",
+        "1": "Pending",
+        "2": "Completed",
+        "4": "Aborted"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.ep1.address"
+      },
+      "display": "enum",
+      "names": {
+        "1": "0x01 - OUT (host to device)",
+        "129": "0x81 - IN (device to host)",
+        "2": "0x02 - OUT (host to device)",
+        "130": "0x82 - IN (device to host)"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.rts"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Not asserted",
+        "1": "Asserted"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.dtr"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Not asserted",
+        "1": "Asserted"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name": "usbx.device_state"
+      },
+      "display": "enum",
+      "names": {
+        "0": "Reset",
+        "1": "Attached",
+        "2": "Addressed",
+        "3": "Configured",
+        "4": "Suspended"
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll",
+        "name_prefix": "usb."
+      },
+      "display": "register",
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "derived",
+        "name_prefix": "usb."
+      },
+      "group": "USBX / STM32U575"
+    },
+    {
+      "match": {
+        "ns": "poll"
+      },
+      "group": "USBX / STM32U575"
+    }
+  ],
+  "derived": [
+    {
+      "type": "field",
+      "name": "usb.interrupts_enabled",
+      "source": "usb.gahbcfg",
+      "shift": 0,
+      "mask": "0x1",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      }
+    },
+    {
+      "type": "field",
+      "name": "usb.soft_disconnect",
+      "source": "usb.dctl",
+      "shift": 1,
+      "mask": "0x1",
+      "values": {
+        "0": "Connected by software",
+        "1": "Software disconnected"
+      }
+    },
+    {
+      "type": "field",
+      "name": "usb.suspended",
+      "source": "usb.dsts",
+      "shift": 0,
+      "mask": "0x1",
+      "values": {
+        "0": "Active bus",
+        "1": "Suspended"
+      }
+    },
+    {
+      "type": "field",
+      "name": "usb.address",
+      "source": "usb.dcfg",
+      "shift": 4,
+      "mask": "0x7f"
+    },
+    {
+      "type": "field",
+      "name": "usb.enumerated_speed",
+      "source": "usb.dsts",
+      "shift": 1,
+      "mask": "0x3",
+      "values": {
+        "0": "High speed",
+        "1": "Full speed (30/60 MHz PHY)",
+        "2": "Low speed",
+        "3": "Full speed (48 MHz PHY)"
+      }
+    }
+  ],
+  "verdicts": [
+    {
+      "id": "usb-global-interrupts-disabled",
+      "name": "USB interrupt delivery disabled",
+      "severity": "error",
+      "when": {
+        "type": "sustained_at_or_below",
+        "channel": "usb.interrupts_enabled",
+        "value": 0,
+        "sustained_ms": 500
+      },
+      "explain": "The OTG_FS global interrupt enable remained clear for at least 500 ms while the USB peripheral clock was enabled. The USBX CDC ACM interrupt-driven driver cannot service USB interrupts in this state. Check HAL_PCD_Start / USB_EnableGlobalInt and code that masks GAHBCFG.GINTMSK. This check is specific to the STM32Cube USBX CDC ACM example; deliberate polling-only drivers may disable this bit. USBX may still report Configured while interrupt delivery is disabled. Compare endpoint pending work and producer/consumer indices to see which work has stopped; waiting threads alone are not an error, and polled transfer fields do not count every transfer.",
+      "evidence": [
+        "usb.gahbcfg",
+        "usb.interrupts_enabled",
+        "usb.gintmsk",
+        "usbx.device_state",
+        "usbx.configuration",
+        "usbx.ep1.status",
+        "usbx.ep2.status",
+        "app.tx_in",
+        "app.tx_out",
+        "threadx.read_state",
+        "threadx.write_state"
+      ]
+    },
+    {
+      "id": "usb-software-disconnected",
+      "name": "USB device held in software disconnect",
+      "severity": "warning",
+      "when": {
+        "type": "sustained_at_or_above",
+        "channel": "usb.soft_disconnect",
+        "value": 1,
+        "sustained_ms": 500
+      },
+      "explain": "DCTL.SDIS remained set for at least 500 ms. The controller is disconnected from the host by software, so the CDC port cannot enumerate or carry data. Check USB_DevConnect / HAL_PCD_Start and intentional disconnect or power-management paths. This is controller state; it does not prove that a cable is missing or that a USBX thread is faulty.",
+      "evidence": [
+        "usb.dctl",
+        "usb.soft_disconnect",
+        "usb.address",
+        "usb.suspended"
+      ]
+    },
+    {
+      "id": "usbx-error-reports",
+      "name": "USBX error-handler count increased",
+      "severity": "info",
+      "when": {
+        "type": "counter_advanced",
+        "channel": "usbx.error_count"
+      },
+      "explain": "The firmware reported additional codes through the USBX error handler between these samples. The last code is context, not a complete log or proof of an active fault. Resets, aborts and device removal may be intentional. API errors that bypass this handler are not counted. A counter decrease ends an advance interval; no reset/wrap delta is inferred.",
+      "evidence": [
+        "usbx.error_count",
+        "usbx.last_error"
+      ]
+    },
+    {
+      "id": "usbx-ep1-completion",
+      "name": "CDC endpoint 1 error code observed",
+      "severity": "warning",
+      "when": {
+        "type": "value_in",
+        "channel": "usbx.ep1.completion_code",
+        "values": [
+          255,
+          253,
+          251,
+          250,
+          248,
+          247,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          33,
+          34,
+          35,
+          36,
+          39,
+          41,
+          49,
+          50,
+          51,
+          65,
+          66,
+          67,
+          68,
+          69,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          96,
+          97,
+          98,
+          99,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          128,
+          129,
+          130,
+          144,
+          145,
+          146,
+          147
+        ]
+      },
+      "explain": "A sampled endpoint completion field contained a recognized error code. Inspect its named code, endpoint direction and transfer state. This is the current or most recent request field, not an active-fault flag or a complete transfer log. Repeated samples do not count repeated failures. Pending receives and ordinary thread waits are normal; reset, abort and not-ready codes are excluded.",
+      "evidence": [
+        "usbx.ep1.address",
+        "usbx.ep1.status",
+        "usbx.ep1.completion_code",
+        "usbx.ep1.requested_length",
+        "usbx.ep1.actual_length"
+      ]
+    },
+    {
+      "id": "usbx-ep2-completion",
+      "name": "CDC endpoint 2 error code observed",
+      "severity": "warning",
+      "when": {
+        "type": "value_in",
+        "channel": "usbx.ep2.completion_code",
+        "values": [
+          255,
+          253,
+          251,
+          250,
+          248,
+          247,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          33,
+          34,
+          35,
+          36,
+          39,
+          41,
+          49,
+          50,
+          51,
+          65,
+          66,
+          67,
+          68,
+          69,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          96,
+          97,
+          98,
+          99,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          128,
+          129,
+          130,
+          144,
+          145,
+          146,
+          147
+        ]
+      },
+      "explain": "A sampled endpoint completion field contained a recognized error code. Inspect its named code, endpoint direction and transfer state. This is the current or most recent request field, not an active-fault flag or a complete transfer log. Repeated samples do not count repeated failures. Pending receives and ordinary thread waits are normal; reset, abort and not-ready codes are excluded.",
+      "evidence": [
+        "usbx.ep2.address",
+        "usbx.ep2.status",
+        "usbx.ep2.completion_code",
+        "usbx.ep2.requested_length",
+        "usbx.ep2.actual_length"
+      ]
+    },
+    {
+      "id": "usbx-control-queue-pressure",
+      "name": "Control queue full or nearly full",
+      "severity": "warning",
+      "when": {
+        "type": "ratio_below",
+        "channel": "app.control_queue.available",
+        "reference": "app.control_queue.capacity",
+        "ratio": 0.2,
+        "sustained_ms": 0
+      },
+      "explain": "A sample found fewer than 20% of control-message slots free. For this five-slot queue that means full. This queue carries USB start/stop messages, not CDC payload bytes. Sampling can miss brief fullness; this does not prove a dropped message or an exact occupancy peak.",
+      "evidence": [
+        "app.control_queue.enqueued",
+        "app.control_queue.capacity",
+        "app.control_queue.available",
+        "app.control_queue.message_words"
+      ]
+    },
+    {
+      "id": "usbx-memory-regular-pressure",
+      "name": "USBX regular memory below 10% free",
+      "severity": "warning",
+      "when": {
+        "type": "ratio_below",
+        "channel": "usbx.memory.regular.free",
+        "reference": "usbx.memory.regular.total",
+        "ratio": 0.1,
+        "sustained_ms": 0
+      },
+      "explain": "A sample found less than 10% of the pool free. This is a pressure threshold, not proof of allocation failure. Free space may be fragmented and does not establish the largest available block. The cache-safe pool may alias the regular pool.",
+      "evidence": [
+        "usbx.memory.regular.free",
+        "usbx.memory.regular.total",
+        "usbx.memory.regular.fragments"
+      ]
+    },
+    {
+      "id": "usbx-memory-cache_safe-pressure",
+      "name": "USBX cache-safe memory below 10% free",
+      "severity": "warning",
+      "when": {
+        "type": "ratio_below",
+        "channel": "usbx.memory.cache_safe.free",
+        "reference": "usbx.memory.cache_safe.total",
+        "ratio": 0.1,
+        "sustained_ms": 0
+      },
+      "explain": "A sample found less than 10% of the pool free. This is a pressure threshold, not proof of allocation failure. Free space may be fragmented and does not establish the largest available block. The cache-safe pool may alias the regular pool.",
+      "evidence": [
+        "usbx.memory.cache_safe.free",
+        "usbx.memory.cache_safe.total",
+        "usbx.memory.cache_safe.fragments"
+      ]
+    }
+  ],
+  "presentation": {
+    "sections": [
+      {
+        "title": "Errors and buffer health",
+        "view": "table",
+        "description": "Reported errors may predate this session and persist after recovery. Zero reports is not proof that all API calls succeeded. Observed incidents below remain visible after recovery.",
+        "fields": [
+          {
+            "channel": "usbx.last_error",
+            "label": "Last reported stack error"
+          },
+          {
+            "channel": "usbx.error_count",
+            "label": "Reported errors since stack init",
+            "unit": "reports"
+          },
+          {
+            "channel": "app.control_queue.enqueued",
+            "reference": "app.control_queue.capacity",
+            "label": "USB start/stop control queue",
+            "unit": "messages"
+          },
+          {
+            "channel": "usbx.memory.regular.free",
+            "reference": "usbx.memory.regular.total",
+            "label": "USBX regular memory free",
+            "unit": "bytes"
+          },
+          {
+            "channel": "usbx.memory.cache_safe.free",
+            "reference": "usbx.memory.cache_safe.total",
+            "label": "USBX cache-safe memory free",
+            "unit": "bytes"
+          }
+        ],
+        "checks": [
+          "usbx-error-reports",
+          "usbx-ep1-completion",
+          "usbx-ep2-completion",
+          "usbx-control-queue-pressure",
+          "usbx-memory-regular-pressure",
+          "usbx-memory-cache_safe-pressure"
+        ]
+      },
+      {
+        "title": "USB controller",
+        "view": "cards",
+        "description": "Sampled controller state; brief changes between reads can be missed.",
+        "fields": [
+          {
+            "channel": "usb.interrupts_enabled",
+            "label": "Interrupt delivery"
+          },
+          {
+            "channel": "usb.soft_disconnect",
+            "label": "Software connection"
+          },
+          {
+            "channel": "usb.address",
+            "label": "USB address"
+          },
+          {
+            "channel": "usb.suspended",
+            "label": "Bus state"
+          }
+        ]
+      },
+      {
+        "title": "USBX device and CDC class",
+        "view": "cards",
+        "description": "Current device and host settings. Uninitialized or changing objects are shown as unavailable.",
+        "fields": [
+          {
+            "channel": "usbx.device_state",
+            "label": "USBX state"
+          },
+          {
+            "channel": "usbx.configuration",
+            "label": "Selected configuration"
+          },
+          {
+            "channel": "usbx.baud",
+            "label": "CDC baud rate"
+          },
+          {
+            "channel": "usbx.dtr",
+            "label": "Host DTR"
+          },
+          {
+            "channel": "usbx.rts",
+            "label": "Host RTS"
+          }
+        ]
+      },
+      {
+        "title": "CDC endpoint 1",
+        "view": "table",
+        "description": "Current or most recent request. Fields are sampled separately; these lengths do not measure throughput.",
+        "fields": [
+          {
+            "channel": "usbx.ep1.address",
+            "label": "Endpoint / direction"
+          },
+          {
+            "channel": "usbx.ep1.status",
+            "label": "Transfer state"
+          },
+          {
+            "channel": "usbx.ep1.requested_length",
+            "label": "Requested bytes"
+          },
+          {
+            "channel": "usbx.ep1.actual_length",
+            "label": "Actual bytes"
+          },
+          {
+            "channel": "usbx.ep1.completion_code",
+            "label": "Completion code"
+          }
+        ]
+      },
+      {
+        "title": "CDC endpoint 2",
+        "view": "table",
+        "description": "Current or most recent request. Fields are sampled separately; these lengths do not measure throughput.",
+        "fields": [
+          {
+            "channel": "usbx.ep2.address",
+            "label": "Endpoint / direction"
+          },
+          {
+            "channel": "usbx.ep2.status",
+            "label": "Transfer state"
+          },
+          {
+            "channel": "usbx.ep2.requested_length",
+            "label": "Requested bytes"
+          },
+          {
+            "channel": "usbx.ep2.actual_length",
+            "label": "Actual bytes"
+          },
+          {
+            "channel": "usbx.ep2.completion_code",
+            "label": "Completion code"
+          }
+        ]
+      },
+      {
+        "title": "Application and ThreadX",
+        "view": "table",
+        "description": "Waiting is normal at idle. Compare the producer and consumer indices with endpoint demand.",
+        "fields": [
+          {
+            "channel": "threadx.read_state",
+            "label": "CDC read thread"
+          },
+          {
+            "channel": "threadx.write_state",
+            "label": "CDC write thread"
+          },
+          {
+            "channel": "app.tx_in",
+            "label": "UART producer index"
+          },
+          {
+            "channel": "app.tx_out",
+            "label": "USB consumer index"
+          }
+        ]
+      },
+      {
+        "title": "Queue and allocator details",
+        "view": "table",
+        "description": "The control queue is separate from the UART/CDC payload ring. Bare ring indices cannot establish overflow or lost bytes. Allocator minimum-free and queue full/timeout statistics are not enabled in the example firmware. The two USBX pools may share storage; do not add their sizes.",
+        "fields": [
+          {
+            "channel": "app.control_queue.message_words",
+            "label": "Control message size",
+            "unit": "32-bit words"
+          },
+          {
+            "channel": "app.control_queue.available",
+            "label": "Control queue free slots",
+            "unit": "slots"
+          },
+          {
+            "channel": "app.control_queue.waiters",
+            "label": "Threads waiting on control queue"
+          },
+          {
+            "channel": "usbx.memory.regular.fragments",
+            "label": "Regular pool fragments"
+          },
+          {
+            "channel": "usbx.memory.cache_safe.fragments",
+            "label": "Cache-safe pool fragments"
+          }
+        ]
+      }
+    ]
+  }
+}
