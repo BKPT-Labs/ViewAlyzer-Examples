@@ -25,6 +25,8 @@
 #include "semphr.h"
 #include "timers.h"
 #include "event_groups.h"
+#include "stream_buffer.h"
+#include "message_buffer.h"
 // Remove CMSIS-OS to use native FreeRTOS APIs
 // #include "cmsis_os.h"
 
@@ -360,9 +362,37 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   VA_LogString(1, "System started");
+  StreamBufferHandle_t stream = xStreamBufferCreate(32, 1);
+  MessageBufferHandle_t messages = xMessageBufferCreate(32);
+  uint32_t bufferPhase = 0;
+  if (stream != NULL)
+    va_logQueueObjectCreateTyped(stream, "Demo stream", VA_OBJECT_TYPE_STREAM_BUFFER);
+  if (messages != NULL)
+    va_logQueueObjectCreateTyped(messages, "Demo messages", VA_OBJECT_TYPE_MESSAGE_BUFFER);
   
   for (;;)
   {
+    if ((++bufferPhase % 25) == 0)
+    {
+      uint8_t bytes[40] = {0};
+      if (stream != NULL)
+      {
+        xStreamBufferSend(stream, bytes, sizeof(bytes), 0); /* partial write */
+        xStreamBufferSend(stream, bytes, 1, 1); /* full: timeout */
+        xStreamBufferReceive(stream, bytes, 8, 0);
+        xStreamBufferReceive(stream, bytes, sizeof(bytes), 0);
+        xStreamBufferReceive(stream, bytes, sizeof(bytes), 1); /* empty */
+        xStreamBufferReset(stream);
+      }
+      if (messages != NULL)
+      {
+        xMessageBufferSend(messages, bytes, 16, 0);
+        xMessageBufferSend(messages, bytes, 16, 1); /* cannot fit */
+        xMessageBufferReceive(messages, bytes, sizeof(bytes), 0);
+        xMessageBufferReceive(messages, bytes, sizeof(bytes), 1);
+        xMessageBufferReset(messages);
+      }
+    }
     // Release binary semaphore for other tasks to use
     if (binarySemaphore != NULL)
     {

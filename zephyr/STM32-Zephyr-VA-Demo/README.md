@@ -54,10 +54,19 @@ the Zephyr adapter — the calls above are only needed for your own values.
 This project is that integration plus a firmware playground rich enough to
 exercise every view.
 
+The resource workload also exercises slab exhaustion, condition-variable
+signals/timeouts and poll signals/timeouts. Inspect those in **Comms >
+Resources**, scheduler states in **Timeline/Details**, and measured expiry/stop
+callbacks in **Timers** on kernels that expose the callback hooks. Use the
+matching updated recorder and viewer for these event types.
+
 ## Requirements
 
-- A Zephyr workspace (this demo targets Zephyr v4.1.0) with the `cmsis`,
-  `hal_stm32`, and — for RTT — `segger` modules fetched.
+- A Zephyr workspace. The manifest pins **v4.4.2**; fetch that revision's
+  `cmsis`, `cmsis_6`, `hal_stm32`, and — for RTT — `segger` modules.
+  Keep older kernels in separate west workspaces so their module revisions
+  remain matched. Changing this manifest does not update an existing external
+  workspace selected by `build.local.*.json`.
 - `west` on your PATH (`pip3 install --user west`).
 - An Arm GNU toolchain. The build script auto-detects an
   [STM32CubeCLT](https://www.st.com/en/development-tools/stm32cubeclt.html)
@@ -69,6 +78,27 @@ exercise every view.
   package `pylink-square`. On Windows, `menuconfig` also needs
   `windows-curses`.
 
+### Zephyr compatibility
+
+The G474 RAM-buffer demo and the recorder's eight real-kernel sleep/heap
+checks pass on the following kernels with the same recorder adapter:
+
+| Kernel | Exact revision |
+| --- | --- |
+| Original 4.1.99 development snapshot | `1f9f4c8cee02cfd6cbb45dfa5dcd3913a338917f` |
+| 4.2.2 | `dbb536326e611dc8e97cc6a322d379ba9cac1ab7` |
+| 4.3.1 | `75f67d766726351b30199f9a2bf55803d717a3be` |
+| 4.4.2 (default) | `dccb09599635bdff17633fa7e9dab014b91dce90` |
+
+Validated with Windows, STM32CubeCLT 1.19.0 / GCC 13.3.1 and a local
+NUCLEO-G474RE/ST-Link. Qualification captures on these anchors reported zero
+lost events, corrupt bytes and sequence gaps. The G474 demo now uses a 16 KB
+RAM ring: one startup trial with the earlier 8 KB ring lost events under host
+load; the final 16 KB startup capture was clean. This is G474 RAM-buffer coverage;
+it does not certify every board, transport, Kconfig combination, intervening
+development commit or host OS. The manifest uses a stable tag; upstream
+`main` is an early compatibility target, not a supported release pin.
+
 ## First Build and Capture
 
 1. Tell the build where Zephyr lives (pick one):
@@ -78,6 +108,9 @@ exercise every view.
      gitignored — safe for machine-specific paths), or
    - keep a `zephyr/` checkout in a directory above this project and let the
      script find it.
+   Project `build.local.{win|linux|mac}.json` settings take precedence over
+   the environment and shared config. Update the applicable file when switching
+   workspaces; do not overwrite a locally modified Zephyr checkout.
 2. Build and flash (Nucleo-G474RE over its onboard ST-LINK shown):
 
    ```bash
@@ -106,7 +139,7 @@ variant), `nucleo_f446re_zephyr_rtt.vacf`, `stm32h750b_zephyr_swo.vacf`.
 ## build.py Reference
 
 ```bash
-python3 build.py [action] [board] [runner] [--swo | --rtt | --varambuf | --snapshot]
+python3 build.py [action] [board] [runner] [--swo | --rtt | --varambuf | --snapshot] [--build-dir DIR]
 ```
 
 - `action`: `build` (default), `clean` (pristine rebuild), `flash`, `debug`,
@@ -116,6 +149,10 @@ python3 build.py [action] [board] [runner] [--swo | --rtt | --varambuf | --snaps
 - `runner` (flash/debug only): `jlink` or `openocd` (`stlink`/`st` are
   aliases for `openocd`). Defaults: `jlink` for `f4`, `openocd` for the
   boards with an onboard ST-LINK (`g4`, `h5`, `h7`).
+- `--build-dir`: exact output directory, relative to this project unless
+  absolute. When supplied, no board or transport suffix is appended. Use a
+  distinct directory for each OS, kernel and transport; pass the same value
+  to build, flash and debug.
 
 Examples:
 
@@ -126,6 +163,7 @@ python3 build.py clean f4
 python3 build.py flash g4         # onboard ST-LINK via OpenOCD
 python3 build.py flash f4 jlink
 python3 build.py debug g4
+python3 build.py build g4 --rambuf --build-dir build-windows-zephyr442-varambuf
 ```
 
 The script wraps `west`, resolves the toolchain/OpenOCD/J-Link installs on

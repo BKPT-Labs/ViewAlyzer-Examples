@@ -74,6 +74,10 @@ K_MUTEX_DEFINE(shared_resource_mutex);
 K_MUTEX_DEFINE(print_mutex);
 K_MUTEX_DEFINE(contention_test_mutex);
 K_MUTEX_DEFINE(normal_op_mutex);
+K_MUTEX_DEFINE(resource_mutex);
+K_CONDVAR_DEFINE(resource_changed);
+K_MEM_SLAB_DEFINE(resource_slab, 64, 2, 4);
+static struct k_poll_signal resource_signal = K_POLL_SIGNAL_INITIALIZER(resource_signal);
 
 /* Semaphores */
 K_SEM_DEFINE(binary_sem, 0, 1);          /* binary semaphore, starts empty */
@@ -124,11 +128,19 @@ static void register_viewalyzer_sync_objects(void)
 	va_logQueueObjectCreateWithType(&blink_sem, "blink_sem_BinSem");
 
 	va_logQueueObjectCreateWithType(&demo_heap, "demo_heap_Heap");
+	va_logQueueObjectCreateTyped(&resource_slab, "Resource slab", VA_OBJECT_TYPE_MEM_SLAB);
+	va_logQueueObjectCreateTyped(&resource_changed, "Resource changed", VA_OBJECT_TYPE_CONDVAR);
+	va_logQueueObjectCreateTyped(&resource_signal, "Resource signal", VA_OBJECT_TYPE_POLL_SIGNAL);
 }
 
 /* ── Demo timer ─────────────────────────────────────────────── */
 static void heartbeat_timer_handler(struct k_timer *timer);
-K_TIMER_DEFINE(heartbeat_timer, heartbeat_timer_handler, NULL);
+static void heartbeat_timer_stopped(struct k_timer *timer)
+{
+	ARG_UNUSED(timer);
+	k_poll_signal_raise(&resource_signal, 2);
+}
+K_TIMER_DEFINE(heartbeat_timer, heartbeat_timer_handler, heartbeat_timer_stopped);
 static volatile uint32_t heartbeatCount;
 
 static void heartbeat_timer_handler(struct k_timer *timer)
@@ -138,6 +150,7 @@ static void heartbeat_timer_handler(struct k_timer *timer)
 	 * it with a new period on every profile change). */
 	ARG_UNUSED(timer);
 	heartbeatCount++;
+	k_poll_signal_raise(&resource_signal, 1);
 }
 
 /* Shared resources protected by mutex */
@@ -236,6 +249,13 @@ static void default_task(void *p1, void *p2, void *p3)
 		/* Wake the self-suspending nap thread every 2 s */
 		if ((++phase % 100) == 0) {
 			k_thread_resume(nap_tid);
+		}
+		if (k_mutex_lock(&resource_mutex, K_NO_WAIT) == 0) {
+			if ((phase % 5) == 0)
+				k_condvar_broadcast(&resource_changed);
+			else
+				k_condvar_signal(&resource_changed);
+			k_mutex_unlock(&resource_mutex);
 		}
 
 		/* Post one event bit per 500 ms, detouring to the alarm bit
@@ -860,7 +880,29 @@ static K_THREAD_STACK_DEFINE(dyn_stack, 1024);
 static void dyn_thread_fn(void *a, void *b, void *c)
 {
 	ARG_UNUSED(a); ARG_UNUSED(b); ARG_UNUSED(c);
+	uint32_t phase = 0;
 	for (;;) {
+		void *first = NULL, *second = NULL, *extra = NULL;
+		if (k_mem_slab_alloc(&resource_slab, &first, K_NO_WAIT) == 0) {
+			if (k_mem_slab_alloc(&resource_slab, &second, K_NO_WAIT) == 0) {
+				/* Full slab: a bounded wait ends in an allocation failure. */
+				if (k_mem_slab_alloc(&resource_slab, &extra, K_MSEC(2)) == 0)
+					k_mem_slab_free(&resource_slab, extra);
+				k_mem_slab_free(&resource_slab, second);
+			}
+			k_mem_slab_free(&resource_slab, first);
+		}
+		if (k_mutex_lock(&resource_mutex, K_FOREVER) == 0) {
+			/* Alternate likely signal and timeout paths; no predicate is
+			 * required because this demo does not consume shared data. */
+			k_condvar_wait(&resource_changed, &resource_mutex,
+				       K_MSEC((++phase & 1) ? 30 : 1));
+			k_mutex_unlock(&resource_mutex);
+		}
+		struct k_poll_event event = K_POLL_EVENT_INITIALIZER(
+			K_POLL_TYPE_SIGNAL, K_POLL_MODE_NOTIFY_ONLY, &resource_signal);
+		k_poll(&event, 1, K_MSEC(10));
+		k_poll_signal_reset(&resource_signal);
 		k_msleep(75);
 	}
 }
