@@ -38,6 +38,7 @@
 #define VA_TRACE_MUTEXES            1
 #define VA_TRACE_SEMAPHORES         1
 #define VA_TRACE_QUEUES             1
+#define VA_TRACE_STREAM_BUFFERS     1
 
 /* Timer tracing: the app's Timers view draws arm/fire/lateness from these.
    Software timers are a handful of events per second in this demo. */

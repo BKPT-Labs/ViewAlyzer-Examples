@@ -181,6 +181,8 @@ standard names. */
 /* USER CODE END 2 */
 
 /* USER CODE BEGIN Defines */
+/* FreeRTOS 10.4+ notification demo uses two independent slots. */
+#define configTASK_NOTIFICATION_ARRAY_ENTRIES 2
 #include "ViewAlyzerFreeRTOSHook.h"
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */

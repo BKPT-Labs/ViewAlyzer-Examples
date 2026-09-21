@@ -25,6 +25,7 @@ Transport selection (default: the board's own transport from boards/<board>.conf
     python3 build.py build g4 --varambuf    # ViewAlyzer RAM buffer (probe memory reads)
     python3 build.py build g4 --snapshot    # RAM buffer in post-mortem snapshot mode
     python3 build.py flash g4 --varambuf
+    python3 build.py build g4 --varambuf --build-dir build-windows-varambuf
 
 Each transport builds into its own directory (e.g. build-varambuf/) so the
 per-board default build is never disturbed and switching never hits a stale
@@ -739,6 +740,11 @@ def parse_args() -> argparse.Namespace:
         nargs="?",
         help="runner shorthand for flash/debug: jlink|openocd",
     )
+    parser.add_argument(
+        "--build-dir", type=Path,
+        help="exact output directory (relative to this project unless absolute); "
+             "use separate directories for each host OS, kernel and transport",
+    )
     transport = parser.add_mutually_exclusive_group()
     transport.add_argument(
         "--swo", dest="transport", action="store_const", const="swo",
@@ -767,6 +773,11 @@ def main():
     try:
         board_cfg = resolve_board(args.board)
         board_cfg, transport_overlays = apply_transport(board_cfg, args.transport)
+        if args.build_dir is not None:
+            build_dir = args.build_dir.expanduser()
+            if not build_dir.is_absolute():
+                build_dir = PROJECT_DIR / build_dir
+            board_cfg = replace(board_cfg, build_dir=build_dir.resolve())
         if args.action == "build":
             return cmd_build(board_cfg, pristine=False, transport_overlays=transport_overlays)
         if args.action == "clean":

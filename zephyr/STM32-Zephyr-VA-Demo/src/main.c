@@ -24,6 +24,7 @@
  */
 
 #include <zephyr/kernel.h>
+#include <zephyr/version.h>
 #include <zephyr/drivers/gpio.h>
 #include <math.h>
 #include <string.h>
@@ -66,6 +67,9 @@ typedef struct {
 } WorkloadCommand_t;
 
 /* Message queues */
+K_FIFO_DEFINE(batch_fifo);
+K_MSGQ_DEFINE(occupancy_msgq, sizeof(uint32_t), 8, 4);
+
 K_MSGQ_DEFINE(data_msgq, sizeof(SensorData_t), 10, 4);
 K_MSGQ_DEFINE(command_msgq, sizeof(WorkloadCommand_t), 5, 4);
 
@@ -74,6 +78,10 @@ K_MUTEX_DEFINE(shared_resource_mutex);
 K_MUTEX_DEFINE(print_mutex);
 K_MUTEX_DEFINE(contention_test_mutex);
 K_MUTEX_DEFINE(normal_op_mutex);
+K_MUTEX_DEFINE(resource_mutex);
+K_CONDVAR_DEFINE(resource_changed);
+K_MEM_SLAB_DEFINE(resource_slab, 64, 2, 4);
+static struct k_poll_signal resource_signal = K_POLL_SIGNAL_INITIALIZER(resource_signal);
 
 /* Semaphores */
 K_SEM_DEFINE(binary_sem, 0, 1);          /* binary semaphore, starts empty */
@@ -109,6 +117,7 @@ static struct work_item work_pool[8];
 
 static void register_viewalyzer_sync_objects(void)
 {
+	va_logQueueObjectCreateWithType(&occupancy_msgq, "Telemetry mailbox");
 	va_logQueueObjectCreateWithType(&data_msgq, "data_msgq_Queue");
 	va_logQueueObjectCreateWithType(&command_msgq, "command_msgq_Queue");
 	va_logQueueObjectCreateWithType(&work_fifo, "work_FifoQueue");
@@ -124,11 +133,19 @@ static void register_viewalyzer_sync_objects(void)
 	va_logQueueObjectCreateWithType(&blink_sem, "blink_sem_BinSem");
 
 	va_logQueueObjectCreateWithType(&demo_heap, "demo_heap_Heap");
+	va_logQueueObjectCreateTyped(&resource_slab, "Resource slab", VA_OBJECT_TYPE_MEM_SLAB);
+	va_logQueueObjectCreateTyped(&resource_changed, "Resource changed", VA_OBJECT_TYPE_CONDVAR);
+	va_logQueueObjectCreateTyped(&resource_signal, "Resource signal", VA_OBJECT_TYPE_POLL_SIGNAL);
 }
 
 /* ── Demo timer ─────────────────────────────────────────────── */
 static void heartbeat_timer_handler(struct k_timer *timer);
-K_TIMER_DEFINE(heartbeat_timer, heartbeat_timer_handler, NULL);
+static void heartbeat_timer_stopped(struct k_timer *timer)
+{
+	ARG_UNUSED(timer);
+	k_poll_signal_raise(&resource_signal, 2);
+}
+K_TIMER_DEFINE(heartbeat_timer, heartbeat_timer_handler, heartbeat_timer_stopped);
 static volatile uint32_t heartbeatCount;
 
 static void heartbeat_timer_handler(struct k_timer *timer)
@@ -138,6 +155,7 @@ static void heartbeat_timer_handler(struct k_timer *timer)
 	 * it with a new period on every profile change). */
 	ARG_UNUSED(timer);
 	heartbeatCount++;
+	k_poll_signal_raise(&resource_signal, 1);
 }
 
 /* Shared resources protected by mutex */
@@ -236,6 +254,13 @@ static void default_task(void *p1, void *p2, void *p3)
 		/* Wake the self-suspending nap thread every 2 s */
 		if ((++phase % 100) == 0) {
 			k_thread_resume(nap_tid);
+		}
+		if (k_mutex_lock(&resource_mutex, K_NO_WAIT) == 0) {
+			if ((phase % 5) == 0)
+				k_condvar_broadcast(&resource_changed);
+			else
+				k_condvar_signal(&resource_changed);
+			k_mutex_unlock(&resource_mutex);
 		}
 
 		/* Post one event bit per 500 ms, detouring to the alarm bit
@@ -860,7 +885,61 @@ static K_THREAD_STACK_DEFINE(dyn_stack, 1024);
 static void dyn_thread_fn(void *a, void *b, void *c)
 {
 	ARG_UNUSED(a); ARG_UNUSED(b); ARG_UNUSED(c);
+	uint32_t phase = 0;
 	for (;;) {
+		/* A visible fill/hold/drain cycle, with real peek, full/empty failure,
+		 * and purge operations. The viewer's cursor follows this queue's slots. */
+		uint32_t sample = phase;
+		switch (phase % 24) {
+		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 8:
+			k_msgq_put(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		case 7:
+#if ZEPHYR_VERSION_CODE >= ZEPHYR_VERSION(4, 4, 0)
+			k_msgq_put_front(&occupancy_msgq, &sample);
+#else
+			k_msgq_put(&occupancy_msgq, &sample, K_NO_WAIT);
+#endif
+			break;
+		case 9: case 10:
+			k_msgq_peek(&occupancy_msgq, &sample); break;
+		case 11: case 12: case 13: case 14: case 15: case 16: case 17:
+			k_msgq_get(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		case 18: {
+			k_msgq_purge(&occupancy_msgq);
+			/* The caller owns this list until the put; all nodes are consumed
+			 * before their stack lifetime ends. Exercise the native batch hook. */
+			struct { void *next; uint32_t value; } batch[3] = {
+				{ &batch[1], 1 }, { &batch[2], 2 }, { NULL, 3 }
+			};
+			k_fifo_put_list(&batch_fifo, &batch[0], &batch[2]);
+			while (k_fifo_get(&batch_fifo, K_NO_WAIT) != NULL) {}
+			break;
+		}
+		default: k_msgq_get(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		}
+		void *first = NULL, *second = NULL, *extra = NULL;
+		if (k_mem_slab_alloc(&resource_slab, &first, K_NO_WAIT) == 0) {
+			if (k_mem_slab_alloc(&resource_slab, &second, K_NO_WAIT) == 0) {
+				/* Full slab: a bounded wait ends in an allocation failure. */
+				if (k_mem_slab_alloc(&resource_slab, &extra, K_MSEC(2)) == 0)
+					k_mem_slab_free(&resource_slab, extra);
+				k_mem_slab_free(&resource_slab, second);
+			}
+			k_mem_slab_free(&resource_slab, first);
+		}
+		/* Timeout conversion macros may evaluate their argument more than once. */
+		++phase;
+		if (k_mutex_lock(&resource_mutex, K_FOREVER) == 0) {
+			/* Alternate likely signal and timeout paths; no predicate is
+			 * required because this demo does not consume shared data. */
+			k_condvar_wait(&resource_changed, &resource_mutex,
+				       K_MSEC((phase & 1) ? 30 : 1));
+			k_mutex_unlock(&resource_mutex);
+		}
+		struct k_poll_event event = K_POLL_EVENT_INITIALIZER(
+			K_POLL_TYPE_SIGNAL, K_POLL_MODE_NOTIFY_ONLY, &resource_signal);
+		k_poll(&event, 1, K_MSEC(10));
+		k_poll_signal_reset(&resource_signal);
 		k_msleep(75);
 	}
 }
