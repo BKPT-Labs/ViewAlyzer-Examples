@@ -39,6 +39,12 @@ add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32g474xx
 # events off: the mutex and both tasks stay registered so the contention event
 # can name them, but no give/take events reach the wire (measured on a
 # Nucleo-G474RE: mutex 678 -> 0, contention 18 -> 19, everything else intact).
+option(VA_IPC_DETAILS "Trace queue occupancy, notification actions and event masks" ON)
+if(VA_IPC_DETAILS)
+    add_definitions(-DVA_TRACE_QUEUE_DETAILS=1 -DVA_TRACE_NOTIFICATION_DETAILS=1
+                    -DVA_TRACE_EVENT_FLAG_DETAILS=1)
+endif()
+
 option(VA_SELECTIVE_TRACING
        "Trace tasks, stacks, ISRs and mutex contention only" OFF)
 if(VA_SELECTIVE_TRACING)

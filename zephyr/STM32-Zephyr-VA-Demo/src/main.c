@@ -24,6 +24,7 @@
  */
 
 #include <zephyr/kernel.h>
+#include <zephyr/version.h>
 #include <zephyr/drivers/gpio.h>
 #include <math.h>
 #include <string.h>
@@ -66,6 +67,9 @@ typedef struct {
 } WorkloadCommand_t;
 
 /* Message queues */
+K_FIFO_DEFINE(batch_fifo);
+K_MSGQ_DEFINE(occupancy_msgq, sizeof(uint32_t), 8, 4);
+
 K_MSGQ_DEFINE(data_msgq, sizeof(SensorData_t), 10, 4);
 K_MSGQ_DEFINE(command_msgq, sizeof(WorkloadCommand_t), 5, 4);
 
@@ -113,6 +117,7 @@ static struct work_item work_pool[8];
 
 static void register_viewalyzer_sync_objects(void)
 {
+	va_logQueueObjectCreateWithType(&occupancy_msgq, "Telemetry mailbox");
 	va_logQueueObjectCreateWithType(&data_msgq, "data_msgq_Queue");
 	va_logQueueObjectCreateWithType(&command_msgq, "command_msgq_Queue");
 	va_logQueueObjectCreateWithType(&work_fifo, "work_FifoQueue");
@@ -882,6 +887,36 @@ static void dyn_thread_fn(void *a, void *b, void *c)
 	ARG_UNUSED(a); ARG_UNUSED(b); ARG_UNUSED(c);
 	uint32_t phase = 0;
 	for (;;) {
+		/* A visible fill/hold/drain cycle, with real peek, full/empty failure,
+		 * and purge operations. The viewer's cursor follows this queue's slots. */
+		uint32_t sample = phase;
+		switch (phase % 24) {
+		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 8:
+			k_msgq_put(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		case 7:
+#if ZEPHYR_VERSION_CODE >= ZEPHYR_VERSION(4, 4, 0)
+			k_msgq_put_front(&occupancy_msgq, &sample);
+#else
+			k_msgq_put(&occupancy_msgq, &sample, K_NO_WAIT);
+#endif
+			break;
+		case 9: case 10:
+			k_msgq_peek(&occupancy_msgq, &sample); break;
+		case 11: case 12: case 13: case 14: case 15: case 16: case 17:
+			k_msgq_get(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		case 18: {
+			k_msgq_purge(&occupancy_msgq);
+			/* The caller owns this list until the put; all nodes are consumed
+			 * before their stack lifetime ends. Exercise the native batch hook. */
+			struct { void *next; uint32_t value; } batch[3] = {
+				{ &batch[1], 1 }, { &batch[2], 2 }, { NULL, 3 }
+			};
+			k_fifo_put_list(&batch_fifo, &batch[0], &batch[2]);
+			while (k_fifo_get(&batch_fifo, K_NO_WAIT) != NULL) {}
+			break;
+		}
+		default: k_msgq_get(&occupancy_msgq, &sample, K_NO_WAIT); break;
+		}
 		void *first = NULL, *second = NULL, *extra = NULL;
 		if (k_mem_slab_alloc(&resource_slab, &first, K_NO_WAIT) == 0) {
 			if (k_mem_slab_alloc(&resource_slab, &second, K_NO_WAIT) == 0) {
@@ -892,11 +927,13 @@ static void dyn_thread_fn(void *a, void *b, void *c)
 			}
 			k_mem_slab_free(&resource_slab, first);
 		}
+		/* Timeout conversion macros may evaluate their argument more than once. */
+		++phase;
 		if (k_mutex_lock(&resource_mutex, K_FOREVER) == 0) {
 			/* Alternate likely signal and timeout paths; no predicate is
 			 * required because this demo does not consume shared data. */
 			k_condvar_wait(&resource_changed, &resource_mutex,
-				       K_MSEC((++phase & 1) ? 30 : 1));
+				       K_MSEC((phase & 1) ? 30 : 1));
 			k_mutex_unlock(&resource_mutex);
 		}
 		struct k_poll_event event = K_POLL_EVENT_INITIALIZER(

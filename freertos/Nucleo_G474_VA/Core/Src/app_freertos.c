@@ -613,12 +613,55 @@ void StartTask03(void *argument)
  * @retval None
  */
 /* USER CODE END Header_StartTask04 */
+#if VA_TRACE_QUEUE_DETAILS || VA_TRACE_NOTIFICATION_DETAILS
+static void IpcDetailsDemo(void)
+{
+  static QueueHandle_t slots, overwrite;
+  static uint32_t step;
+  if (slots == NULL) {
+    slots = xQueueCreate(8, sizeof(uint32_t));
+    overwrite = xQueueCreate(1, sizeof(uint32_t));
+    if (slots) va_logQueueObjectSetName(slots, "Telemetry mailbox");
+    if (overwrite) va_logQueueObjectSetName(overwrite, "Latest sample");
+  }
+  uint32_t value = step++;
+  if (slots != NULL) {
+    switch (step % 16) {
+      case 0: xQueueReset(slots); break;
+      case 1: case 2: case 3: case 4: xQueueSendToBack(slots, &value, 0); break;
+      case 5: case 6: xQueueSendToFront(slots, &value, 0); break;
+      case 7: xQueuePeek(slots, &value, 0); break;
+      default: xQueueReceive(slots, &value, 0); break;
+    }
+  }
+  if (overwrite != NULL) {
+    xQueueOverwrite(overwrite, &value);
+    xQueueOverwrite(overwrite, &step);
+    xQueueReceive(overwrite, &value, 0);
+  }
+  /* The stock indexed API is available from 10.4. Older kernels exercise
+     slot zero through the ordinary notification workload below. */
+#if defined(xTaskNotifyIndexed) && configTASK_NOTIFICATION_ARRAY_ENTRIES > 1
+  TaskHandle_t self = xTaskGetCurrentTaskHandle();
+  xTaskNotifyIndexed(self, 1, 1, eSetBits);
+  xTaskNotifyIndexed(self, 1, 2, eSetValueWithoutOverwrite); /* deliberately rejected */
+  xTaskNotifyWaitIndexed(1, 0, UINT32_MAX, &value, 0);
+  xTaskNotifyWaitIndexed(1, 0, 0, &value, 0); /* deliberate timeout */
+  xTaskNotifyIndexed(self, 1, 0, eIncrement);
+  ulTaskNotifyTakeIndexed(1, pdFALSE, 0);
+#endif
+}
+#endif
+
 void StartTask04(void *argument)
 {
   /* USER CODE BEGIN StartTask04 */
   volatile uint32_t ulValue = 0; // Notification value to send
   for (;;)
   {
+#if VA_TRACE_QUEUE_DETAILS || VA_TRACE_NOTIFICATION_DETAILS
+    IpcDetailsDemo();
+#endif
     // Send notifications to multiple tasks using native FreeRTOS API
     if (myTask08Handle != NULL)
     {
