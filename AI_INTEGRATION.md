@@ -187,6 +187,31 @@ The app listens with `--transport udp`.
 
 ## Step 3 — Connect and capture
 
+Default direct DROP-mode RAM capture (without a snapshot tee) uses a metadata
+table. Supply the matching firmware ELF to a compatible ViewAlyzer-RS host.
+The table defaults to 2048 bytes plus a 64-byte descriptor and service state;
+set `VA_METADATA_SIZE` to change its capacity. Zephyr uses
+`CONFIG_VIEWALYZER_METADATA_SIZE`.
+
+For a viewer without metadata support, capture without an ELF, or reduced RAM
+usage, set `VA_METADATA=0` (`CONFIG_VIEWALYZER_METADATA=n` on Zephyr).
+Other transports and snapshot modes use setup bundles by default.
+
+Keep `VA_TickOverflowCheck()` running periodically from the main loop or an
+application thread. Timestamped events already handle counter rollover; this
+call covers quiet gaps and idle attachment requests. Use an interval below
+the timer's wrap period, such as 100 ms for typical 32-bit timers or 10 ms for
+a 16-bit timer at 1 MHz. Default RAM capture needs no periodic
+`VA_EmitSetupBundle()` call. See the
+[RAM metadata guide](https://github.com/BKPT-Labs/ViewAlyzer/blob/main/ViewAlyzerRecorder/docs/api/ram-metadata.md).
+
+Select **ELF / Symbols > ELF File** before pressing Record in the app. Disable
+**Reset on Connect** to attach to the running application. CLI equivalent:
+
+```bash
+viewalyzer-cli capture --config board_rambuf.vacf --elf build/firmware.elf --no-reset --output attached.vadb --duration 10
+```
+
 ### With a `.vacf` connection config (recommended)
 
 Write one per board and commit it next to the firmware — then connecting is
@@ -222,7 +247,7 @@ one and adjust.
 
 ```bash
 # record 10 s to a .vadb
-ViewAlyzer --headless --config my_board.vacf --output run.vadb --duration 10
+ViewAlyzer --headless --config my_board.vacf --elf build/firmware.elf --output run.vadb --duration 10
 
 # validate a recording
 ViewAlyzer --headless --replay run.vadb
