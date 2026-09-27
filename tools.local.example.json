@@ -10,7 +10,9 @@
 
   "stm32cubeclt_root": "/opt/ST/STM32CubeCLT_1.22.0",
   "zephyr_base": "~/zephyrproject/zephyr",
+  "zephyr_venv": "~/zephyrproject/.venv",
   "gnuarmemb_toolchain_path": "/opt/ST/STM32CubeCLT_1.22.0/GNU-tools-for-STM32",
+  "stm32_programmer_cli": "/opt/ST/STM32CubeCLT_1.22.0/STM32CubeProgrammer/bin/STM32_Programmer_CLI",
   "openocd_bin": "/usr/local/bin/openocd",
   "jlink_commander": "/Applications/SEGGER/JLink/JLinkExe"
 }

@@ -146,9 +146,13 @@ python3 build.py [action] [board] [runner] [--swo | --rtt | --varambuf | --snaps
   `menuconfig`
 - `board`: `g4` (default), `f4`, `h5`, `h7` (full Zephyr board names also
   accepted)
-- `runner` (flash/debug only): `jlink` or `openocd` (`stlink`/`st` are
-  aliases for `openocd`). Defaults: `jlink` for `f4`, `openocd` for the
-  boards with an onboard ST-LINK (`g4`, `h5`, `h7`).
+- `runner` (flash/debug only): `stlink` (STM32CubeProgrammer — bundled with
+  STM32CubeCLT, so no OpenOCD install is needed; `st`/`cubeprog` are
+  aliases), `jlink`, or `openocd`. Defaults for `flash`: `stlink` for the
+  boards with an onboard ST-LINK (`g4`, `h5`, `h7`), `jlink` for `f4`.
+  When STM32CubeProgrammer is not installed but OpenOCD is, `flash` falls
+  back to `openocd` on its own. `debug` defaults to `openocd` on the
+  ST-LINK boards (STM32CubeProgrammer can only flash).
 - `--build-dir`: exact output directory, relative to this project unless
   absolute. When supplied, no board or transport suffix is appended. Use a
   distinct directory for each OS, kernel and transport; pass the same value
@@ -160,17 +164,23 @@ Examples:
 python3 build.py                  # build g4
 python3 build.py build h5
 python3 build.py clean f4
-python3 build.py flash g4         # onboard ST-LINK via OpenOCD
+python3 build.py flash g4         # onboard ST-LINK via STM32CubeProgrammer
+python3 build.py flash g4 openocd # ... or via OpenOCD
 python3 build.py flash f4 jlink
 python3 build.py debug g4
 python3 build.py build g4 --rambuf --build-dir build-windows-zephyr442-varambuf
 ```
 
-The script wraps `west`, resolves the toolchain/OpenOCD/J-Link installs on
-all three OSes (override with `STM32CUBECLT_ROOT`, `GNUARMEMB_TOOLCHAIN_PATH`,
-`OPENOCD_BIN`, `OPENOCD_SCRIPTS`, `JLINK_COMMANDER`), keeps a separate build
-directory per board and transport, and cleans up stale caches copied from
-another machine or OS before they can break the build.
+The script wraps `west`, resolves the toolchain/STM32CubeProgrammer/OpenOCD/
+J-Link installs on all three OSes (override with `STM32CUBECLT_ROOT`,
+`GNUARMEMB_TOOLCHAIN_PATH`, `STM32_PROGRAMMER_CLI`, `OPENOCD_BIN`,
+`OPENOCD_SCRIPTS`, `JLINK_COMMANDER`, or the matching keys in the gitignored
+`build.local.json` / repo-root `tools.local.<os>.json`), keeps a separate
+build directory per board and transport, and cleans up stale caches copied
+from another machine or OS before they can break the build. `west` itself
+does not need to be on PATH: the virtualenv from Zephyr's getting-started
+guide (`<workspace>/.venv`) is picked up automatically, so any `python3`
+(3.9 or newer) can run the script from a plain shell.
 
 ## Transports
 
@@ -247,8 +257,12 @@ both threads stay registered, so the contention event can still name them.
 
 ## Troubleshooting
 
-- **OpenOCD `open failed`** — the host cannot see the ST-LINK probe (cable,
-  permissions/udev on Linux, or another program holding it open).
+- **STM32CubeProgrammer `Error: No debug probe detected` / OpenOCD `open
+  failed`** — the host cannot see the ST-LINK probe (cable, permissions/udev
+  on Linux, or another program holding it open).
+- **`ERROR: <tool> not found`** before the build starts — `build.py` checks
+  the runner's host program up front; the message names the environment
+  variable / `build.local.json` key to set.
 - **J-Link `Cannot connect to J-Link`** — probe visibility problem: check
   the SEGGER software is installed and the probe enumerates as a J-Link.
 - **Empty capture (0 events)** — check the transport matches the firmware

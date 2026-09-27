@@ -35,6 +35,8 @@ PATH order silently picks up older installs, whose "unknown device" dialog
 pops on every flash.
 """
 
+from __future__ import annotations   # `X | None` annotations on Python 3.9
+
 import glob
 import os
 import shutil

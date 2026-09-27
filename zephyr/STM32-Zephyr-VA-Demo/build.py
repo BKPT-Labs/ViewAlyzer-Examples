@@ -13,8 +13,15 @@ Usage:
     python3 build.py clean f4           # pristine rebuild
     python3 build.py flash g4           # build + flash (board's default runner)
     python3 build.py flash f4 jlink     # build + flash with an explicit runner
+    python3 build.py flash g4 openocd   # ... or OpenOCD instead of STM32CubeProgrammer
     python3 build.py debug g4
     python3 build.py menuconfig g4
+
+Runners: stlink  — STM32CubeProgrammer, bundled with STM32CubeCLT; the default
+                   for boards with an onboard ST-LINK (no OpenOCD needed; falls
+                   back to openocd when only that is installed)
+         jlink   — SEGGER J-Link Commander (default for f4)
+         openocd — OpenOCD; also what `debug` uses on the ST-LINK boards
 
 Boards: g4 (nucleo_g474re, default), f4 (nucleo_f446re),
         h5 (nucleo_h503rb), h7 (stm32h750b_dk)
@@ -31,20 +38,28 @@ Each transport builds into its own directory (e.g. build-varambuf/) so the
 per-board default build is never disturbed and switching never hits a stale
 Kconfig cache.
 
-Machine-specific paths (Zephyr, toolchain, OpenOCD, J-Link) are resolved in
-this order — first match wins:
+Machine-specific paths (Zephyr, west's venv, toolchain, OpenOCD, J-Link) are
+resolved in this order — first match wins:
     1. build.local.{win|linux|mac}.json, then build.local.json, next to this
        script (per-project overrides)
     2. tools.local.{win|linux|mac}.json, then tools.local.json, at the repo
        root (one master file shared by every example project)
-    3. environment variables (ZEPHYR_BASE, STM32CUBECLT_ROOT,
-       GNUARMEMB_TOOLCHAIN_PATH, OPENOCD_BIN, OPENOCD_SCRIPTS, JLINK_COMMANDER)
+    3. environment variables (ZEPHYR_BASE, VIRTUAL_ENV, STM32CUBECLT_ROOT,
+       GNUARMEMB_TOOLCHAIN_PATH, STM32_PROGRAMMER_CLI, OPENOCD_BIN,
+       OPENOCD_SCRIPTS, JLINK_COMMANDER)
     4. auto-detection (standard install locations / PATH)
+
+`west` does not need to be on PATH: if it isn't, the virtualenv Zephyr's
+getting-started guide creates next to the workspace (<workspace>/.venv) is
+used automatically, so this script works from a plain shell with any
+python3 >= 3.9.  Set "zephyr_venv" in a .local. file if yours lives elsewhere.
 
 All the .local. files are gitignored — put machine-specific paths there, never
 in committed files. See tools.local.example.json at the repo root for the keys
 (the per-OS variants exist so a dual-boot machine can keep one checkout).
 """
+
+from __future__ import annotations   # `X | None` annotations on Python 3.9
 
 import argparse
 from datetime import datetime
@@ -143,6 +158,7 @@ class HostTools:
     openocd_bin: str
     openocd_scripts: Path
     jlink_commander: str
+    cubeprogrammer_cli: str | None      # None when no STM32_Programmer_CLI was found
 
 
 def _existing_path_from_candidates(*candidates: str) -> Path | None:
@@ -176,6 +192,7 @@ def _resolve_cubeclt_root() -> Path | None:
     return _existing_path_from_candidates(
         "~/st/stm32cubeclt_*",
         "/opt/st/stm32cubeclt_*",
+        "/opt/ST/STM32CubeCLT_*",          # macOS installer default
         "/usr/local/st/stm32cubeclt_*",
     )
 
@@ -342,6 +359,47 @@ def _resolve_jlink_commander() -> str:
     return "JLink.exe" if IS_WINDOWS else "JLinkExe"
 
 
+def _resolve_cubeprogrammer_cli(cubeclt_root: Path | None) -> str | None:
+    """STM32_Programmer_CLI: bundled with STM32CubeCLT, or a standalone install."""
+    local = _local_path("stm32_programmer_cli")
+    if local is not None:
+        return str(local)
+
+    env_cli = os.environ.get("STM32_PROGRAMMER_CLI")
+    if env_cli:
+        path = Path(os.path.expandvars(os.path.expanduser(env_cli)))
+        if path.exists():
+            return str(path)
+
+    exe_name = "STM32_Programmer_CLI.exe" if IS_WINDOWS else "STM32_Programmer_CLI"
+    detected = shutil.which(exe_name)
+    if detected:
+        return detected
+
+    if cubeclt_root is not None:
+        candidate = cubeclt_root / "STM32CubeProgrammer" / "bin" / exe_name
+        if candidate.exists():
+            return str(candidate)
+
+    if IS_WINDOWS:
+        fallback = _existing_path_from_candidates(
+            "C:/ST/STM32CubeCLT_*/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+            "C:/Program Files/STMicroelectronics/STM32CubeCLT_*/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+            "C:/Program Files/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+            "C:/Program Files (x86)/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+        )
+    else:
+        fallback = _existing_path_from_candidates(
+            "/opt/ST/STM32CubeCLT_*/STM32CubeProgrammer/bin/STM32_Programmer_CLI",
+            "/opt/st/stm32cubeclt_*/STM32CubeProgrammer/bin/STM32_Programmer_CLI",
+            "~/st/stm32cubeclt_*/STM32CubeProgrammer/bin/STM32_Programmer_CLI",
+            "~/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI",
+            "/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/"
+            "STM32CubeProgrammer.app/Contents/MacOs/bin/STM32_Programmer_CLI",
+        )
+    return str(fallback) if fallback is not None else None
+
+
 def resolve_host_tools() -> HostTools:
     cubeclt_root = _resolve_cubeclt_root()
     toolchain_path = _resolve_toolchain_path(cubeclt_root)
@@ -357,6 +415,7 @@ def resolve_host_tools() -> HostTools:
         openocd_bin=openocd_bin,
         openocd_scripts=_resolve_openocd_scripts(cubeclt_root, openocd_bin),
         jlink_commander=_resolve_jlink_commander(),
+        cubeprogrammer_cli=_resolve_cubeprogrammer_cli(cubeclt_root),
     )
 
 
@@ -377,7 +436,7 @@ BOARD_CONFIGS = {
         board="nucleo_g474re",
         build_dir=DEFAULT_BUILD_DIR,
         jlink_device="STM32G474RE",
-        default_flash_runner="openocd",
+        default_flash_runner="stm32cubeprogrammer",
         # Zephyr's own nucleo_g474re/support/openocd.cfg selects the removed
         # 'hla_swd' transport, which fails on any recent OpenOCD and with an
         # ST-LINK/V3.  Use the project-local config instead (see the comment
@@ -396,7 +455,7 @@ BOARD_CONFIGS = {
         board="nucleo_h503rb",
         build_dir=PROJECT_DIR / "build-h5",
         jlink_device="STM32H503RB",
-        default_flash_runner="openocd",
+        default_flash_runner="stm32cubeprogrammer",
         openocd_config=ZEPHYR_BASE / "boards" / "st" / "nucleo_h503rb" / "support" / "openocd.cfg",
     ),
     "h7": BoardConfig(
@@ -404,7 +463,7 @@ BOARD_CONFIGS = {
         board="stm32h750b_dk",
         build_dir=PROJECT_DIR / "build-h7",
         jlink_device="STM32H735IG",
-        default_flash_runner="openocd",
+        default_flash_runner="stm32cubeprogrammer",
         openocd_config=ZEPHYR_BASE / "boards" / "st" / "stm32h750b_dk" / "support" / "openocd.cfg",
     ),
 }
@@ -451,14 +510,50 @@ def apply_transport(board_cfg: BoardConfig, transport: str | None) -> tuple[Boar
 RUNNER_ALIASES = {
     "jlink": "jlink",
     "jl": "jlink",
-    "stlink": "openocd",
-    "st-link": "openocd",
-    "st": "openocd",
+    "stlink": "stm32cubeprogrammer",
+    "st-link": "stm32cubeprogrammer",
+    "st": "stm32cubeprogrammer",
+    "cubeprog": "stm32cubeprogrammer",
+    "cubeprogrammer": "stm32cubeprogrammer",
+    "stm32cubeprogrammer": "stm32cubeprogrammer",
     "openocd": "openocd",
     "ocd": "openocd",
 }
 
 # ── Environment ──────────────────────────────────────────────────────
+def _venv_bin_dir(venv: Path) -> Path:
+    return venv / ("Scripts" if IS_WINDOWS else "bin")
+
+
+def _venv_has_west(venv: Path) -> bool:
+    names = ("west.exe", "west") if IS_WINDOWS else ("west",)
+    return any((_venv_bin_dir(venv) / name).is_file() for name in names)
+
+
+def _find_west_venv() -> Path | None:
+    """Return the virtualenv west is installed into, or None.
+
+    Zephyr's getting-started guide installs west (and Zephyr's Python
+    requirements) into <workspace>/.venv, which is only on PATH while that
+    venv is activated.  Find it so `python3 build.py` also works from a plain
+    shell, whatever python3 happens to be there.
+    """
+    candidates: list[Path] = []
+    local = _local_path("zephyr_venv")
+    if local is not None:
+        candidates.append(local)
+    active = os.environ.get("VIRTUAL_ENV")
+    if active:
+        candidates.append(Path(active))
+    candidates.append(Path(sys.prefix))            # build.py run with the venv's python
+    workspace = ZEPHYR_BASE.parent
+    candidates += [workspace / ".venv", workspace / "venv", ZEPHYR_BASE / ".venv"]
+    for venv in candidates:
+        if _venv_has_west(venv):
+            return venv
+    return None
+
+
 def setup_env():
     """Return a copy of os.environ with every Zephyr variable set."""
     env = os.environ.copy()
@@ -471,11 +566,19 @@ def setup_env():
     # Prevent CMake from finding an incompatible Zephyr SDK
     env.pop("ZEPHYR_SDK_INSTALL_DIR", None)
 
-    # Make sure west is on PATH
+    # Make sure west is on PATH: `pip install --user` puts it in ~/.local/bin;
+    # otherwise activate west's virtualenv for the child processes (PATH +
+    # VIRTUAL_ENV is what `source .venv/bin/activate` does), so west, Zephyr's
+    # CMake python lookup and the runner scripts all use that interpreter.
     home = Path.home()
     local_bin = str(home / ".local" / "bin")
     if local_bin not in env.get("PATH", ""):
         env["PATH"] = local_bin + os.pathsep + env.get("PATH", "")
+    if shutil.which("west", path=env["PATH"]) is None:
+        venv = _find_west_venv()
+        if venv is not None:
+            env["PATH"] = str(_venv_bin_dir(venv)) + os.pathsep + env["PATH"]
+            env["VIRTUAL_ENV"] = str(venv)
 
     # If the host has no system CMake/Ninja, fall back to the copies that
     # ship inside STM32CubeCLT so a stock CubeCLT install is enough to build.
@@ -494,8 +597,11 @@ def find_west(env):
     """Return the absolute path to west, or exit with a clear message."""
     west = shutil.which("west", path=env.get("PATH"))
     if west is None:
-        print("ERROR: 'west' not found on PATH.", file=sys.stderr)
-        print("  Install with:  pip3 install --user west", file=sys.stderr)
+        print("ERROR: 'west' not found on PATH, and no virtualenv containing it exists", file=sys.stderr)
+        print(f"       next to Zephyr ({ZEPHYR_BASE.parent / '.venv'}).", file=sys.stderr)
+        print("  Activate the venv you installed west into, point at it with", file=sys.stderr)
+        print('  {"zephyr_venv": "<path>"} in build.local.json (or the repo-root', file=sys.stderr)
+        print("  tools.local.json), or install west with:  pip3 install --user west", file=sys.stderr)
         sys.exit(1)
     return west
 
@@ -613,7 +719,73 @@ def reset_build_dir_if_needed(board_cfg: BoardConfig) -> bool:
     return True
 
 
+def runner_tool(runner: str, host_tools: HostTools) -> str:
+    """The host program a runner drives, for messages."""
+    return {
+        "stm32cubeprogrammer": host_tools.cubeprogrammer_cli or "STM32_Programmer_CLI",
+        "openocd": host_tools.openocd_bin,
+        "jlink": host_tools.jlink_commander,
+    }.get(runner, "")
+
+
+def runner_tool_available(runner: str, host_tools: HostTools, env: dict, *, action: str) -> bool:
+    """Check the probe tool behind `runner` exists BEFORE spending a build on it.
+
+    Prints what to do about it and returns False when it is missing.
+    """
+    path = env.get("PATH")
+    if runner == "stm32cubeprogrammer":
+        if host_tools.cubeprogrammer_cli is not None:
+            return True
+        print("ERROR: STM32CubeProgrammer CLI (STM32_Programmer_CLI) not found.", file=sys.stderr)
+        print("  It ships with STM32CubeCLT: install that and set STM32CUBECLT_ROOT (or", file=sys.stderr)
+        print('  "stm32cubeclt_root" in build.local.json / tools.local.<os>.json), or point', file=sys.stderr)
+        print('  STM32_PROGRAMMER_CLI / "stm32_programmer_cli" at the binary.', file=sys.stderr)
+        return False
+    if runner == "openocd":
+        if shutil.which(host_tools.openocd_bin, path=path):
+            return True
+        print(f"ERROR: OpenOCD not found ('{host_tools.openocd_bin}').", file=sys.stderr)
+        print('  Install OpenOCD and put it on PATH, or set OPENOCD_BIN / "openocd_bin" in', file=sys.stderr)
+        print("  build.local.json / tools.local.<os>.json.", file=sys.stderr)
+        if action == "flash":
+            print("  Flashing over the onboard ST-LINK does not need OpenOCD: drop the runner", file=sys.stderr)
+            print("  argument (or pass 'stlink') to flash with STM32CubeProgrammer instead.", file=sys.stderr)
+        return False
+    if runner == "jlink":
+        if shutil.which(host_tools.jlink_commander, path=path):
+            return True
+        print(f"ERROR: J-Link Commander not found ('{host_tools.jlink_commander}').", file=sys.stderr)
+        print('  Install the SEGGER J-Link software, or set JLINK_COMMANDER / "jlink_commander"', file=sys.stderr)
+        print("  in build.local.json / tools.local.<os>.json.", file=sys.stderr)
+        return False
+    return True
+
+
+def effective_flash_runner(runner: str, explicit: bool, host_tools: HostTools, env: dict) -> str:
+    """Fall back from the STM32CubeProgrammer default to OpenOCD when only that exists.
+
+    Hosts set up with a standalone GNU Arm toolchain plus OpenOCD (no
+    STM32CubeCLT) keep flashing without having to name a runner.
+    """
+    if (not explicit and runner == "stm32cubeprogrammer"
+            and host_tools.cubeprogrammer_cli is None
+            and shutil.which(host_tools.openocd_bin, path=env.get("PATH"))):
+        print("NOTE: STM32CubeProgrammer not found; flashing with OpenOCD instead.")
+        return "openocd"
+    return runner
+
+
 def west_runner_args(board_cfg: BoardConfig, runner: str, host_tools: HostTools) -> list[str]:
+    if runner == "stm32cubeprogrammer":
+        # Zephyr's board.cmake already sets --port/--reset-mode (and e.g. the
+        # external loader for the H750 DK); repeating the basics is harmless
+        # and keeps this working for a board that doesn't.
+        args = ["--runner", "stm32cubeprogrammer", "--port", "swd", "--reset-mode", "hw"]
+        if host_tools.cubeprogrammer_cli is not None:
+            args.extend(["--cli", host_tools.cubeprogrammer_cli])
+        return args
+
     if runner == "openocd":
         args = [
             "--runner", "openocd",
@@ -690,33 +862,39 @@ def cmd_menuconfig(board_cfg: BoardConfig, transport_overlays: list[Path] | None
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
-def cmd_flash(board_cfg: BoardConfig, runner: str, transport_overlays: list[Path] | None = None):
+def cmd_flash(board_cfg: BoardConfig, runner: str, transport_overlays: list[Path] | None = None,
+              *, explicit_runner: bool = True):
+    env, host_tools = setup_env()
+    west = find_west(env)
+    runner = effective_flash_runner(runner, explicit_runner, host_tools, env)
+    if not runner_tool_available(runner, host_tools, env, action="flash"):
+        return 1
+
     rc = cmd_build(board_cfg, transport_overlays=transport_overlays)
     if rc != 0:
         return rc
-
-    env, host_tools = setup_env()
-    west = find_west(env)
 
     args = [west, "flash", "-d", str(board_cfg.build_dir), "--skip-rebuild"]
     args.extend(west_runner_args(board_cfg, runner, host_tools))
 
-    print(f"\nFlashing {board_cfg.board} via {runner} …")
+    print(f"\nFlashing {board_cfg.board} via {runner} ({runner_tool(runner, host_tools)}) …")
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
 def cmd_debug(board_cfg: BoardConfig, runner: str, transport_overlays: list[Path] | None = None):
+    env, host_tools = setup_env()
+    west = find_west(env)
+    if not runner_tool_available(runner, host_tools, env, action="debug"):
+        return 1
+
     rc = cmd_build(board_cfg, transport_overlays=transport_overlays)
     if rc != 0:
         return rc
 
-    env, host_tools = setup_env()
-    west = find_west(env)
-
     args = [west, "debug", "-d", str(board_cfg.build_dir), "--skip-rebuild"]
     args.extend(west_runner_args(board_cfg, runner, host_tools))
 
-    print(f"\nStarting debugger for {board_cfg.board} via {runner} …")
+    print(f"\nStarting debugger for {board_cfg.board} via {runner} ({runner_tool(runner, host_tools)}) …")
     return subprocess.call(args, env=env, cwd=str(PROJECT_DIR))
 
 
@@ -738,7 +916,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "runner",
         nargs="?",
-        help="runner shorthand for flash/debug: jlink|openocd",
+        help="runner shorthand for flash/debug: stlink|jlink|openocd",
     )
     parser.add_argument(
         "--build-dir", type=Path,
@@ -786,7 +964,8 @@ def main():
             return cmd_menuconfig(board_cfg, transport_overlays)
         if args.action == "flash":
             runner = resolve_runner(args.runner, default=board_cfg.default_flash_runner)
-            return cmd_flash(board_cfg, runner, transport_overlays)
+            return cmd_flash(board_cfg, runner, transport_overlays,
+                             explicit_runner=args.runner is not None)
         if args.action == "debug":
             runner = resolve_runner(args.runner, default=board_cfg.default_debug_runner)
             return cmd_debug(board_cfg, runner, transport_overlays)

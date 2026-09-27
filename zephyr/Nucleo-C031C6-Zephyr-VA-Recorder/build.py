@@ -28,6 +28,8 @@ Usage:
     python3 build.py menuconfig
 """
 
+from __future__ import annotations   # `X | None` annotations on Python 3.9
+
 import glob
 import os
 import shutil
