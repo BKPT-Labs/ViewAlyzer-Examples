@@ -18,6 +18,9 @@ This repo doubles as integration documentation:
   assistant at ("integrate ViewAlyzer into my project, follow this guide").
 - Each Zephyr/FreeRTOS/baremetal project is a working reference you can diff
   your own project against.
+- **[RTX5 examples](rtx5/README.md)** - source-built CMSIS-RTX 5.9.1 on
+  NUCLEO-G474RE with ST-Link and NUCLEO-F767ZI with J-Link. The guide lists
+  pinned source dependencies, explicit build paths and capture settings.
 
 The projects are grouped by RTOS / runtime:
 
@@ -26,6 +29,7 @@ ViewAlyzer-Examples/
 ├── baremetal/           # No RTOS - direct user trace + ISR instrumentation
 ├── freertos/            # FreeRTOS-based examples (task switches, sync objects)
 ├── zephyr/              # Zephyr RTOS examples using the ViewAlyzer Zephyr module
+├── rtx5/                # RTX5 native hooks on Cortex-M4/M7, SWO/RAM/RTT
 ├── throughput/          # Transport bandwidth benchmarks (one board per Cortex-M core)
 ├── Desktop-CPP-UDP/     # Host-side C++ example that streams traces over UDP
 └── Desktop-Python-UDP/  # Host-side Python UDP sender package + examples
@@ -73,7 +77,7 @@ or pass `--elf build/firmware.elf` on the CLI. Set `VA_METADATA=0` (Zephyr:
 without an ELF, or with reduced RAM usage. See the
 [integration guide](AI_INTEGRATION.md#step-3--connect-and-capture).
 
-Every firmware example ships one or more `.vacf` files - small JSON
+Most firmware examples ship one or more `.vacf` files - small JSON
 **connection configs** (transport, target device, probe speed, SWO
 frequency, …). Open one in the ViewAlyzer app and the connection is set up
 in one click, or pass it on the CLI:
