@@ -48,6 +48,7 @@ static osMessageQueueId_t irq_queue;
 static osSemaphoreId_t irq_semaphore, irq_ack;
 static osEventFlagsId_t irq_flags;
 static osMemoryPoolId_t irq_pool;
+static osThreadId_t consumer_thread, irq_thread;
 
 static void expect(int32_t actual, int32_t wanted)
 {
@@ -75,6 +76,11 @@ void TIM2_IRQHandler(void)
     if (block) expect(osMemoryPoolFree(irq_pool, block), osOK);
     else ++rtx5_example_failures;
     expect(osSemaphoreRelease(irq_semaphore), osOK);
+    expect((int32_t)osThreadFlagsSet(irq_thread, 0x10), 0x10);
+    /* These illegal ISR calls must clear their trace request without
+       inventing a successful operation or consuming a request slot. */
+    expect((int32_t)osThreadFlagsClear(1), (int32_t)osFlagsErrorISR);
+    expect((int32_t)osThreadFlagsWait(1, osFlagsWaitAny, 0), (int32_t)osFlagsErrorISR);
     VA_LogISREnd(TIM2_IRQn + 16);
 }
 
@@ -83,6 +89,7 @@ static void irq_consumer(void *argument)
     (void)argument;
     for (;;) {
         uint32_t value;
+        expect((int32_t)osThreadFlagsWait(0x10, osFlagsWaitAll, osWaitForever), 0x10);
         expect(osSemaphoreAcquire(irq_semaphore, osWaitForever), osOK);
         expect(osMessageQueueGet(irq_queue, &value, 0, 0), osOK);
         expect((int32_t)osEventFlagsWait(irq_flags, 1, osFlagsWaitAll, 0), 1);
@@ -120,6 +127,7 @@ static void consumer(void *argument)
         expect(osMutexRelease(mutex), osOK);
         expect(osSemaphoreAcquire(semaphore, osWaitForever), osOK);
         expect((int32_t)osEventFlagsWait(flags, 1, osFlagsWaitAll, osWaitForever), 1);
+        expect((int32_t)osThreadFlagsWait(3, osFlagsWaitAll, osWaitForever), 3);
         ++rtx5_example_completed;
     }
 }
@@ -140,8 +148,35 @@ static void detached_fp_exit(void *argument)
     osThreadExit();
 }
 
+static void cancelled_flags(void *argument)
+{
+    (void)argument;
+    /* The controller terminates this detached waiter; cleanup must not read
+       its freed control block while closing the outstanding wait. */
+    (void)osThreadFlagsWait(0x100, osFlagsWaitAll, osWaitForever);
+    ++rtx5_example_failures;
+}
+
+static void suspended_flags(void *argument)
+{
+    (void)argument;
+    expect((int32_t)osThreadFlagsWait(0x200, osFlagsWaitAll, osWaitForever),
+        (int32_t)osFlagsErrorTimeout);
+}
+
 static void lifecycle(void)
 {
+    const osThreadAttr_t suspended = {.name = "suspend flags", .priority = osPriorityAboveNormal,
+        .stack_size = 2048};
+    osThreadId_t suspended_waiter = osThreadNew(suspended_flags, 0, &suspended);
+    if (suspended_waiter) {
+        expect(osThreadSuspend(suspended_waiter), osOK);
+        expect(osThreadResume(suspended_waiter), osOK);
+    } else ++rtx5_example_failures;
+    const osThreadAttr_t cancelled = {.name = "cancel flags", .priority = osPriorityAboveNormal,
+        .stack_size = 2048};
+    osThreadId_t waiter = osThreadNew(cancelled_flags, 0, &cancelled);
+    if (waiter) expect(osThreadTerminate(waiter), osOK); else ++rtx5_example_failures;
     const osThreadAttr_t detached = {.name = "FP exit", .priority = osPriorityAboveNormal,
         .stack_size = 2048};
     if (!osThreadNew(detached_fp_exit, 0, &detached)) ++rtx5_example_failures;
@@ -201,6 +236,15 @@ static void resource_limits(void)
     expect((int32_t)osEventFlagsWait(flags, 2, osFlagsWaitAll, 1), (int32_t)osFlagsErrorTimeout);
     expect((int32_t)osEventFlagsSet(flags, 2), 2);
     expect((int32_t)osEventFlagsClear(flags, 2), 2);
+    osThreadId_t self = osThreadGetId();
+    expect((int32_t)osThreadFlagsSet(self, 0x30), 0x30);
+    expect((int32_t)osThreadFlagsWait(0x10, osFlagsWaitAny | osFlagsNoClear, 0), 0x30);
+    expect((int32_t)osThreadFlagsClear(0x10), 0x30);
+    expect((int32_t)osThreadFlagsGet(), 0x20);
+    expect((int32_t)osThreadFlagsWait(0x20, osFlagsWaitAll, 0), 0x20);
+    expect((int32_t)osThreadFlagsWait(0x40, osFlagsWaitAny, 0), (int32_t)osFlagsErrorResource);
+    expect((int32_t)osThreadFlagsWait(0x40, osFlagsWaitAll | osFlagsNoClear, 1), (int32_t)osFlagsErrorTimeout);
+    expect((int32_t)osThreadFlagsSet(self, 0x80000000u), (int32_t)osFlagsErrorParameter);
 }
 
 static void controller(void *argument)
@@ -228,6 +272,8 @@ static void controller(void *argument)
         expect(osSemaphoreRelease(semaphore), osOK);
         /* The higher-priority waiter consumes the bit before Set returns. */
         expect((int32_t)osEventFlagsSet(flags, 1), 0);
+        expect((int32_t)osThreadFlagsSet(consumer_thread, 1), 1);
+        expect((int32_t)osThreadFlagsSet(consumer_thread, 2), 0);
         NVIC_SetPendingIRQ(TIM2_IRQn);
         expect(osSemaphoreAcquire(irq_ack, 10), osOK);
         VA_TickOverflowCheck();
@@ -275,12 +321,14 @@ void rtx5_workload_init(void)
         ++rtx5_example_failures;
         return;
     }
-    if (!osThreadNew(consumer, 0, &wa) || !osThreadNew(controller, 0, &ca))
+    consumer_thread = osThreadNew(consumer, 0, &wa);
+    if (!consumer_thread || !osThreadNew(controller, 0, &ca))
         ++rtx5_example_failures;
     const osThreadAttr_t ia = {.name = "IRQ consumer", .priority = osPriorityAboveNormal1, .stack_size = 2048};
     const osThreadAttr_t fpa = {.name = "FP A", .priority = osPriorityBelowNormal, .stack_size = 2048};
     const osThreadAttr_t fpb = {.name = "FP B", .priority = osPriorityBelowNormal, .stack_size = 2048};
-    if (!osThreadNew(irq_consumer, 0, &ia) || !osThreadNew(floating_point_worker, 0, &fpa) ||
+    irq_thread = osThreadNew(irq_consumer, 0, &ia);
+    if (!irq_thread || !osThreadNew(floating_point_worker, 0, &fpa) ||
         !osThreadNew(floating_point_worker, (void *)1, &fpb)) ++rtx5_example_failures;
     VA_RegisterUserTrace(TIM2_IRQn + 16, "TIM2 IRQ", VA_USER_TYPE_ISR);
     VA_RegisterUserTrace(RAW_CYCLES_ID, "RawCycles", VA_USER_TYPE_GRAPH);

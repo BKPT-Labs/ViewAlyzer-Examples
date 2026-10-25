@@ -45,7 +45,9 @@ their event rate is not a recorder throughput benchmark.
 The workload exercises priority inheritance, recursive mutexes, direct queue/
 semaphore/flag handoffs, limits and timeouts, pool exhaustion, object deletion,
 thread suspend/resume/join/termination, timer callbacks, interrupt-originated
-operations and floating-point context preservation. Firmware counters expose
+operations and floating-point context preservation. Thread flags exercise
+task/IRQ sends, all/any waits, no-clear and clear behavior, polling and timed
+failures, and termination of a blocked detached waiter. Firmware counters expose
 progress and failures; a successful build alone does not establish capture
 correctness. Long captures should cross multiple 32-bit DWT wraps (about 53.7 s
 on G474 and 19.9 s on F767).
