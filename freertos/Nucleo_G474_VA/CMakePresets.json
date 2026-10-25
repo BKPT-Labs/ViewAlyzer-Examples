@@ -18,6 +18,15 @@
             }
         },
         {
+            "name": "Debug-NoRecorder",
+            "inherits": "Debug",
+            "displayName": "FreeRTOS debugger demo (recorder disabled)",
+            "binaryDir": "${sourceDir}/build/${hostSystemName}/Debug-NoRecorder",
+            "cacheVariables": {
+                "VA_ENABLED": "OFF"
+            }
+        },
+        {
             "name": "Debug-RamBuf",
             "inherits": "default",
             "cacheVariables": {
@@ -51,6 +60,10 @@
         {
             "name": "Debug",
             "configurePreset": "Debug"
+        },
+        {
+            "name": "Debug-NoRecorder",
+            "configurePreset": "Debug-NoRecorder"
         },
         {
             "name": "RelWithDebInfo",

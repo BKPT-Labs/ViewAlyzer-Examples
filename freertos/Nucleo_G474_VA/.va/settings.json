@@ -1,0 +1,21 @@
+{
+  "debug": {
+    "session": {
+      "schemaVersion": 1,
+      "cores": [
+        {
+          "role": "application",
+          "label": "FreeRTOS · G474",
+          "images": [
+            {
+              "id": "app",
+              "elf": "build/Debug/Nucelo_G474_VA.elf"
+            }
+          ],
+          "primaryImage": "app"
+        }
+      ],
+      "breakpoints": []
+    }
+  }
+}

@@ -23,7 +23,8 @@ set(CMAKE_C_EXTENSIONS ON)
 # VA_MAX_TASKS: this demo runs 17 application tasks plus IDLE and Tmr Svc;
 # the recorder default of 16 slots would overflow (extra tasks trace as
 # id 0 and health reports taskmap_full).
-add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32g474xx.h
+option(VA_ENABLED "Enable ViewAlyzer recorder instrumentation" ON)
+add_definitions(-DVA_ENABLED=$<BOOL:${VA_ENABLED}> -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32g474xx.h
     -DVA_MAX_TASKS=24
 )
 
