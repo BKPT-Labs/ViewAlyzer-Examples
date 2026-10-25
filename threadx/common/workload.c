@@ -34,14 +34,15 @@
 static TX_THREAD controller, helper, disposable;
 static ULONG controller_stack[1024], helper_stack[1024], disposable_stack[512];
 static TX_SEMAPHORE command_sem, done_sem, semaphore, isr_sem, delete_sem, owner_ready;
-static TX_QUEUE queue, isr_queue;
+static TX_QUEUE queue, isr_queue, late_queue;
 static TX_MUTEX mutex, owner_mutex, priority_mutex;
-static TX_EVENT_FLAGS_GROUP flags, isr_flags;
+static TX_EVENT_FLAGS_GROUP flags, isr_flags, late_flags;
 static TX_BYTE_POOL byte_pool;
 static TX_BLOCK_POOL block_pool;
 static TX_TIMER timer;
 static ULONG queue_memory[2], byte_memory[256], block_memory[80];
 static ULONG isr_queue_memory[1];
+static ULONG late_queue_memory[1];
 static volatile UINT command, disposable_wait, isr_done;
 volatile ULONG threadx_example_round;
 volatile ULONG threadx_example_failures;
@@ -49,7 +50,8 @@ volatile ULONG threadx_example_timer_fires;
 volatile ULONG threadx_example_isr_rounds;
 
 enum { RECEIVE, SEMAPHORE, MUTEX, FLAGS, BYTE, BLOCK, SEND, FRONT_SEND, DELETE_WAIT,
-       OWNER_MUTEX, PRIORITY_MUTEX, WAKE = 0x100 };
+       OWNER_MUTEX, PRIORITY_MUTEX, DELETE_RECEIVE, DELETE_SEND, DELETE_FRONT,
+       DELETE_FLAGS, WAKE = 0x100 };
 
 static void expect(UINT actual, UINT wanted)
 {
@@ -164,6 +166,20 @@ static void helper_entry(ULONG unused)
         case DELETE_WAIT:
             expect(tx_semaphore_get(&delete_sem, TX_WAIT_FOREVER), TX_DELETED);
             break;
+        case DELETE_RECEIVE:
+            expect(tx_queue_receive(&late_queue, &value, TX_WAIT_FOREVER), TX_DELETED);
+            break;
+        case DELETE_SEND:
+            value = 108;
+            expect(tx_queue_send(&late_queue, &value, TX_WAIT_FOREVER), TX_DELETED);
+            break;
+        case DELETE_FRONT:
+            value = 109;
+            expect(tx_queue_front_send(&late_queue, &value, TX_WAIT_FOREVER), TX_DELETED);
+            break;
+        case DELETE_FLAGS:
+            expect(tx_event_flags_get(&late_flags, 3, TX_AND_CLEAR, &value, TX_WAIT_FOREVER), TX_DELETED);
+            break;
         case OWNER_MUTEX:
             expect(tx_mutex_get(&owner_mutex, TX_WAIT_FOREVER), TX_SUCCESS);
             expect(tx_mutex_put(&owner_mutex), TX_SUCCESS);
@@ -202,6 +218,10 @@ static void waiting_case(UINT which)
         expect(block_pool.tx_block_pool_suspended_count, 1); break;
     case DELETE_WAIT:
         expect(delete_sem.tx_semaphore_suspended_count, 1); break;
+    case DELETE_RECEIVE: case DELETE_SEND: case DELETE_FRONT:
+        expect(late_queue.tx_queue_suspended_count, 1); break;
+    case DELETE_FLAGS:
+        expect(late_flags.tx_event_flags_group_suspended_count, 1); break;
     case OWNER_MUTEX:
         expect(owner_mutex.tx_mutex_suspended_count, 1);
         expect(disposable.tx_thread_priority, 6); break;
@@ -220,6 +240,50 @@ static void blocking_case(UINT which)
     expect(tx_semaphore_get(&done_sem, TX_WAIT_FOREVER), TX_SUCCESS);
 }
 
+static void deleted_waiters(void)
+{
+    /* Block at high priority, then lower the waiter. Deletion and same-address
+       reuse must finish before it returns TX_DELETED from the old object. */
+    for (UINT which = DELETE_RECEIVE; which <= DELETE_FLAGS; ++which) {
+        UINT priority, ignored;
+        ULONG value = 1;
+        if (which == DELETE_FLAGS)
+            expect(tx_event_flags_create(&late_flags, "TxLateFlags"), TX_SUCCESS);
+        else {
+            const char *name = which == DELETE_RECEIVE ? "TxLateReceive" :
+                which == DELETE_SEND ? "TxLateSend" : "TxLateFront";
+            expect(tx_queue_create(&late_queue, (CHAR *)name, TX_1_ULONG,
+                late_queue_memory, sizeof late_queue_memory), TX_SUCCESS);
+            if (which != DELETE_RECEIVE) expect(tx_queue_send(&late_queue, &value, TX_NO_WAIT), TX_SUCCESS);
+        }
+        waiting_case(which);
+        expect(tx_thread_priority_change(&helper, 12, &priority), TX_SUCCESS);
+        if (which == DELETE_FLAGS) {
+            expect(tx_event_flags_delete(&late_flags), TX_SUCCESS);
+            expect(tx_event_flags_create(&late_flags, "TxReusedFlags"), TX_SUCCESS);
+        } else {
+            expect(tx_queue_delete(&late_queue), TX_SUCCESS);
+            expect(tx_queue_create(&late_queue, "TxReusedQueue", TX_1_ULONG,
+                late_queue_memory, sizeof late_queue_memory), TX_SUCCESS);
+        }
+        finish_waiting_case();
+        expect(tx_thread_priority_change(&helper, priority, &ignored), TX_SUCCESS);
+        if (which == DELETE_FLAGS) expect(tx_event_flags_delete(&late_flags), TX_SUCCESS);
+        else expect(tx_queue_delete(&late_queue), TX_SUCCESS);
+    }
+    UINT priority, ignored;
+    expect(tx_semaphore_create(&delete_sem, "TxLateSem", 0), TX_SUCCESS);
+    waiting_case(DELETE_WAIT);
+    expect(tx_thread_priority_change(&helper, 12, &priority), TX_SUCCESS);
+    expect(tx_semaphore_delete(&delete_sem), TX_SUCCESS);
+    expect(tx_semaphore_create(&delete_sem, "TxReusedSem", 1), TX_SUCCESS);
+    finish_waiting_case();
+    expect(delete_sem.tx_semaphore_count, 1);
+    expect(tx_thread_priority_change(&helper, priority, &ignored), TX_SUCCESS);
+    expect(tx_semaphore_delete(&delete_sem), TX_SUCCESS);
+    VA_LogString(5, "THREADX:late-delete-complete");
+}
+
 static void run_round(void)
 {
     ULONG value = 42, actual = 0;
@@ -229,6 +293,9 @@ static void run_round(void)
     VA_LogString(1, "THREADX:round-begin");
     VA_LogString(4, "THREADX:kernel:" TX_EXAMPLE_VERSION);
     VA_LogString(4, "THREADX:coverage:v2");
+    /* Let RAM readers acknowledge their initial stream checkpoint before
+       the one-time deletion/reuse case; later rounds keep normal load. */
+    if (threadx_example_round == 1) deleted_waiters();
     expect(tx_queue_create(&queue, "TxQueue", TX_1_ULONG, queue_memory, sizeof queue_memory), TX_SUCCESS);
     expect(tx_semaphore_create(&semaphore, "TxSemaphore", 0), TX_SUCCESS);
     expect(tx_mutex_create(&mutex, "TxMutex", TX_INHERIT), TX_SUCCESS);
