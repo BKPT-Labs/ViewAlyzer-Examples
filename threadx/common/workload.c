@@ -293,7 +293,9 @@ static void run_round(void)
     VA_LogString(1, "THREADX:round-begin");
     VA_LogString(4, "THREADX:kernel:" TX_EXAMPLE_VERSION);
     VA_LogString(4, "THREADX:coverage:v2");
-    if (threadx_example_round == 0) deleted_waiters();
+    /* Let RAM readers acknowledge their initial stream checkpoint before
+       the one-time deletion/reuse case; later rounds keep normal load. */
+    if (threadx_example_round == 1) deleted_waiters();
     expect(tx_queue_create(&queue, "TxQueue", TX_1_ULONG, queue_memory, sizeof queue_memory), TX_SUCCESS);
     expect(tx_semaphore_create(&semaphore, "TxSemaphore", 0), TX_SUCCESS);
     expect(tx_mutex_create(&mutex, "TxMutex", TX_INHERIT), TX_SUCCESS);

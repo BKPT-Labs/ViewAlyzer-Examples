@@ -82,7 +82,8 @@ terminating that owner verifies the kernel's implicit mutex release and wakeup.
 A software-pended EXTI0 interrupt uses one manual ISR hook pair to send to a
 separate queue, give a semaphore and set flags; no physical interrupt input is
 required. Deleting a semaphore with a blocked helper checks `TX_DELETED` wakeup.
-The first round also lowers the blocked helper's priority, deletes and recreates
+After one full warm-up round and its sleep, the second round lowers the blocked
+helper's priority, deletes and recreates
 queue, semaphore and event-flag objects at the same addresses, then lets the
 helper return. These failures must retain the deleted object's identity, including
 queue receive/front-send/back-send and flag-mask details.
