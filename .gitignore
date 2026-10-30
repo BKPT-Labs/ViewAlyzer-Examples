@@ -1,6 +1,8 @@
 # Build output (per-board / per-transport build dirs)
 build/
 build-*/
+CMakeFiles/
+CMakeCache.txt
 
 # Python
 __pycache__/
@@ -14,6 +16,8 @@ tools.local.*.json
 !tools.local.example.json
 
 # Editor / tool caches
+.vscode/
+.bkpt/
 .cache/
 .root-artifact-backup/
 
