@@ -19,22 +19,29 @@ are changed by these projects. U575 supports a flat image for `TZEN=0` and a
 paired secure boot / NonSecure ThreadX image for an already provisioned `TZEN=1`
 board. Select the mode matching the board before programming it.
 
-Install Python 3.10+, Git, CMake, Ninja and Arm GNU tools. Use a current
-ViewAlyzerRecorder checkout containing `threadx/VA_Adapter_ThreadX.c`.
-The dependency cache and build directories must be outside this repository.
+Install Python 3.10+, Git, CMake, Ninja and Arm GNU tools. `build.py` takes
+the same flags as the FreeRTOS and baremetal examples:
 
 ```sh
-python threadx/build.py --board f767 --kernel eclipse --transport rambuf \
-  --cache /path/to/dependency-cache --build-dir /path/to/build-f767-eclipse-rambuf \
-  --recorder /path/to/ViewAlyzer/ViewAlyzerRecorder
+python threadx/build.py                                 # F767, Eclipse kernel, RAM buffer
+python threadx/build.py --board g474 --transport swo
+python threadx/build.py --kernel st                     # ST's ThreadX 6.4.0
+python threadx/build.py --flash --serial <probe-serial>
+python threadx/build.py --clean                         # full rebuild
 ```
 
-Use `--board g474` for the ST-Link board and `--kernel st` for ST's kernel.
+Output goes to `threadx/build/<os>-<board>-<kernel>-<transport>/`. Tools are
+found the same way as the other examples (STM32CubeCLT, PATH, or
+`tools.local[.os].json`). The recorder defaults to
+`../ViewAlyzer/ViewAlyzerRecorder` next to this repo or `VIEWALYZER_RECORDER_DIR`;
+`--recorder` overrides it. Pinned dependencies are fetched once into a per-user
+cache shared with the RTX5 examples; `--cache` or `deps_cache` overrides it and
+must be outside this repository. `--build-dir` selects an exact output directory
+under `threadx/build/` or outside the repository.
 Both boards support `--transport swo` and `rambuf`; `rtt` is only available
-for the F767 example.
-Pass `--toolchain-bin /path/to/arm-gnu/bin` if Arm GNU tools are not on PATH.
-Windows PowerShell accepts the same arguments on one line, using native paths.
-Build directories should be separate for each board, kernel, transport and host OS.
+for the F767 example. `--flash` uses a J-Link for F767 and the onboard ST-Link
+for G474 and U575.
+Pass `--toolchain-bin /path/to/arm-gnu/bin` if Arm GNU tools are not on PATH or in STM32CubeCLT.
 
 For the experimental U575 build, select `--board u575`. For an existing
 TrustZone layout matching the following settings, add
@@ -46,13 +53,13 @@ bank swapping and `BOOT_LOCK` must be disabled. Check these before flashing. Pro
 pair does not provision or change option bytes. The default `--u575-security flat`
 uses the original donor's `0x08000000` image and requires `TZEN=0`.
 
-`build.py` only builds. It produces `threadx_recorder.elf`, a matching `.hex`,
+`build.py` produces `threadx_recorder.elf`, a matching `.hex`,
 a linker map and `build-manifest.json`. The manifest records exact source
 revisions, input and image hashes, compiler identity and ELF symbols. Existing
 dependency checkouts must be clean and match their pins; the helper never resets
 or updates an existing checkout to another revision.
 The paired U575 build additionally produces `threadx_secure_boot.elf`, its HEX,
-and `threadx_paired.hex`. Flash the combined HEX and verify both images;
+and `threadx_paired.hex`. Flash the combined HEX (`--flash` does this) and verify both images;
 use `threadx_recorder.elf` for recorder capture symbols. The manifest includes
 both image hashes and the secure partner's source provenance. An existing sparse
 CubeU5 checkout must include the GTZC donor and the Nucleo BSP dependencies.
