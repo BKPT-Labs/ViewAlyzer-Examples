@@ -14,7 +14,7 @@ set(CMAKE_C_EXTENSIONS ON)
 
 # VA_TRANSPORT=JLINK_RTT (2): this example streams over SEGGER RTT - the
 # SEGGER sources below are dead weight without it (the config default is ITM).
-add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32f446xx.h -DVA_TRANSPORT=2)
+add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32f446xx.h -DVA_TRANSPORT=2 -DVA_FREERTOS_HEAP_SCHEME=4)
 # Define the build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")

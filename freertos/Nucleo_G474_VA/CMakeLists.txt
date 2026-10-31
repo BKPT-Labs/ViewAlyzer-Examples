@@ -25,7 +25,7 @@ set(CMAKE_C_EXTENSIONS ON)
 # id 0 and health reports taskmap_full).
 option(VA_ENABLED "Enable ViewAlyzer recorder instrumentation" ON)
 add_definitions(-DVA_ENABLED=$<BOOL:${VA_ENABLED}> -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32g474xx.h
-    -DVA_MAX_TASKS=24
+    -DVA_MAX_TASKS=24 -DVA_FREERTOS_HEAP_SCHEME=4
 )
 
 # Selective tracing demo. OFF by default, so this example traces everything out

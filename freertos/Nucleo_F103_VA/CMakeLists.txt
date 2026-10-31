@@ -12,7 +12,14 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
-add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32f103xb.h)
+add_definitions(-DVA_ENABLED=1 -DVA_RTOS_SELECT=1 -DVA_DEVICE_HEADER=stm32f103xb.h -DVA_FREERTOS_HEAP_SCHEME=4)
+# The F103 has 20 KiB SRAM. This 14-task demo needs its 10 KiB application
+# heap, so use SWO rather than reserving a RAM ring and metadata table.
+# Nine sync objects include the timer queue and heap; retain spare slots.
+set(VA_TRANSPORT ARM_ITM CACHE STRING "Recorder transport")
+set(VA_MAX_SYNC_OBJECTS 16 CACHE STRING "Recorder synchronization-object slots")
+add_definitions(-DVA_TRANSPORT=${VA_TRANSPORT}
+    -DVA_MAX_SYNC_OBJECTS=${VA_MAX_SYNC_OBJECTS})
 # Define the build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
