@@ -80,7 +80,11 @@ if(VA_UART)
 endif()
 if(VA_RAMBUF)
     add_definitions(-DVA_TRANSPORT=RAM_BUFFER -DVA_RAMBUF_SIZE=16384u)
-    message(STATUS "ViewAlyzer: RAM-buffer transport (16 KB ring)")
+    # This full-feature demo registers more metadata than the recorder's 2 KB
+    # default can hold (tasks, IPC objects, timers and user trace channels).
+    # Keep the extra attach-time storage local to this RAM-buffer demo.
+    add_definitions(-DVA_METADATA_SIZE=4096u)
+    message(STATUS "ViewAlyzer: RAM-buffer transport (16 KB ring, 4 KB metadata)")
 endif()
 
 # Define the build type
