@@ -41,6 +41,39 @@ Each build writes an
 ELF, HEX, map, log and manifest containing dependency revisions, tool identity,
 source/image hashes and ELF symbols.
 
+## ViewAlyzer connection files
+
+Open the `.vacf` matching the board and the transport used to build the flashed
+firmware. In ViewAlyzer, select the probe and set **ELF File** to that build's
+`rtx5_recorder.elf`. The configs contain no machine paths or probe serials.
+
+| Board | SWO | RAM buffer | RTT |
+| --- | --- | --- | --- |
+| G474 / ST-Link | [SWO](nucleo_g474_rtx5_swo.vacf) | [RAM buffer](nucleo_g474_rtx5_rambuf.vacf) | — |
+| F767 / J-Link | [SWO](nucleo_f767_rtx5_swo.vacf) | [RAM buffer](nucleo_f767_rtx5_rambuf.vacf) | [RTT](nucleo_f767_rtx5_rtt.vacf) |
+
+These use the firmware's 80 MHz G474 / 216 MHz F767 clocks, 4 MHz SWO on ITM
+port 1, and RTT channel 0. Install SEGGER's J-Link software for F767 capture.
+RAM-buffer configs scan the board's SRAM when no ELF is selected; choosing the
+matching ELF resolves `_VA_RAMBUF` without pinning a build-specific address in
+the shared config. The GUI scans for RTT when **RTT Address** is blank; to skip
+that scan, copy `_SEGGER_RTT` from the matching `build-manifest.json` into that
+field. The CLI resolves either control block with `--elf`. Capture resets the target to collect
+the workload from boot. Recorder-off control builds do not produce a trace.
+
+For the CLI, pass the ELF separately; a VACF `elf` key is not a CLI ELF selection:
+
+```sh
+viewalyzer-cli config --config rtx5/nucleo_g474_rtx5_rambuf.vacf --elf /path/to/rtx5_recorder.elf
+viewalyzer-cli capture --config rtx5/nucleo_g474_rtx5_rambuf.vacf --elf /path/to/rtx5_recorder.elf --stlink-serial <serial> --duration 5 --output rtx5.vadb
+```
+
+`config` validates settings without opening a probe. Use `--jlink-serial` for
+F767 and add `--jlink-engine segger-dll` for its SWO capture. The GUI selects
+the installed SEGGER library automatically; the engine flag is CLI-only.
+With the HIL dashboard, use the matching ELF path shown after **Build & flash**;
+its build directory may be outside this repository.
+
 The G474 runs at 80 MHz and F767 at 216 MHz. SWO is on PB3. The examples reserve
 8 KiB of MSP and use 32 KiB transport buffers. Use the manifest's clock and
 buffer symbols when constructing a capture configuration.

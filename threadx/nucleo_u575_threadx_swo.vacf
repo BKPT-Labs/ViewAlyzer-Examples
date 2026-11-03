@@ -1,0 +1,10 @@
+{
+  "transport": "stlink-swo",
+  "target-device": "STM32U575ZITx",
+  "cpu-clock-hz": 160000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": false,
+  "swo-freq-hz": 2000000,
+  "itm-port": 1
+}

@@ -64,6 +64,44 @@ use `threadx_recorder.elf` for recorder capture symbols. The manifest includes
 both image hashes and the secure partner's source provenance. An existing sparse
 CubeU5 checkout must include the GTZC donor and the Nucleo BSP dependencies.
 
+## ViewAlyzer connection files
+
+Open the `.vacf` matching the board, flashed transport, and U575 security mode.
+In ViewAlyzer, select the probe and set **ELF File** to the matching build's
+`threadx_recorder.elf`. The same configs work with Eclipse and ST ThreadX; they
+contain no fixed buffer addresses, machine paths or probe serials.
+
+| Board / firmware | SWO | RAM buffer | RTT |
+| --- | --- | --- | --- |
+| G474 / ST-Link | [SWO](nucleo_g474_threadx_swo.vacf) | [RAM buffer](nucleo_g474_threadx_rambuf.vacf) | — |
+| F767 / J-Link | [SWO](nucleo_f767_threadx_swo.vacf) | [RAM buffer](nucleo_f767_threadx_rambuf.vacf) | [RTT](nucleo_f767_threadx_rtt.vacf) |
+| U575 flat, TZEN=0 (experimental) | [SWO](nucleo_u575_threadx_swo.vacf) | [RAM buffer](nucleo_u575_threadx_rambuf.vacf) | — |
+| U575 TrustZone pair, TZEN=1 (experimental) | [SWO](nucleo_u575_threadx_swo.vacf) | [NonSecure RAM buffer](nucleo_u575_threadx_tz_rambuf.vacf) | — |
+
+The configs use 170 MHz for G474, 216 MHz for F767, 160 MHz for U575, 2 MHz
+SWO on ITM port 1, and RTT channel 0. Install SEGGER's J-Link software for F767 capture.
+RAM-buffer configs scan the firmware's SRAM range when no ELF is selected;
+the U575 TrustZone config starts at NonSecure RAM `0x20040000`. Selecting the
+matching ELF resolves `_VA_RAMBUF` directly. The GUI scans for RTT when **RTT
+Address** is blank; to skip that scan, copy `_SEGGER_RTT` from the matching
+`build-manifest.json` into that field. The CLI resolves either control block with
+`--elf`. Capture resets
+the target to collect the workload from boot. These files do not program firmware
+or provision TrustZone; the U575 pair requires the existing layout described above.
+
+For the CLI, pass the ELF separately; a VACF `elf` key is not a CLI ELF selection:
+
+```sh
+viewalyzer-cli config --config threadx/nucleo_g474_threadx_rambuf.vacf --elf /path/to/threadx_recorder.elf
+viewalyzer-cli capture --config threadx/nucleo_g474_threadx_rambuf.vacf --elf /path/to/threadx_recorder.elf --stlink-serial <serial> --duration 5 --output threadx.vadb
+```
+
+`config` validates settings without opening a probe. Use `--jlink-serial` for
+F767 and add `--jlink-engine segger-dll` for its SWO capture. The GUI selects
+the installed SEGGER library automatically; the engine flag is CLI-only.
+With the HIL dashboard, use the matching ELF path shown after **Build & flash**;
+its build directory may be outside this repository.
+
 For capture, use the matching ELF/image pair, explicitly select the probe serial,
 and set the target and clock from the table. ITM uses stimulus port **1** and
 a **2 MHz** SWO rate. RAM capture uses `_VA_RAMBUF` from that ELF; RTT uses

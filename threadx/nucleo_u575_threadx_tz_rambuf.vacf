@@ -1,0 +1,11 @@
+{
+  "transport": "stlink-rambuf",
+  "target-device": "STM32U575ZITx",
+  "cpu-clock-hz": 160000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": false,
+  "rambuf-scan-start": "0x20040000",
+  "rambuf-scan-size": 524288,
+  "rambuf-poll-ms": 5
+}

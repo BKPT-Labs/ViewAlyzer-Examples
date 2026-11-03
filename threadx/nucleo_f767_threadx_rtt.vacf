@@ -1,0 +1,9 @@
+{
+  "transport": "jlink-rtt",
+  "target-device": "STM32F767ZI",
+  "cpu-clock-hz": 216000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": false,
+  "rtt-channel": 0
+}

@@ -1,0 +1,10 @@
+{
+  "transport": "jlink-swo",
+  "target-device": "STM32F767ZI",
+  "cpu-clock-hz": 216000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": false,
+  "swo-freq-hz": 4000000,
+  "itm-port": 1
+}

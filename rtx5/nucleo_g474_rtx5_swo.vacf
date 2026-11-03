@@ -1,0 +1,10 @@
+{
+  "transport": "stlink-swo",
+  "target-device": "STM32G474RE",
+  "cpu-clock-hz": 80000000,
+  "interface": "SWD",
+  "speed-khz": 4000,
+  "no-reset": false,
+  "swo-freq-hz": 4000000,
+  "itm-port": 1
+}
