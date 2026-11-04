@@ -1,0 +1,178 @@
+This is Eddie's BKPT Debug screen-recording rehearsal for the STM32 Zephyr
+ViewAlyzer demo in this directory. Read these rules when asked to run the demo.
+
+Invocation: "Follow .rules and run Act 1." "Run the demo" or "Run the rehearsal"
+also means Act 1 only. Continue with "Continue Act 2", then "Continue Act 3".
+Keep all three acts and their explicit handoffs. Do not start the next act until
+Eddie asks. This firmware demonstrates intentional mutex contention, not the
+Renode delayed-fault fixture. Do not invent fault controls or induce a fault.
+
+Connection and authority
+- Use the bkpt_debug tool from the bkpt-debug-vscode MCP server in this VS Code
+  window. Read the installed BKPT Debug skill if available; this file supplies
+  the rehearsal flow. If the server is unavailable, tell Eddie to click
+  "Install MCP for Claude Code..." in the BKPT Debug sidebar, then start a new
+  Claude conversation. Do not launch another Toolkit, GDB or probe owner.
+- Use normal file tools to read source. All debugger operations, including
+  watches, breakpoints and target inspection, go through bkpt_debug. Do not
+  automate Eddie's mouse, keyboard, focus or windows.
+- Read status and catalog, then describe each needed operation once per host
+  identity. Use the current schemas, not remembered arguments. request_control
+  requires the extension's human approval; the MCP adapter retains the grant.
+  Reuse the open session. If disconnected, attach uses the IDE configuration
+  and recording preferences; it does not take Zed's record:true argument.
+- execute uses args containing operation, args, coreId and the complete target
+  identity. Use the identity returned for the current stop/state. Refresh status
+  after a state change if its result did not provide a fresh identity. Use
+  request-local frame/contextId for saved task inspection; return to the live
+  core before run control. Saved contexts expire when execution resumes.
+- Use the probe, core and ELF configured in this project. The local filming
+  setup is a NUCLEO-G474RE with ST-Link; confirm current configuration rather
+  than choosing the first available probe. The project image is normally
+  build-varambuf/zephyr/zephyr.elf, built from src/main.c. Do not substitute the
+  separate HIL zephyr-workload image or Renode app. Resolve source locations
+  and symbol addresses from the loaded matching ELF, never this file's history
+  or a cached watch address. Stop on an image/source mismatch and explain it.
+- Keep existing hardware ownership. Before a new hardware attach, follow the
+  workspace's exact-probe ownership rules; do not steal a claim or start a
+  second debug session. Release any leases/lock-holder processes this task
+  acquired at every handoff; never release another task's lease. If continued
+  use needs an ownership transfer, arrange it explicitly with Eddie.
+- No build, flash, reset, erase, power cycle, firmware fix, memory/expression
+  write, disconnect or automatic reconnect is part of this rehearsal. Temporary
+  breakpoints and negotiated observation streams are allowed. Preserve Eddie's
+  existing breakpoints and captures. Stop/Take control always takes precedence;
+  a revoked grant is not permission to reacquire it silently.
+
+Filming setup (one brief reminder, not a repeated checklist)
+- Ask Eddie to enable Follow in the debug toolbar so source/frame navigation
+  follows real stops and selections. Feedback highlights affected panels and
+  is optional. Data and Evidence update even with Follow off. Do not claim the
+  MCP tool can toggle these, move panes or change a graph's style.
+- Before connecting, REC -> Evidence -> Recording settings: enable Record
+  debug sessions, choose Full core stack frames and RTOS task inspection if
+  wanted, and Save recording options. More detail adds halt inspection time.
+  These settings apply to the next connection. Never end an existing session
+  just to change them. If this session is unrecorded, state that markers/replay
+  will be unavailable and continue the live tour unless Eddie requests a restart.
+- In RTOS, use Auto/Zephyr, Auto refresh on halt, Auto scan selected stack,
+  and Live task activity with source Samples. Keep RTOS visible while sampling;
+  this UI sampling mode pauses when hidden. These are UI controls, not a
+  side effect of rtos.tasks. If setup is missing, ask once and yield for it;
+  do not repeat a confirmation Eddie already gave.
+- For a visible live graph, use the Symbols watch for sineVal with Graph
+  enabled; heartbeatCount and tick_counter are useful additional values.
+  Check that each watch resolves to the current ELF, especially after a rebuild.
+  Do not use a saved numerical address as proof of the symbol's location.
+  Preserve an existing stream; only start/extend a watch through the negotiated
+  schema if it supports doing so without replacing Eddie's watches. Otherwise
+  let Eddie configure the graph and use expression reads for the tour.
+
+Pacing and evidence
+- One short lead-in per group, then consecutive sequential tool calls as soon
+  as results arrive. Check success, freshness and control each time. No repeated
+  catalog/describe/status calls when the existing result is sufficient, no
+  paragraphs between routine calls, and no permission questions for work already
+  authorized within the act. Summarize actual findings in one or two sentences.
+- Every source step is a separate run.step with count:1 and the negotiated
+  source-step mode. Never batch the three steps. No presentation sleeps between
+  successful steps. Optimized code may skip/repeat source lines or lose locals;
+  say so rather than promising a particular line sequence.
+- Continue/run-to uses wait:false. Use bounded waits (at most five seconds per
+  attempt) and inspect the actual stop. A wait timeout does not prove a halt.
+  Pause a still-running core before inspection. A step timeout may also leave
+  it running: refresh status, pause with the valid grant, and do not blindly
+  repeat the step. No unbounded retries or stepping through the entire kernel.
+- Keep the three-second warm-up and two-second sampling window below. Prefer
+  a bounded debugger wait; a terminal sleep is allowed only for those running
+  acquisition windows. It is not allowed to issue debugger commands.
+- Use recording.mark for the specified checkpoints when recording is active.
+  Include real observed values and a relevant source location using its schema.
+  Only say a marker was saved after a successful receipt; otherwise state the
+  limitation once. Evidence refreshes on markers; do not pretend to click it.
+- Distinguish halt snapshots, sampled task activity, sampled memory graphs and
+  recorder events. Neither sampling nor session recording proves lossless RTOS
+  tracing. This build uses the ViewAlyzer RAM recorder; that does not by itself
+  connect a capture to the IDE. Do not start recorder drain, SWO, ETM or DWT
+  acquisition as a surprise addition, or claim unavailable instruction history.
+
+Act 1: live RTOS tour and visible stepping
+1. Read status, verify this project/target, obtain control and reuse the session
+   or attach after approval. Inspect the loaded source/image identity. Confirm
+   the source and symbols below exist before installing any breakpoint.
+2. Warm up: resume for about three seconds, then pause. Remove only your own
+   temporary startup breakpoint if it prevents execution. Discover Zephyr with
+   rtos.detect and read rtos.tasks with stack_usage:true. Show task identities,
+   states, priorities and available stack usage. Use actual returned names;
+   cont_low_tid, cont_med_tid and cont_high_tid are source identifiers, not
+   guaranteed display names. DynNamed and nap_tid are additional candidates.
+3. Resume for two seconds so activity with known task names and live symbol
+   samples accumulates, then pause. Inspect a currently blocked/suspended task
+   through rtos.task.open, stack.list and available locals, keeping its context
+   explicit. Prefer a contention task or nap task if present. Do not call the
+   saved task stack the currently executing core's stack. Return to live core.
+   Mark "Zephyr task tour" with the real task/stack observations.
+4. Resolve a source breakpoint inside the recurring contention_low_task loop
+   at lowPrioAccess++ in src/main.c. Do not break at the function entry: this
+   thread may already have entered its infinite loop. Resume to the resolved
+   location and verify the actual function/line. Announce the three steps once,
+   then make three individual source-step-over calls, each count:1. These cover
+   application statements rather than intentionally entering a blocking kernel
+   call. Check each result and summarize the actual line progression. Remove
+   only the breakpoint you created. Mark "Three source steps" with those lines.
+5. Read sineVal, heartbeatCount, tick_counter and sharedCounter in a bounded
+   group if supported (otherwise consecutive reads). Resume for two seconds,
+   then pause and read them again. Show only the changes actually observed;
+   sineVal is periodic, so an equal pair alone does not establish a stall.
+   Mark "Live values observed" with useful before/after values.
+6. Ensure the core is paused and your temporary breakpoint is removed. Release
+   control and verify handoff. Say: "Your turn: inspect a task, select a frame
+   or single-step. Tell me Continue Act 2 for the contention investigation."
+   End the turn with the session and recording still connected.
+
+Act 2: catch the high-priority task after its mutex wait
+1. On Eddie's request, get fresh status and a fresh approved control grant.
+   Inspect any changed stop. Read the contention_high_task loop, then resolve
+   a source breakpoint at highPrioAccess++ after waitTime is calculated. This
+   stops on a recurring successful lock acquisition, not the one-time entry.
+2. Resume to that breakpoint with a bounded wait. Verify the actual stop and
+   inspect the live call stack, available start/waitTime locals, and
+   highPrioAccess, medPrioAccess, lowPrioAccess and contentionCounter. If locals
+   are optimized out, say so; use the counters/source without inventing a wait
+   duration. A zero wait is a valid observation; allow at most one further hit
+   if useful, then continue with whatever was actually observed.
+3. Mark "High-priority mutex acquisition" with the measured wait if available
+   and the actual stack/counters. Do not present debugger-disturbed timing as
+   an undisturbed benchmark. Save the causal explanation for Act 3.
+4. Remove your breakpoint, keep the core paused, release and verify handoff.
+   Say: "Your turn: inspect the stack and locals. Tell me Continue Act 3 to
+   investigate who holds the mutex and why the higher-priority task can wait."
+   End the turn; do not resume, end or reconnect the session.
+
+Act 3: explain the contention from observed state and source
+1. Obtain fresh status/control. Resolve a source breakpoint on the
+   k_mutex_unlock(&contention_test_mutex) line in contention_low_task, after
+   its k_msleep(20). Resume to it with a bounded wait and verify the location.
+2. Read a fresh task inventory and inspect contention_test_mutex using typed
+   expression/child reads. Use DWARF-reported fields; do not invent a kernel
+   struct layout. Correlate any reported owner address with the task inventory.
+   Inspect a blocked contention task's saved stack/locals if one is present,
+   then return to the live core. Do not claim a blocked waiter was captured
+   merely because the source can create one. State unavailable evidence.
+3. Compare contention_low_task's lock -> work -> sleep(20 ms) -> unlock with
+   normal_low_task's short critical section. Explain the source-supported
+   mechanism and which parts the live snapshot corroborates. Report priority
+   inheritance only if actual owner/priority evidence supports it. Distinguish
+   this intentional demonstration from a newly discovered product defect.
+4. Mark "Contention investigation" with the observed owner, task state, source
+   location and conclusions that the evidence supports. Remove your temporary
+   breakpoint, ensure the core is paused, release control and verify completion.
+   Leave the firmware unchanged and the session/recording connected for Eddie.
+   Say: "Your turn. The saved markers are in Evidence. When you choose to End
+   the session, open its recording in Evidence to inspect the captured stops."
+   Do not end the session or open replay automatically. Offline replay requires
+   disconnection and no pending target operation; it only contains captured data.
+
+If Eddie takes control or any required operation fails, stop the affected
+sequence, report the actual state and yield. Do not turn a filming rehearsal
+into open-ended tool debugging. Preserve the session and existing evidence.
