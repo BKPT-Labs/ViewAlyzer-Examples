@@ -16,8 +16,12 @@ Connection and authority
 - Use normal file tools to read source. All debugger operations, including
   watches, breakpoints and target inspection, go through bkpt_debug. Do not
   automate Eddie's mouse, keyboard, focus or windows.
-- Read status and catalog, then describe each needed operation once per host
-  identity. Use the current schemas, not remembered arguments. request_control
+- Read status and catalog once. Do not fetch every operation's schema before
+  attaching: status, request_control and attach are tool actions, not operations
+  that need describe. Establish/reuse the target session first, then describe
+  only the operations needed for the next group, once per host identity. Reuse
+  schemas already returned in this conversation while the host is unchanged.
+  Use the current schemas, not remembered arguments. request_control
   requires the extension's human approval; the MCP adapter retains the grant.
   Reuse an existing target session. connected reports the Toolkit engine
   connection, NOT whether a board is attached. catalog can make connected:true
@@ -86,12 +90,17 @@ Pacing and evidence
   catalog/describe/status calls when the existing result is sufficient, no
   paragraphs between routine calls, and no permission questions for work already
   authorized within the act. Summarize actual findings in one or two sentences.
-- Every source step is a separate run.step with count:1 and the negotiated
-  source-step mode. Never batch the three steps. No presentation sleeps between
-  successful steps. Optimized code may skip/repeat source lines or lose locals;
+- Every source step is a separate run.step call. In this build the operation
+  arguments are {"kind":"over"}; one call performs one step. There is NO count
+  argument: do not send count:1 or reject this schema because count is absent.
+  Use the negotiated schema if a future host changes it. Never batch the three
+  steps. No presentation sleeps between successful steps. Optimized code may
+  skip/repeat source lines or lose locals;
   say so rather than promising a particular line sequence.
 - Continue/run-to uses wait:false. Use bounded waits (at most five seconds per
-  attempt) and inspect the actual stop. A wait timeout does not prove a halt.
+  attempt) and inspect the actual stop. run.wait has empty operation args {};
+  set timeoutMs on the execute request alongside operation/coreId/target, not
+  inside the operation args. A wait timeout does not prove a halt.
   Pause a still-running core before inspection. A step timeout may also leave
   it running: refresh status, pause with the valid grant, and do not blindly
   repeat the step. No unbounded retries or stepping through the entire kernel.
@@ -130,7 +139,7 @@ Act 1: live RTOS tour and visible stepping
    at lowPrioAccess++ in src/main.c. Do not break at the function entry: this
    thread may already have entered its infinite loop. Resume to the resolved
    location and verify the actual function/line. Announce the three steps once,
-   then make three individual source-step-over calls, each count:1. These cover
+   then make three individual run.step calls with {"kind":"over"}. These cover
    application statements rather than intentionally entering a blocking kernel
    call. Check each result and summarize the actual line progression. Remove
    only the breakpoint you created. Mark "Three source steps" with those lines.
