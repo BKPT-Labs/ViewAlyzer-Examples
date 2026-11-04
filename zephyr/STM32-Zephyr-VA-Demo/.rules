@@ -19,8 +19,20 @@ Connection and authority
 - Read status and catalog, then describe each needed operation once per host
   identity. Use the current schemas, not remembered arguments. request_control
   requires the extension's human approval; the MCP adapter retains the grant.
-  Reuse the open session. If disconnected, attach uses the IDE configuration
-  and recording preferences; it does not take Zed's record:true argument.
+  Reuse an existing target session. connected reports the Toolkit engine
+  connection, NOT whether a board is attached. catalog can make connected:true
+  while sessionId is still empty and targets is still []. This is normal.
+- Decide whether to attach from sessionId and targets, not connected. With an
+  empty sessionId, empty targets, no pendingOperations, recorded:false and
+  cleanupUnconfirmed:false, obtain control and call action:"attach". attach
+  needs NO coreId or target identity: it creates the first target session in
+  this IDE's existing engine and returns its identity. It uses the IDE's probe,
+  ELF and recording preferences; it does not take Zed's record:true argument.
+  The extension rejects a second attach if a session already exists. If a
+  nonempty sessionId has targets, reuse them. If operations are pending, allow
+  a bounded wait and refresh status. If sessionId is nonempty but targets stay
+  empty, or cleanup is unconfirmed, report that inconsistency instead of
+  attaching. Recorded playback is not a live target; ask Eddie to close it.
 - execute uses args containing operation, args, coreId and the complete target
   identity. Use the identity returned for the current stop/state. Refresh status
   after a state change if its result did not provide a fresh identity. Use
@@ -97,9 +109,11 @@ Pacing and evidence
   acquisition as a surprise addition, or claim unavailable instruction history.
 
 Act 1: live RTOS tour and visible stepping
-1. Read status, verify this project/target, obtain control and reuse the session
-   or attach after approval. Inspect the loaded source/image identity. Confirm
-   the source and symbols below exist before installing any breakpoint.
+1. Read status and the project's IDE configuration, obtain control, then reuse
+   the target session or attach after approval using the decision above. Do not
+   require a live target identity before attach; use the identity it returns.
+   Once attached, verify the actual target and loaded source/image identity.
+   Confirm the source and symbols below before installing any breakpoint.
 2. Warm up: resume for about three seconds, then pause. Remove only your own
    temporary startup breakpoint if it prevents execution. Discover Zephyr with
    rtos.detect and read rtos.tasks with stack_usage:true. Show task identities,
