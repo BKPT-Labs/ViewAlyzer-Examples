@@ -1,151 +1,53 @@
-This is Eddie's screen-recording DEMO of BKPT Debug in VS Code.
-The objective is visible IDE activity: source navigation, task selection,
-stack frames, single steps, live graphs and evidence markers. Follow the
-short choreography below. Do not turn it into a troubleshooting investigation.
+This is a filmed demonstration of BKPT Debug in VS Code. There is no problem
+to diagnose. Execute the numbered sequence. Do not make a plan or investigate.
+"Run the demo", "run the rehearsal" and "run Act 1" mean this whole sequence.
+"Continue" means the next unfinished step, not setup again.
 
-"Follow .rules and run Act 1", "run the demo" and "run the rehearsal" start
-Act 1 only. "Continue Act 2" and "Continue Act 3" start the next acts.
-If Eddie says continue during an act, resume at the next unfinished action.
-Reuse the current session, grant and discovered schemas when still valid.
-Do not restart setup, repeat completed demonstrations or repeat the warm-up.
+Say "Attaching, running, pausing, then showing breakpoints and source steps."
+Then do these actions consecutively, checking success without narrating each
+call. Do not ask between steps. Narrate only "Running for three seconds",
+"Three source steps", "Running freely for five seconds", and the final handoff.
 
-Demo pacing
-- Give one short sentence introducing each visible group, execute its calls
-  consecutively, then at most one sentence about what actually appeared.
-  No per-call commentary, lengthy analysis, plans or diagnostic reports.
-- Move directly to the next visible action after each successful result.
-  Keep the three-second warm-up and two-second live sampling windows.
-  No extra presentation sleeps. Debugger operations remain sequential.
-- Use the configured project, probe and ELF as the prepared demo setup.
-  Do not independently verify flash bytes, compare ELF sections, dump memory
-  maps, run objdump/nm, enumerate probes, audit the build or investigate why
-  a value is unavailable. Do not use memory.read or allow_side_effects for
-  preflight. A successful normal attach and usable source/symbol responses
-  are enough to proceed with this tour; they are not a claim of full image
-  verification. Stop only if the host reports a concrete target/image mismatch.
-- Read only the small source section needed to locate the next breakpoint
-  or explain the displayed statement. Use symbol/source resolution provided
-  by the debugger. Do not hardcode addresses or reuse a stale watch address.
-- Prefer the first suitable task/frame returned. Inspect one saved task and
-  one set of locals per group. If locals are optimized out, say so and move on.
-  Do not hunt for a more impressive result, chase contention timing, reconstruct
-  raw stacks or try to prove priority inheritance. No bug needs to be solved.
-- Optional graph, stack detail or marker unavailable: mention it briefly and
-  continue the remaining visible actions. Do not build a workaround during
-  filming. An unexpected stop/control loss is different: inspect status once
-  and yield if continuing safely needs Eddie's input.
-- If the session already has the requested view/setup, use it immediately.
-  Do not ask Eddie to confirm setup again. Respect Stop/Take control and each
-  act's explicit handoff. Never invent values, markers or successful steps.
+1. Read status. Reuse the configured IDE session if it has a sessionId and
+   targets. Request control once; use the existing grant if still valid.
+   If sessionId is empty and targets is empty, attach using the IDE settings
+   after the host's approval. connected:true alone means the engine, not a
+   target session. Never create a second session.
+2. Resume (run.continue, wait:false). Sleep 3 seconds. Pause (run.pause).
+3. Read rtos.tasks once with stack_usage:false. This is only to show the task
+   inventory. Do not inspect task contexts, stacks, locals or memory here.
+4. Resume. Sleep 3 seconds. Pause.
+5. Set your own breakpoint at src/main.c:688 (lowPrioAccess++ inside the
+   contention_low_task loop). Resolve that source statement if the file moved;
+   do not investigate the code. Resume and wait at most 5 seconds for the stop.
+6. Make three separate run.step calls with args {"kind":"over"}. No count
+   argument. Do not inspect variables or explain each line between steps.
+7. Remove your breakpoint. If recording is active, add the marker
+   "Three source steps" after the successful steps.
+8. Resume. Sleep 5 seconds. Pause.
+9. Read rtos.tasks once with stack_usage:false. No analysis or stack scans.
+10. Set your own breakpoint at src/main.c:737 (highPrioAccess++ in the
+    contention_high_task loop). Resume and wait at most 5 seconds for the stop.
+11. Make three separate step-over calls. Remove your breakpoint.
+12. Resume. Sleep 5 seconds. Pause. Add "Demo complete" if recording is active.
+    Release control. Leave the session paused and connected. End the turn with
+    "Your turn. The session is paused and connected."
 
-Use the shared IDE session
-- All debugger actions use bkpt_debug from the bkpt-debug-vscode MCP server.
-  Use the installed BKPT Debug skill if available. No second Toolkit, GDB or
-  probe connection. Normal file tools may read source. Do not automate Eddie's
-  mouse, keyboard, focus or windows.
-- Read status and catalog once. Reuse schemas already discovered for this host;
-  describe a missing operation only when the next visible action needs it.
-  Do not fetch every schema in advance. status, request_control and attach
-  are tool actions and do not need operation discovery.
-- connected means the Toolkit engine is connected, NOT that a board is attached.
-  An empty sessionId with targets:[], no pendingOperations, recorded:false and
-  cleanupUnconfirmed:false allows request_control, then attach after approval.
-  attach needs no coreId/target identity and returns the new target identity.
-  It uses IDE probe/ELF/recording settings without reset or flash. A nonempty
-  sessionId with targets means reuse that session; never attach a second one.
-  If operations are pending, wait boundedly and refresh. If a session has no
-  targets, cleanup is uncertain, or playback is open, yield for Eddie.
-- execute uses args containing operation, operation args, coreId and target.
-  Copy the complete current target identity. Refresh status when a state/stop
-  change did not return a complete new identity; never submit a stale identity.
-  Use request-local contextId/frame for saved stacks. Select a returned source
-  frame with frame.select to make Follow navigation visible, then return to
-  the live core before resuming. Saved contexts expire on resume.
-- run.step operation args are {"kind":"over"}. One call is one source step;
-  there is no count argument. Three visible steps means three separate calls.
-- Continue/run-to uses wait:false. run.wait has empty operation args {}; put
-  timeoutMs (at most 5000) alongside operation/coreId/target on execute, not
-  inside operation args. A timeout is not a halt: check status and pause before
-  inspection. Do not blindly retry a timed-out step. A terminal sleep is allowed
-  only for the specified running warm-up/sampling windows.
-- Preserve Eddie's breakpoints/captures. Remove only temporary points you create.
-  No build, flash, reset, erase, power change, expression/memory write, firmware
-  edit or automatic disconnect/reconnect. Follow workspace ownership rules
-  for a new hardware attach; reuse existing IDE ownership, never steal it.
-  Release only task-owned leases/lock-holder processes at every handoff.
-- Before each handoff, return to the live core, ensure it is paused, remove your
-  temporary breakpoints, release control and verify completion. Leave the
-  session/recording connected. Never use End as a handoff. Do not silently
-  reacquire a grant after Eddie takes control.
+Use only bkpt_debug from bkpt-debug-vscode for debugger operations. Discover
+only the next missing operation schema, once, and reuse it. Use current target
+identity from replies/status; refresh only when needed. run.wait has args {};
+timeoutMs belongs on execute alongside operation/coreId/target. A timed-out
+wait is not a stop: pause, skip that breakpoint/stepping group and continue.
+Only sleep while running, for the explicit 3/5-second windows above. Calls are
+sequential. Never replace real source steps with a batch or prerecorded result.
 
-Visible setup
-- Follow enables source/frame navigation; Feedback highlights changed views.
-  Remind Eddie only if these are off. Do not claim the MCP tool toggled them.
-- Recording is configured before attach: REC -> Evidence -> Recording settings
-  -> Record debug sessions -> Save recording options. Extra stack/task detail
-  is optional and adds inspection time. Keep the current setting during a run;
-  do not restart a session for recording. If off, continue without markers.
-- RTOS: Live task activity, source Samples; keep the panel visible. The Symbols
-  graph can show sineVal, with heartbeatCount as an optional second watch.
-  Auto refresh on halt and Auto scan selected stack are optional. These are UI
-  preferences. Use existing setup; an unconfigured optional graph is no reason
-  to stop the tour or start a background configuration investigation.
-- Use recording.mark only when recording is active; one factual title/note per
-  checkpoint. Claim success only after its receipt. These actions update the
-  shared views. Do not paste raw tool JSON/schema into narration.
-- Call task activity and memory graphs sampled observations. Session recording
-  does not start acquisition or establish lossless RTOS/instruction tracing.
-  Do not add SWO/ETM/DWT/recorder capture, layout changes or graph styling.
-
-Act 1: show the IDE following the agent
-1. Reuse or attach the configured session as above. If starting fresh, resume
-   for three seconds, then pause. This is the required warm-up. Go directly
-   to the task tour; do not insert firmware verification.
-2. Read rtos.tasks with stack_usage:true (rtos.detect once if needed). Open one
-   returned blocked/suspended task with rtos.task.open, preferably cont_low_tid
-   or nap_tid. Use its returned frames rather than fetching the same stack
-   again. Select its application frame in src/main.c and read locals once.
-   Briefly name the task and displayed function. Return to the live core.
-   Save "Task and stack tour" if recording.
-3. Read the small contention_low_task section in src/main.c. Set a temporary
-   source breakpoint at lowPrioAccess++ inside its recurring loop, not the
-   function entry. Resume to it and check the returned stop location.
-   Say "Watch the source follow three steps." Make three consecutive run.step
-   calls with {"kind":"over"}. Report the actual line progression briefly;
-   optimized code may skip/repeat lines. Remove your point and save
-   "Three visible source steps" if recording.
-4. Read heartbeatCount once, resume for two seconds to show live activity and
-   any configured sineVal graph, then pause and read heartbeatCount once more.
-   Mention the observed values; no extra proof or measurement investigation.
-5. Handoff paused and connected. Say: "Your turn. Tell me Continue Act 2 for
-   breakpoints, frames and variables." End the turn.
-
-Act 2: show breakpoints and variables
-1. On request, obtain fresh status/control. Set a temporary source breakpoint
-   at highPrioAccess++ in the recurring contention_high_task loop in src/main.c.
-   Resume to it with a bounded wait; check the actual stop.
-2. Show stack.list, select the application frame and read its locals once.
-   Read highPrioAccess and contentionCounter. Do not chase waitTime if missing
-   or zero. This group demonstrates inspecting variables at a breakpoint.
-3. Make three separate source-step-over calls back-to-back. Remove your point.
-   Save "Breakpoint and variables" with actual displayed values if recording.
-4. Handoff paused and connected. Say: "Your turn. Tell me Continue Act 3 for
-   another task, live activity and the final marker." End the turn.
-
-Act 3: show another context and finish
-1. On request, obtain fresh status/control. Read a fresh task inventory without
-   another full stack scan. Open a different available blocked/suspended task,
-   select its returned application frame and inspect locals once. Return live.
-2. Resume for two seconds so the live activity/graphs advance, then pause.
-   Show the current live stack and select an available source frame.
-3. Save "Demo complete" with a brief description of the actual task/frame and
-   stepping views shown. Give a two-sentence recap, without diagnosing a bug.
-4. Handoff paused and connected. Say: "Your turn. The markers are in Evidence.
-   When you choose to End the session, open its recording there to inspect
-   the captured stops." Do not disconnect or open replay automatically.
-   Replay requires disconnection and no pending operation, and shows only
-   captured data.
-
-Missing optional data is a skipped demo item, not a new engineering task.
-If a required action fails or Eddie takes control, preserve the session,
-report the actual state briefly and yield.
+Use the prepared project, probe and ELF. No preflight audit, memory map, flash
+verification, symbol inventory, build, reset, flash, target writes or firmware
+changes. No fault diagnosis, task comparison, saved-context exploration or
+performance analysis. Optional unavailable data means skip it and continue.
+Do not configure views, captures or recordings during the demo. Follow and
+Feedback are user settings; mention them once if off, without waiting for a
+redundant confirmation. Respect human Stop/Take control; never reacquire a
+revoked grant silently. Preserve the user's breakpoints. Stop on a concrete
+target mismatch or lost control. Never End/disconnect as a handoff, open replay,
+start another debugger, operate the desktop or fabricate a successful action.
