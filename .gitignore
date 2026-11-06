@@ -1,8 +1,23 @@
 # Build output (per-board / per-transport build dirs)
 build/
 build-*/
+bkpt-build/
 CMakeFiles/
 CMakeCache.txt
+CMakeUserPresets.json
+.cmake/
+build.ninja
+.ninja_deps
+.ninja_log
+cmake_install.cmake
+compile_commands.json
+
+# Zephyr module discovery output from an accidental in-source configure
+/zephyr/*/Kconfig/Kconfig.modules
+/zephyr/*/Kconfig/Kconfig.sysbuild.modules
+/zephyr/*/sysbuild_modules.txt
+/zephyr/*/zephyr_modules.txt
+/zephyr/*/zephyr_settings.txt
 
 # Python
 __pycache__/
@@ -16,6 +31,7 @@ tools.local.*.json
 !tools.local.example.json
 
 # Editor / tool caches
+.gitnexus/
 .vscode/
 .bkpt/
 .cache/
