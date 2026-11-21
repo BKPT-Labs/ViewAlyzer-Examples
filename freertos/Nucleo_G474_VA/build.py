@@ -167,14 +167,14 @@ def build(transport: str, clean: bool) -> Path:
             [str(CUBECLT / "GNU-tools-for-STM32" / "bin"), env.get("PATH", "")])
 
     cmake = _tool("cmake", "CMake/bin")
-    if not (build_dir / "CMakeCache.txt").exists():
-        configure = [cmake, "-S", PROJECT_DIR, "-B", build_dir, "-G", "Ninja",
-                     "--toolchain", PROJECT_DIR / "cmake" / "gcc-arm-none-eabi.cmake",
-                     "-DCMAKE_BUILD_TYPE=Release",
-                     f"-DCMAKE_MAKE_PROGRAM={_tool('ninja', 'Ninja/bin')}"]
-        if TRANSPORTS.get(transport):
-            configure.append(f"-DVA_TRANSPORT={TRANSPORTS[transport]}")
-        _run(configure, env=env)
+    # Let the project's default apply even to a cache created by an older helper.
+    configure = [cmake, "-S", PROJECT_DIR, "-B", build_dir, "-G", "Ninja",
+                 "--toolchain", PROJECT_DIR / "cmake" / "gcc-arm-none-eabi.cmake",
+                 "-U", "CMAKE_BUILD_TYPE",
+                 f"-DCMAKE_MAKE_PROGRAM={_tool('ninja', 'Ninja/bin')}"]
+    if TRANSPORTS.get(transport):
+        configure.append(f"-DVA_TRANSPORT={TRANSPORTS[transport]}")
+    _run(configure, env=env)
     _run([cmake, "--build", build_dir], env=env)
 
     elf = build_dir / f"{ELF_NAME}.elf"
