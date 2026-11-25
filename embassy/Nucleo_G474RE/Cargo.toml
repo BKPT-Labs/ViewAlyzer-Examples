@@ -15,6 +15,7 @@ embassy-stm32 = { version = "0.6", features = ["stm32g474re", "memory-x", "dual-
 embassy-sync = "0.8"
 embassy-futures = "0.1"
 embassy-time = { version = "0.5", features = ["tick-hz-1_000_000"] }
+libm = "0.2"
 panic-halt = "1"
 viewalyzer-embassy = { path = "../../../ViewAlyzer/ViewAlyzerRecorder/embassy" }
 

@@ -1,6 +1,8 @@
 # Rust Embassy on NUCLEO-G474RE
 
-The producer bursts five samples into a two-slot channel. The consumer toggles the green PA5 LED and holds the display mutex while processing each sample. A refresh task competes for that mutex and shares an ADC permit with a calibration task. Two short-lived heartbeat instances yield and finish in the same Embassy task slot.
+All three queues have eight slots. The producer generates ten samples per burst. In one burst out of four, it tries the ninth sample once and drops it if **Samples** is full. All other sends wait for space. The consumer toggles the green PA5 LED and holds the display mutex while processing each accepted sample. A refresh task competes for that mutex and shares an ADC permit with a calibration task. Two short-lived heartbeat instances yield and finish in the same Embassy task slot.
+
+**Sensor** samples a 3.2-second sine wave about every 16 ms. **Filter** moves its estimate a quarter of the way toward each reading and forwards it to **Controller**. In **Comms → Resources**, watch the backlog move from **Raw readings** to **Filtered data** as the filter alternates between slower and faster processing. **Setpoint** publishes a 4.8-second sine wave through an Embassy `Signal`, sweeping the target from 256 to 768 and back. The demo needs only the board.
 
 ## Build
 
@@ -26,9 +28,16 @@ Capture resets and starts the target. The onboard ST-LINK drains a 32 KiB RAM ri
 
 Open the recording in ViewAlyzer. **Timeline** shows named task polls, sleeps, both heartbeat lifetimes, and the executor poll span. **Comms** shows the Producer → Samples → Consumer FIFO path, Display mutex use, and ADC permit handoffs. In the **Event Table**, filter for **Poll self-wake** to see when a Heartbeat task yields and re-enqueues itself. The sample value is its recorder task ID. **Poll IRQ wake** records an interrupt re-enqueuing the currently polled task. Timer futures appear as task sleeps. The **Timers** panel is for kernel timer objects and callbacks.
 
+In **Comms**, follow Sensor → Raw readings → Filter → Filtered data → Controller. In the trace charts, overlay **Raw input** and **Filtered input** to see the delay from queueing and filtering. **Applied target** shows the slower wave sampled by the controller. **Control error** is that target minus the filtered input and crosses zero as the input passes the target. These four graph channels use IDs 4–7. The existing poll-wake channels use IDs 2 and 3.
+
+In **Runtime Map**, enable **Enhance issues** and play through a failed send to see the marker on **Samples**. Filter map activity to **Failed** to jump to an occurrence. The native analyzer attributes the failed operations to **Producer**.
+
 ```sh
 viewalyzer-cli query task-states --recording g474-embassy.vadb
 viewalyzer-cli query resources --recording g474-embassy.vadb
 viewalyzer-cli query semaphores --recording g474-embassy.vadb
 viewalyzer-cli query comms --recording g474-embassy.vadb
+viewalyzer-cli query user-traces --recording g474-embassy.vadb
+viewalyzer-cli map activity --recording g474-embassy.vadb --tags failed
+viewalyzer-cli query verdicts --recording g474-embassy.vadb
 ```
