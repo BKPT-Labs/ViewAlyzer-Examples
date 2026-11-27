@@ -10,14 +10,14 @@ publish = false
 [dependencies]
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7"
-embassy-executor = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["platform-cortex-m", "executor-thread", "scheduler-priority", "scheduler-deadline"] }
-embassy-stm32 = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["stm32g474re", "memory-x", "dual-bank", "time-driver-any"] }
-embassy-sync = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022" }
-embassy-futures = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022" }
-embassy-time = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["tick-hz-1_000_000"] }
+embassy-executor = { git = "https://github.com/EdwinFairchild/embassy.git", rev = "75f8b52f200ba9d0fd827662986454a2eee65de4", features = ["platform-cortex-m", "executor-thread", "scheduler-priority", "scheduler-deadline"] }
+embassy-stm32 = { git = "https://github.com/EdwinFairchild/embassy.git", rev = "75f8b52f200ba9d0fd827662986454a2eee65de4", features = ["stm32g474re", "memory-x", "dual-bank", "time-driver-any", "trace"] }
+embassy-sync = { git = "https://github.com/EdwinFairchild/embassy.git", rev = "75f8b52f200ba9d0fd827662986454a2eee65de4" }
+embassy-futures = { git = "https://github.com/EdwinFairchild/embassy.git", rev = "75f8b52f200ba9d0fd827662986454a2eee65de4" }
+embassy-time = { git = "https://github.com/EdwinFairchild/embassy.git", rev = "75f8b52f200ba9d0fd827662986454a2eee65de4", features = ["tick-hz-1_000_000"] }
 libm = "0.2"
 panic-halt = "1"
-viewalyzer-embassy = { path = "../../../ViewAlyzer/ViewAlyzerRecorder/embassy" }
+viewalyzer-embassy = { path = "../../../ViewAlyzer/ViewAlyzerRecorder/embassy", features = ["stm32-irq"] }
 
 [build-dependencies]
 cc = "1"

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 #pragma once
+#define VA_TRACE_ISRS 1
 #define VA_TRACE_USER_VALUES 1
 #define VA_EMBASSY_SELF_WAKE_TRACE_ID 2
 #define VA_EMBASSY_IRQ_WAKE_TRACE_ID  3

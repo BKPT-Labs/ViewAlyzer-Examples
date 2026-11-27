@@ -48,23 +48,3 @@ void demo_log_control(int32_t target, int32_t error)
     VA_LogTrace(APPLIED_TARGET, target);
     VA_LogTrace(CONTROL_ERROR, error);
 }
-
-/* Match the recorder's compatibility event and actor-attributed queue detail
- * for the native try_send that the Embassy Traced wrapper does not expose. */
-void demo_log_sample_try_send(uintptr_t queue_handle, uint32_t task_id, uint32_t used, bool sent)
-{
-    void *queue = (void *)queue_handle;
-    if (sent) {
-        va_logQueueObjectGiveTyped(queue, VA_OBJECT_TYPE_QUEUE);
-    } else {
-        va_logObjectOpFailedTyped(queue, VA_OBJECT_TYPE_QUEUE, true, 0);
-    }
-#if VA_HAS_QUEUE_DETAILS
-    va_logRtosOperation(queue, VA_OBJECT_TYPE_QUEUE, VA_EVENT_QUEUE_DETAILS,
-                        (VA_RtosOperation_t)((sent ? VA_QUEUE_BACK : VA_QUEUE_SEND_FAILED) | VA_OP_EXPLICIT_ACTOR),
-                        used, sent ? 1u : 0u, (void *)(uintptr_t)task_id, 0);
-#else
-    (void)task_id;
-    (void)used;
-#endif
-}

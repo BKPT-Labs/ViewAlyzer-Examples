@@ -21,7 +21,7 @@ This repo doubles as integration documentation:
 - **[RTX5 examples](rtx5/README.md)** - source-built CMSIS-RTX 5.9.1 on
   NUCLEO-G474RE with ST-Link and NUCLEO-F767ZI with J-Link. The guide lists
   pinned source dependencies, explicit build paths and capture settings.
-- **[Rust Embassy on NUCLEO-G474RE](embassy/Nucleo_G474RE/README.md)** uses ST-LINK RAM buffer capture for async task polls, timer waits, a bounded channel, a mutex and a semaphore.
+- **[Rust Embassy on NUCLEO-G474RE](embassy/Nucleo_G474RE/README.md)** uses ST-LINK RAM buffer capture for native resource waits, eight-slot FIFO traffic, task lifecycle, interrupts and four application waveforms.
 
 The projects are grouped by RTOS / runtime:
 
