@@ -6,7 +6,7 @@ All three queues have eight slots. The producer generates ten samples per burst.
 
 ## Build
 
-Use sibling checkouts of `ViewAlyzer-Examples` and `ViewAlyzer` with the Embassy recorder adapter. The build uses the G474 CMSIS headers already in this examples repository. Install stable Rust with the Cortex-M4F target, Arm GNU GCC with newlib-nano, and probe-rs. Run from this directory so Cargo loads the board configuration.
+Use sibling checkouts of `ViewAlyzer-Examples` and `ViewAlyzer` with the Embassy recorder adapter. Cargo fetches the pinned upstream Embassy Git revision shared with the recorder. The build uses the G474 CMSIS headers already in this examples repository. Install stable Rust with the Cortex-M4F target, Arm GNU GCC with newlib-nano, and probe-rs. Run from this directory so Cargo loads the board configuration.
 
 ```sh
 rustup target add thumbv7em-none-eabihf
@@ -28,7 +28,7 @@ Capture resets and starts the target. The onboard ST-LINK drains a 32 KiB RAM ri
 
 Open the recording in ViewAlyzer. **Timeline** shows named task polls, sleeps, both heartbeat lifetimes, and the executor poll span. **Comms** shows the Producer → Samples → Consumer FIFO path, Display mutex use, and ADC permit handoffs. In the **Event Table**, filter for **Poll self-wake** to see when a Heartbeat task yields and re-enqueues itself. The sample value is its recorder task ID. **Poll IRQ wake** records an interrupt re-enqueuing the currently polled task. Timer futures appear as task sleeps. The **Timers** panel is for kernel timer objects and callbacks.
 
-In **Comms**, follow Sensor → Raw readings → Filter → Filtered data → Controller. In the trace charts, overlay **Raw input** and **Filtered input** to see the delay from queueing and filtering. **Applied target** shows the slower wave sampled by the controller. **Control error** is that target minus the filtered input and crosses zero as the input passes the target. These four graph channels use IDs 4–7. The existing poll-wake channels use IDs 2 and 3.
+In **Comms**, follow Sensor → Raw readings → Filter → Filtered data → Controller. In the trace charts, overlay **Raw input** and **Filtered input** to see the delay from queueing and filtering. **Applied target** shows the slower wave sampled by the controller. **Control error** is that target minus the filtered input and crosses zero as the input passes the target. These four graph channels use IDs 4–7. The poll-wake channels use IDs 2 and 3. **Before WFE** (8) marks each visit to the executor sleep instruction. Each Heartbeat sets priority 1 and a 25 ms deadline. **Deadline in us** (9) records the time remaining when the task assigns that deadline.
 
 In **Runtime Map**, enable **Enhance issues** and play through a failed send to see the marker on **Samples**. Filter map activity to **Failed** to jump to an occurrence. The native analyzer attributes the failed operations to **Producer**.
 

@@ -10,11 +10,11 @@ publish = false
 [dependencies]
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7"
-embassy-executor = { version = "=0.10.0", features = ["platform-cortex-m", "executor-thread"] }
-embassy-stm32 = { version = "0.6", features = ["stm32g474re", "memory-x", "dual-bank", "time-driver-any"] }
-embassy-sync = "0.8"
-embassy-futures = "0.1"
-embassy-time = { version = "0.5", features = ["tick-hz-1_000_000"] }
+embassy-executor = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["platform-cortex-m", "executor-thread", "scheduler-priority", "scheduler-deadline"] }
+embassy-stm32 = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["stm32g474re", "memory-x", "dual-bank", "time-driver-any"] }
+embassy-sync = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022" }
+embassy-futures = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022" }
+embassy-time = { git = "https://github.com/embassy-rs/embassy.git", rev = "aedfadc3db30054b41928ceb1c6d8a848cafb022", features = ["tick-hz-1_000_000"] }
 libm = "0.2"
 panic-halt = "1"
 viewalyzer-embassy = { path = "../../../ViewAlyzer/ViewAlyzerRecorder/embassy" }
