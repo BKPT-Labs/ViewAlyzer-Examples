@@ -74,8 +74,14 @@ fn main() -> ! {
 
 #[embassy_executor::task]
 async fn producer(samples: Traced<Samples>, spawner: Spawner) {
-    let task =
-        poll_fn(|cx| Poll::Ready(embassy_executor::raw::task_from_waker(cx.waker()).id())).await;
+    let task = poll_fn(|cx| {
+        Poll::Ready(
+            embassy_executor::raw::task_from_waker(cx.waker())
+                .id()
+                .get() as u32,
+        )
+    })
+    .await;
     let mut sequence = 0u32;
     for burst in (0..4).cycle() {
         // Burst past channel capacity, then leave the consumer waiting for input.
@@ -103,6 +109,9 @@ async fn producer(samples: Traced<Samples>, spawner: Spawner) {
 
 #[embassy_executor::task]
 async fn heartbeat() {
+    let metadata = embassy_executor::MetadataRef::for_current_task().await;
+    metadata.set_priority(1);
+    metadata.set_deadline((Instant::now() + Duration::from_millis(25)).as_ticks());
     embassy_futures::yield_now().await;
     sleep(Duration::from_millis(10)).await;
 }
